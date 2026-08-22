@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S7 对齐失败降级浮层 · VR留念</title>
+<!-- 字号 px 等值;D-022:失败出口 = 重试 / 低精度继续 / 返回地图;D-063:三分线+氛围光+FA 图标(A-732/733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.btn-dark{display:flex;align-items:center;justify-content:center;gap:8px;border:2px solid #fff;border-radius:999px;font-weight:800;box-shadow:0 4px 0 rgba(255,255,255,.85);transition:transform .12s ease,box-shadow .12s ease}
+.btn-dark:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.85)}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px);background-size:33.34% 33.34%}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 44%,transparent 50%,rgba(20,14,10,.5) 100%),radial-gradient(44% 32% at 12% 88%,rgba(255,107,74,.14),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.6)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-5">
+    <!-- 白贴纸卡浮在暗舞台(纸面↔舞台对比) -->
+    <div class="w-full max-w-[330px] bg-white text-[#1A1410] p-5" style="border:2px solid #1A1410;border-radius:22px;box-shadow:5px 5px 0 #1A1410">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-[16px] flex items-center justify-center text-[26px] border-2 border-[#1A1410] rotate-3 shrink-0" style="background:rgba(245,158,11,.18);color:#1A1410"><i class="fa-solid fa-compass"></i></div>
+        <div>
+          <h1 class="text-[21px] font-black leading-tight">对齐没成功</h1>
+          <p class="text-[13px] font-semibold text-[#6F6259]">换个姿势或换个位置,再试一次</p>
+        </div>
+      </div>
+      <div class="mt-4 space-y-2">
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5" style="background:rgba(255,179,71,.18)">
+          <span class="text-[16px] shrink-0" style="color:#1A1410"><i class="fa-solid fa-magnet"></i></span><p class="text-[13px] font-bold">疑似磁场干扰:附近有金属护栏 / 电梯 / 地下车库</p>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5 bg-white">
+          <span class="text-[16px] shrink-0" style="color:#1A1410"><i class="fa-solid fa-signal"></i></span><p class="text-[13px] font-bold">GPS 信号弱:高层楼宇 / 室内遮挡,建议走到开阔处</p>
+        </div>
+      </div>
+      <button class="w-full h-[48px] rounded-full text-white text-[16px] font-extrabold border-2 border-[#1A1410] mt-4 flex items-center justify-center gap-2" style="background:var(--coral);box-shadow:0 4px 0 #1A1410"><i class="fa-solid fa-rotate-right"></i>重试对齐</button>
+      <button class="w-full h-[44px] rounded-full text-[15px] font-extrabold border-2 border-[#1A1410] mt-3 bg-white flex items-center justify-center gap-2" style="box-shadow:0 4px 0 #1A1410">以低精度模式继续<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+      <button class="w-full h-[40px] rounded-full text-[14px] font-extrabold border-2 border-white/70 mt-3 flex items-center justify-center gap-2 text-white" style="background:rgba(20,14,10,.4)">返回地图</button>
+    </div>
+
+    <!-- 低精度继续后的常驻提示样式(E5) -->
+    <div class="spec-d w-full max-w-[330px] mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-triangle-exclamation"></i>状态样式 · 低精度继续后(S5 顶部常驻)</span>
+      <div class="hud px-3 py-2 mt-2.5 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,179,71,.6)"><i class="fa-solid fa-triangle-exclamation text-[11px]" style="color:#FFCF8E"></i> 精度降级 · 模型位置可能偏移(锚点附虚线辅助标)</div>
+    </div>
+    <div class="home-ind"></div>
+  </main>
+</div>
+</body>
+</html>

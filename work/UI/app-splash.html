@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S1 启动与登录 · VR留念</title>
+<!-- 字号一律 px 等值使用,无 pt 换算;设计规范 ui-spec v0.3(贴纸系统,D-059) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--cream:#FFEED9;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn-hard[disabled]{background:#EFE0D2!important;color:#B4A79D!important;box-shadow:0 4px 0 #B4A79D;pointer-events:none}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.wig{animation:wig 3.6s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <!-- iOS 状态栏 -->
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-5 pt-4 pb-6 flex flex-col">
+    <!-- 装饰贴纸(Z1;A-725 仅装饰件旋转) -->
+    <div class="flex justify-between items-start px-1">
+      <div class="stk-sm w-12 h-12 flex items-center justify-center text-[22px] -rotate-6 wig" style="color:#C2410C"><i class="fa-solid fa-map"></i></div>
+      <div class="stk-sm w-10 h-10 flex items-center justify-center text-[18px] rotate-12 mt-6" style="color:#B45309"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+    </div>
+
+    <!-- Logo 贴纸 -->
+    <div class="flex justify-center mt-3">
+      <div class="w-[88px] h-[88px] rounded-[26px] flex items-center justify-center border-2 border-[#1A1410]" style="background:var(--coral);box-shadow:5px 5px 0 #1A1410,inset 0 0 0 4px rgba(255,255,255,.9)">
+        <i class="fa-solid fa-location-dot text-white text-[38px]"></i>
+      </div>
+    </div>
+
+    <!-- 超大标语(Z3 展示字层 A-721) -->
+    <h1 class="text-center text-[40px] leading-[1.18] font-black mt-5">把回忆<br><span class="px-2 rounded-xl inline-block -rotate-1" style="background:#FFD98E;border:2px solid #1A1410">钉进</span>真实世界</h1>
+    <p class="text-center text-[14px] text-[#6F6259] font-semibold mt-3">到过的地方,留下会站立的 AR 记忆<br>地图发现 · 打卡合影 · 一键分享</p>
+
+    <!-- 协议勾选(同意后才可登录) -->
+    <div class="flex items-start gap-2.5 mt-7 px-1">
+      <button class="shrink-0 w-6 h-6 rounded-lg border-2 border-[#1A1410] bg-[#FF6B4A] flex items-center justify-center mt-0.5"><i class="fa-solid fa-check text-white text-[11px]"></i></button>
+      <p class="text-[13px] leading-snug text-[#6F6259] font-semibold">已阅读并同意<span class="text-[#FF6B4A] font-extrabold">《用户协议》</span>与<span class="text-[#FF6B4A] font-extrabold">《隐私政策》</span>,知悉敏感权限将逐项单独申请</p>
+    </div>
+
+    <!-- 主按钮:微信登录 -->
+    <button class="btn-hard w-full h-[52px] text-[17px] text-white mt-4" style="background:var(--coral)"><i class="fa-brands fa-weixin text-[20px]"></i>微信登录</button>
+    <!-- 次入口:游客体验(D-030) -->
+    <button class="btn-hard w-full h-[44px] text-[15px] mt-3 bg-white">先随便逛逛<i class="fa-solid fa-arrow-right text-[13px]"></i></button>
+
+    <!-- 状态演示:默认/禁用并列 -->
+    <div class="spec mt-6">
+      <span class="spec-lbl"><i class="fa-solid fa-circle-info"></i>状态样式 · 协议未勾选时</span>
+      <button class="btn-hard w-full h-[48px] text-[16px] mt-3" disabled><i class="fa-brands fa-weixin text-[18px]"></i>微信登录(置灰)</button>
+      <p class="text-[12px] text-[#6F6259] font-semibold mt-2">微信授权失败:Toast「授权失败,请重试」+ 按钮恢复可点</p>
+    </div>
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-user-secret"></i>状态样式 · 游客触发需登录操作(D-030)</span>
+      <div class="flex items-center gap-3 mt-3">
+        <span class="chip shrink-0" style="background:rgba(255,179,71,.35)"><i class="fa-solid fa-arrow-up-right-dots"></i>升级引导</span>
+        <span class="text-[12px] text-[#6F6259] font-semibold leading-snug">弹层「登录后即可放置/生成/分享」+ 微信一键登录,账号自动合并</span>
+      </div>
+    </div>
+
+    <p class="text-center text-[12px] text-[#6F6259] font-semibold mt-6">首次使用将按需申请 定位 / 相机 / 相册 权限<br>可随时在系统设置中关闭</p>
+  </main>
+
+  <!-- 底部手势条(D-063;S1 豁免 TabBar) -->
+  <div class="shrink-0 bg-[#FFF9F5] pb-1.5 pt-0"><div class="mx-auto w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div></div>
+</div>
+</body>
+</html>

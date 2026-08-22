@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S31 打卡足迹(P1) · VR留念</title>
+<!-- 字号 px 等值;FR-13:时间线/地图双视图;D-063:6 条真实足迹+地图视图路网升级+FA 勋章(A-732/734/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.seg{border:2px solid var(--ink);border-radius:999px;padding:3px;display:flex;gap:2px;background:#fff}
+.seg span{border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800}
+.seg-on{background:var(--coral);color:#fff}
+.medal{width:64px;height:64px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;box-shadow:2px 2px 0 var(--ink);background:var(--sun);color:#1A1410}
+.medal::after{content:"";position:absolute;inset:4px;border-radius:999px;border:2px dashed rgba(255,255,255,.85)}
+/* D-063 地图视图(A-734) */
+.mini-map{position:relative;height:200px;background:#FBEDDC;border:2px solid #1A1410;border-radius:16px;overflow:hidden}
+.mm-road{position:absolute;background:#FFE3B3;border-top:2px solid #fff;border-bottom:2px solid #fff;height:12px}
+.mm-minor{position:absolute;background:#fff;height:8px}
+.mm-name{position:absolute;font-size:8px;font-weight:800;color:#B4884D;white-space:nowrap}
+.mm-pin{position:absolute;width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid var(--ink);box-shadow:2px 2px 0 rgba(26,20,16,.5), inset 0 0 0 2px #fff;color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">打卡足迹</h1>
+      <span class="chip ml-auto shrink-0 text-white" style="background:var(--coral)"><i class="fa-solid fa-shoe-prints text-[11px]"></i>24 次 · 5 城</span>
+    </div>
+
+    <!-- 双视图切换 -->
+    <div class="seg mt-4">
+      <span class="seg-on flex-1 text-center"><i class="fa-solid fa-timeline text-[11px]"></i> 时间线</span>
+      <span class="flex-1 text-center text-[#6F6259]"><i class="fa-solid fa-map text-[11px]"></i> 地图</span>
+    </div>
+
+    <!-- 成就贴纸勋章(Z1;FA 图标 A-732) -->
+    <div class="flex gap-3 mt-4 justify-center">
+      <div class="flex flex-col items-center gap-1"><div class="medal -rotate-3"><i class="fa-solid fa-medal"></i></div><p class="text-[11px] font-extrabold">连续 3 天</p></div>
+      <div class="flex flex-col items-center gap-1"><div class="medal rotate-2" style="background:#FFE3B3"><i class="fa-solid fa-tower-observation"></i></div><p class="text-[11px] font-extrabold">5 城旅人</p></div>
+      <div class="flex flex-col items-center gap-1"><div class="medal -rotate-1" style="background:#FFD98E"><i class="fa-solid fa-moon"></i></div><p class="text-[11px] font-extrabold">夜猫打卡</p></div>
+      <div class="flex flex-col items-center gap-1"><div class="medal rotate-3" style="background:#EFE0D2;opacity:.55"><i class="fa-solid fa-lock"></i></div><p class="text-[11px] font-extrabold">百次待解锁</p></div>
+    </div>
+
+    <!-- 时间线:拍立得贴纸卡(D-063 六条真实足迹,相对+绝对时间混用) -->
+    <p class="lbl mt-5 mb-2">本周</p>
+    <div class="stk p-3.5" style="transform:rotate(-0.6deg)">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip text-white" style="background:var(--coral)"><i class="fa-solid fa-cube text-[10px]"></i>模型</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">断桥 · 与「给未来的我们」合影</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2490°N · 今天 17:42(2 小时前)</p>
+        </div>
+      </div>
+    </div>
+    <div class="stk p-3.5 mt-3" style="transform:rotate(0.5deg)">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(78,205,196,.15);color:#0E7F78"><i class="fa-solid fa-image text-[10px]"></i>图片</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">湖滨夜景灯牌 · 城市之光</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2468°N · 昨天 20:15</p>
+        </div>
+      </div>
+    </div>
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-comment-dots text-[10px]"></i>文字</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">柳浪闻莺 · 樟树下的慢半拍</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2402°N · 08-19 15:30(3 天前)</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="lbl mt-5 mb-2">更早</p>
+    <div class="stk p-3.5" style="transform:rotate(-0.4deg)">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip text-white" style="background:var(--coral)"><i class="fa-solid fa-cube text-[10px]"></i>模型</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">千岛湖 · 山水之间的鲸鱼阿北</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">29.6047°N · 08-15 11:08</p>
+        </div>
+      </div>
+    </div>
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(78,205,196,.15);color:#0E7F78"><i class="fa-solid fa-image text-[10px]"></i>图片</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">武林夜市 · 人间烟火位</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2741°N · 08-12 19:47</p>
+        </div>
+      </div>
+    </div>
+    <div class="stk p-3.5 mt-3" style="transform:rotate(0.4deg)">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=160&q=80" alt="打卡照片" class="w-[68px] h-[68px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-comment-dots text-[10px]"></i>文字</span><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57">+2 积分</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">毕业快乐,2020-2026 · 操场东门</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2512°N · 08-10 17:00</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地图视图(D-063:路网分级 + 足迹贴纸针) -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-map"></i>状态样式 · 地图视图(复用 S3 组件,足迹针点亮)</span>
+      <div class="mini-map mt-3">
+        <div class="absolute left-[-30px] top-0" style="width:150px;height:110px;border-radius:44px;background:#CDEBE9;transform:rotate(6deg)"></div>
+        <span class="absolute left-[14px] top-[52px] text-[9px] font-black tracking-[.18em]" style="color:#5FA8A2">西湖</span>
+        <div class="absolute right-[-16px] bottom-[-18px] w-[130px] h-[84px] rounded-[32px]" style="background:#E2F0DC"></div>
+        <div class="mm-road left-0 right-0" style="top:96px"></div>
+        <div class="mm-minor left-0 right-0" style="top:44px"></div>
+        <div class="mm-minor top-0 bottom-0" style="left:180px;width:8px"></div>
+        <div class="mm-minor top-[96px] bottom-0" style="left:96px;width:8px"></div>
+        <span class="mm-name" style="left:118px;top:100px">南山路</span>
+        <span class="mm-name" style="left:186px;top:56px;writing-mode:vertical-rl">湖滨路</span>
+        <div class="mm-pin" style="left:18%;top:38%;background:var(--coral)"><i class="fa-solid fa-cube"></i></div>
+        <div class="mm-pin" style="left:52%;top:24%;background:var(--teal)"><i class="fa-solid fa-image"></i></div>
+        <div class="mm-pin" style="left:66%;top:62%;background:var(--amber)"><i class="fa-solid fa-comment-dots"></i></div>
+        <div class="mm-pin" style="left:30%;top:66%;background:var(--coral)"><i class="fa-solid fa-cube"></i></div>
+      </div>
+      <p class="text-[11px] text-[#6F6259] font-semibold mt-2">足迹按类型色点亮 · 点针可回到当时的拍立得</p>
+    </div>
+
+    <!-- 空态 -->
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-shoe-prints"></i>状态样式 · 空态</span>
+      <div class="flex flex-col items-center py-3">
+        <div class="stk-sm w-16 h-16 flex items-center justify-center text-[30px] -rotate-3 wig" style="color:#B45309"><i class="fa-solid fa-shoe-prints"></i></div>
+        <p class="text-[14px] font-bold mt-2">还没有打卡 · 去逛逛</p>
+        <button class="btn-hard h-[38px] px-6 text-[14px] text-white mt-2.5" style="background:var(--coral)">打开地图</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab4 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+<style>.wig{animation:wig 3.6s ease-in-out infinite}@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}</style>
+</body>
+</html>

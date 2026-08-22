@@ -1,0 +1,29 @@
+{
+  "name": "@vrm/server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VR 留念服务端 monorepo(NestJS 10:apps/api + apps/worker + packages/*)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @vrm/shared --filter @vrm/database build && pnpm --parallel --filter @vrm/api --filter @vrm/worker dev",
+    "dev:api": "pnpm --filter @vrm/shared --filter @vrm/database build && pnpm --filter @vrm/api dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,md,yml,json}\"",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "migrate:dev": "pnpm --filter @vrm/database migrate:dev",
+    "migrate:deploy": "pnpm --filter @vrm/database migrate:deploy",
+    "db:patch": "pnpm --filter @vrm/database db:patch",
+    "db:studio": "pnpm --filter @vrm/database db:studio"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "eslint": "^9.14.0",
+    "prettier": "^3.3.3",
+    "typescript-eslint": "^8.14.0"
+  }
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S2 隐私授权总览 · VR留念</title>
+<!-- 字号 px 等值;D-031:隐私总览页 + 上下文触发逐项弹窗,总览页不做一次性打包索取 -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--cream:#FFEED9;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.tag{border:2px solid var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:800;background:#fff;white-space:nowrap}
+.tag-on{background:var(--coral);color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-6">
+    <!-- 标题行:盾牌贴纸 + 超大标题 -->
+    <div class="flex items-center gap-3 mt-2">
+      <div class="stk-sm w-12 h-12 flex items-center justify-center text-[22px] rotate-3 shrink-0" style="color:#0E7F78"><i class="fa-solid fa-shield-halved"></i></div>
+      <div>
+        <h1 class="text-[24px] font-black leading-tight">隐私授权总览</h1>
+        <p class="text-[13px] text-[#6F6259] font-semibold">三项敏感权限 · 用到才弹窗 · 逐项单独同意</p>
+      </div>
+    </div>
+
+    <!-- 说明撞色块 -->
+    <div class="mt-4 rounded-[20px] border-2 border-[#1A1410] px-4 py-3.5" style="background:rgba(78,205,196,.15)">
+      <p class="text-[14px] font-bold leading-snug"><i class="fa-solid fa-circle-check text-[#0E7F78]"></i> 我们不会一次性打包索取权限:进入对应功能时,才会逐项弹出系统授权窗。</p>
+    </div>
+
+    <!-- 权限卡 ×3(贴纸卡) -->
+    <div class="mt-4 stk p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[22px] shrink-0" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-crosshairs"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2"><h2 class="text-[17px] font-black">定位</h2><span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C">敏感</span></div>
+          <p class="text-[13px] text-[#6F6259] font-semibold">展示附近 AR 内容与你的位置</p>
+        </div>
+        <button class="tag tag-on shrink-0">了解并同意</button>
+      </div>
+      <div class="mt-3 pt-3 border-t border-[#EFE0D2] grid grid-cols-2 gap-2">
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">何时用</span>打开地图 / 放置内容时申请</p>
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">为何用</span>计算你与内容的距离</p>
+      </div>
+    </div>
+
+    <div class="mt-4 stk p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[22px] shrink-0" style="background:rgba(255,179,71,.18);color:#B45309"><i class="fa-solid fa-camera"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2"><h2 class="text-[17px] font-black">相机</h2><span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C">敏感</span></div>
+          <p class="text-[13px] text-[#6F6259] font-semibold">AR 取景浏览与打卡合影</p>
+        </div>
+        <button class="tag shrink-0">了解并同意</button>
+      </div>
+      <div class="mt-3 pt-3 border-t border-[#EFE0D2] grid grid-cols-2 gap-2">
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">何时用</span>首次进入 AR 相机时申请</p>
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">为何用</span>空间锚定与实景合影</p>
+      </div>
+    </div>
+
+    <div class="mt-4 stk p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[22px] shrink-0" style="background:rgba(78,205,196,.15);color:#0E7F78"><i class="fa-regular fa-image"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2"><h2 class="text-[17px] font-black">相册</h2><span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C">敏感</span></div>
+          <p class="text-[13px] text-[#6F6259] font-semibold">选照片生成 3D / 保存合影</p>
+        </div>
+        <button class="tag shrink-0">了解并同意</button>
+      </div>
+      <div class="mt-3 pt-3 border-t border-[#EFE0D2] grid grid-cols-2 gap-2">
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">何时用</span>上传照片 / 保存成片时申请</p>
+        <p class="text-[12px] font-semibold"><span class="lbl block mb-0.5">为何用</span>读取所选照片或写入保存</p>
+      </div>
+    </div>
+
+    <!-- 进入地图 CTA -->
+    <button class="btn-hard w-full h-[52px] text-[17px] text-white mt-5" style="background:var(--coral)">进入地图<i class="fa-solid fa-arrow-right"></i></button>
+    <p class="text-center text-[12px] text-[#6F6259] font-semibold mt-2">拒绝任何一项都不影响其他功能,可随时去系统设置开启</p>
+
+    <!-- 状态样式:单项拒绝的降级后果(D-031) -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-triangle-exclamation"></i>状态样式 · 单项拒绝时的降级说明(逐项弹窗内)</span>
+      <div class="mt-3 space-y-2">
+        <div class="flex items-center gap-2.5"><span class="chip shrink-0 bg-white"><i class="fa-solid fa-location-crosshairs text-[10px]"></i>定位</span><span class="text-[12px] font-semibold">将退化为「我创建的内容列表」,无法发现附近内容</span></div>
+        <div class="flex items-center gap-2.5"><span class="chip shrink-0 bg-white"><i class="fa-solid fa-camera text-[10px]"></i>相机</span><span class="text-[12px] font-semibold">无法进入 AR 浏览与合影(核心体验必需)</span></div>
+        <div class="flex items-center gap-2.5"><span class="chip shrink-0 bg-white"><i class="fa-regular fa-image text-[10px]"></i>相册</span><span class="text-[12px] font-semibold">不能上传照片生成,不能保存合影到本地</span></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部手势条(D-063;S2 豁免 TabBar) -->
+  <div class="shrink-0 bg-[#FFF9F5] pb-1.5 pt-0"><div class="mx-auto w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div></div>
+</div>
+</body>
+</html>

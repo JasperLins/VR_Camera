@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S3 地图发现首页 · VR留念</title>
+<!-- 字号 px 等值;Z4 地图即社交场:贴纸针+条数徽标+聚合胶囊;类型色 D-057;D-063:路网分级/水系绿地/路名/POI + FA 类型锚(A-732) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--cream:#FFEED9;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.skel{background:linear-gradient(90deg,#F6E7D7 25%,#FDF0E3 50%,#F6E7D7 75%);background-size:200% 100%;animation:skel 1.4s infinite}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.pulse{animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.5);opacity:.8}80%{transform:scale(2);opacity:0}100%{transform:scale(2);opacity:0}}
+.pin{position:absolute;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--ink);box-shadow:3px 3px 0 rgba(26,20,16,.85), inset 0 0 0 2.5px #fff}
+.badge-n{position:absolute;top:-7px;right:-7px;min-width:17px;height:17px;border-radius:999px;background:var(--ink);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 3px}
+/* D-063 地图细节:路网分级 / 路名 / POI 小点 */
+.road-major{position:absolute;height:18px;background:#FFE3B3;border-top:2px solid #fff;border-bottom:2px solid #fff}
+.road-minor{position:absolute;background:#fff}
+.road-name{position:absolute;font-size:9px;font-weight:800;color:#B4884D;letter-spacing:.06em;white-space:nowrap;text-shadow:0 0 3px #FBEDDC}
+.poi{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;border:1.5px solid #C9A97E}
+.poi-lbl{position:absolute;font-size:9px;font-weight:700;color:#A08363;white-space:nowrap}
+.bld{position:absolute;width:26px;height:30px;background:#fff;border:1.5px solid #1A1410;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#1A1410;box-shadow:1.5px 1.5px 0 rgba(26,20,16,.25)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <!-- 状态栏悬浮于地图上 -->
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-[#1A1410]">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 地图画布(Z4 第一公民;CSS 奶油底卡通示意,D-063 细节升级:西湖水系/绿地/主次路网/路名/POI) -->
+  <div class="relative shrink-0 w-full" style="height:404px;background:#FBEDDC;overflow:hidden">
+    <!-- 水系:西湖(左上大水面)+ 小支流 -->
+    <div class="absolute left-[-46px] top-[-28px] w-[210px] h-[190px] rounded-[80px] rotate-6" style="background:#CDEBE9"></div>
+    <div class="absolute left-[148px] top-[52px] w-[54px] h-[76px] rounded-[40px] -rotate-12" style="background:#CDEBE9"></div>
+    <span class="absolute left-[26px] top-[92px] text-[11px] font-black tracking-[.2em]" style="color:#5FA8A2">西&nbsp;湖</span>
+    <div class="absolute left-[-20px] top-[190px] w-[150px] h-[26px] rounded-full" style="background:#CDEBE9;opacity:.8"></div>
+    <!-- 绿地:柳浪闻莺 / 湖滨公园 -->
+    <div class="absolute left-[-24px] bottom-[-30px] w-[190px] h-[120px] rounded-[46px]" style="background:#E2F0DC"></div>
+    <span class="absolute left-[18px] bottom-[16px] text-[10px] font-black" style="color:#7BA86F">🌲 柳浪闻莺</span>
+    <div class="absolute right-[64px] top-[6px] w-[92px] h-[58px] rounded-[30px]" style="background:#E2F0DC"></div>
+    <span class="absolute right-[74px] top-[26px] text-[10px] font-black" style="color:#7BA86F">湖滨公园</span>
+    <!-- 路网:主干(蜜色 #FFE3B3 + 白包边)/次干(白)分级 -->
+    <div class="road-major left-0 right-0" style="top:150px"></div>
+    <div class="road-major top-0 bottom-0" style="left:262px;width:20px"></div>
+    <div class="road-minor left-0 right-0" style="top:86px;height:11px"></div>
+    <div class="road-minor left-0 right-0" style="top:238px;height:13px"></div>
+    <div class="road-minor top-0 bottom-0" style="left:150px;width:11px"></div>
+    <div class="road-minor top-[150px] bottom-0" style="left:206px;width:11px"></div>
+    <div class="road-minor left-[262px] right-0" style="top:308px;height:11px"></div>
+    <!-- 路名标注 -->
+    <span class="road-name" style="left:196px;top:156px">西湖大道</span>
+    <span class="road-name" style="left:64px;top:244px">南山路</span>
+    <span class="road-name" style="left:267px;top:186px;writing-mode:vertical-rl;letter-spacing:.14em">延安路</span>
+    <span class="road-name" style="left:155px;top:60px;writing-mode:vertical-rl;letter-spacing:.14em">湖滨路</span>
+    <span class="road-name" style="left:14px;top:92px">庆春路</span>
+    <!-- POI 小点 + 标注 -->
+    <span class="poi" style="left:300px;top:200px"></span><span class="poi-lbl" style="left:312px;top:196px">银泰 in77</span>
+    <span class="poi" style="left:104px;top:130px"></span><span class="poi-lbl" style="left:116px;top:126px">音乐喷泉</span>
+    <span class="poi" style="left:224px;top:270px"></span><span class="poi-lbl" style="left:236px;top:266px">美术馆</span>
+    <span class="poi" style="left:52px;top:266px"></span><span class="poi-lbl" style="left:64px;top:262px">长桥公园</span>
+    <!-- 贴纸微建筑(白底墨描边,FA 图标 A-732) -->
+    <div class="bld" style="left:286px;top:118px"><i class="fa-solid fa-building"></i></div>
+    <div class="bld" style="left:224px;top:174px"><i class="fa-solid fa-mug-hot"></i></div>
+    <div class="bld" style="left:60px;top:196px"><i class="fa-solid fa-landmark"></i></div>
+    <!-- 内容贴纸针(类型色 D-057 + FA 类型锚 + 条数徽标) -->
+    <div class="pin" style="left:14%;top:40%;background:var(--coral);transform:rotate(-2deg)"><i class="fa-solid fa-cube" style="color:#fff"></i><span class="badge-n">3</span></div>
+    <div class="pin" style="left:58%;top:16%;background:var(--teal);transform:rotate(2deg)"><i class="fa-solid fa-image" style="color:#fff"></i><span class="badge-n">1</span></div>
+    <div class="pin" style="left:70%;top:56%;background:var(--amber);transform:rotate(-1deg)"><i class="fa-solid fa-comment-dots" style="color:#fff"></i><span class="badge-n">2</span></div>
+    <!-- 聚合胶囊(低缩放态) -->
+    <div class="absolute" style="left:36%;top:70%"><span class="inline-flex items-center gap-1 px-2.5 h-[26px] rounded-full border-2 border-[#1A1410] text-[12px] font-extrabold" style="background:var(--sun);box-shadow:2px 2px 0 #1A1410"><i class="fa-solid fa-layer-group text-[10px]"></i>8</span></div>
+    <!-- 用户定位点(呼吸光环) -->
+    <div class="absolute" style="left:47%;top:52%">
+      <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full pulse" style="background:rgba(78,205,196,.35)"></span>
+      <span class="relative block w-[18px] h-[18px] rounded-full border-2 border-white" style="background:var(--teal);box-shadow:0 0 0 1.5px #1A1410"></span>
+    </div>
+    <!-- 浮层:附近计数 / 半径切换 / 热门入口 -->
+    <div class="absolute left-3 top-2.5 stk-sm px-3 py-1.5"><span class="text-[13px] font-extrabold"><i class="fa-solid fa-location-dot text-[#FF6B4A]"></i> 附近 <span class="num text-[#FF6B4A]">12</span> 处</span></div>
+    <div class="absolute right-3 top-2.5 stk-sm flex items-center p-0.5 gap-0.5">
+      <span class="px-2 py-1 rounded-full text-[11px] font-extrabold">500m</span>
+      <span class="px-2 py-1 rounded-full text-[11px] font-extrabold text-white" style="background:var(--coral)">1k</span>
+      <span class="px-2 py-1 rounded-full text-[11px] font-extrabold">5k</span>
+    </div>
+    <button class="absolute left-3 top-[54px] stk-sm px-3 py-1.5"><span class="text-[12px] font-extrabold"><i class="fa-solid fa-fire" style="color:#E8463A"></i> 热门区域</span></button>
+    <!-- 右下放置 FAB -->
+    <button class="absolute right-4 bottom-4 w-[52px] h-[52px] rounded-[18px] flex items-center justify-center text-white text-[20px] border-2 border-[#1A1410]" style="background:var(--coral);box-shadow:4px 4px 0 #1A1410"><i class="fa-solid fa-plus"></i></button>
+  </div>
+
+  <!-- 详情卡浮层(贴纸卡,D-063 真实化:具体标题/昵称/距离/时间/赞数) -->
+  <main class="flex-1 overflow-y-auto px-4 pt-3 pb-3">
+    <div class="stk p-3.5">
+      <div class="w-9 h-1.5 rounded-full bg-[#1A1410]/20 mx-auto mb-3"></div>
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=120&q=80" alt="内容缩略图" class="w-[64px] h-[64px] rounded-[14px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap"><span class="chip text-white" style="background:var(--coral)"><i class="fa-solid fa-cube text-[10px]"></i>模型</span><span class="chip bg-white">3 条内容</span></div>
+          <h2 class="text-[17px] font-black mt-1.5 truncate">在断桥给未来的我们</h2>
+          <p class="text-[12px] text-[#6F6259] font-semibold">@林小满 · 120m · 步行约 2 分钟</p>
+        </div>
+      </div>
+      <div class="flex gap-2.5 mt-3.5">
+        <button class="btn-hard flex-1 h-[44px] text-[15px] text-white" style="background:var(--coral)"><i class="fa-solid fa-person-walking"></i>前往</button>
+        <button class="btn-hard h-[44px] px-4 bg-white text-[15px]"><i class="fa-regular fa-heart" style="color:var(--coral)"></i><span class="num">27</span></button>
+      </div>
+      <p class="text-[11px] text-[#6F6259] font-semibold mt-2.5"><i class="fa-regular fa-clock"></i> 最近更新:2 小时前 · 距你最近的锚点 35m</p>
+    </div>
+
+    <!-- E1 空区域三出口(幽默贴纸化) -->
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-map"></i>状态样式 · 附近无内容(E1)</span>
+      <div class="flex items-center gap-3 mt-3">
+        <div class="stk-sm w-14 h-14 flex items-center justify-center text-[24px] -rotate-3 shrink-0 wig">🫧</div>
+        <p class="text-[14px] font-bold leading-snug">这一片还是空白地图…<br><span class="text-[12px] text-[#6F6259] font-semibold">别灰心,惊喜都在下一个路口</span></p>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mt-3">
+        <div class="rounded-[14px] border-2 border-[#1A1410] bg-white p-2 text-center"><div class="text-[18px]" style="color:#1A1410"><i class="fa-solid fa-magnifying-glass-plus"></i></div><p class="text-[11px] font-extrabold mt-0.5">扩大范围<br>1k / 5k</p></div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] p-2 text-center" style="background:rgba(255,179,71,.35)"><div class="text-[18px]" style="color:#1A1410"><i class="fa-solid fa-medal"></i></div><p class="text-[11px] font-extrabold mt-0.5">创建第一个<br>+积分奖励</p></div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] bg-white p-2 text-center"><div class="text-[18px]" style="color:#E8463A"><i class="fa-solid fa-fire"></i></div><p class="text-[11px] font-extrabold mt-0.5">去热门区域<br>逛逛</p></div>
+      </div>
+    </div>
+
+    <!-- E2 定位权限拒绝退化 -->
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-location-crosshairs"></i>状态样式 · 定位权限被拒绝(E2)</span>
+      <div class="mt-3 rounded-[14px] border-2 border-[#1A1410] bg-white p-3 flex items-center gap-3">
+        <span class="text-[20px] shrink-0" style="color:#1A1410"><i class="fa-solid fa-folder-open"></i></span>
+        <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold">查看我创建的所有内容</p><p class="text-[11px] text-[#6F6259] font-semibold">替代地图发现,跳转内容管理</p></div>
+        <span class="chip shrink-0" style="background:rgba(78,205,196,.15);color:#0E7F78">去设置</span>
+      </div>
+    </div>
+
+    <!-- 加载骨架 + 无网络 -->
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-spinner"></i>状态样式 · 地图加载中 / 无网络</span>
+      <div class="mt-3 flex gap-2">
+        <div class="skel h-8 flex-1 rounded-lg border-2 border-[#1A1410]"></div>
+        <div class="skel h-8 w-20 rounded-lg border-2 border-[#1A1410]"></div>
+      </div>
+      <p class="text-[12px] text-[#6F6259] font-semibold mt-2">无网络:离线灰图 + 「点击重试」贴纸按钮</p>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab1 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+<style>.wig{animation:wig 3.6s ease-in-out infinite}@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}</style>
+</body>
+</html>

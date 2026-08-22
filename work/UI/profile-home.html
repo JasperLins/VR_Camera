@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S30 个人主页(P1) · VR留念</title>
+<!-- 字号 px 等值;FR-13:头像/足迹摘要/打卡墙开关/入口聚合;D-063:FA 图标+真实化资料(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <!-- 头部:头像贴纸 + 足迹摘要(Z3 数字主角) -->
+    <div class="mt-2 flex items-center gap-4">
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&q=80" alt="用户头像" class="w-[76px] h-[76px] rounded-[24px] object-cover border-2 border-[#1A1410] rotate-3" style="box-shadow:4px 4px 0 #1A1410">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2 flex-wrap"><h1 class="text-[22px] font-black">林小满</h1><span class="chip" style="background:rgba(78,205,196,.15);color:#0E7F78"><i class="fa-brands fa-weixin text-[11px]"></i>已绑定</span></div>
+        <p class="text-[12px] text-[#6F6259] font-semibold mt-0.5">@林小满 · 杭州 · 加入 62 天</p>
+        <div class="flex items-end gap-4 mt-1.5">
+          <div><p class="num text-[26px] leading-none">24</p><p class="lbl">打卡</p></div>
+          <div><p class="num text-[26px] leading-none">5</p><p class="lbl">城市</p></div>
+          <div><p class="num text-[26px] leading-none">7</p><p class="lbl">作品</p></div>
+          <div><p class="num text-[26px] leading-none">158</p><p class="lbl">获赞</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 打卡墙公开开关 -->
+    <div class="stk px-4 py-3.5 mt-4 flex items-center gap-3">
+      <span class="text-[18px] shrink-0" style="color:#C2410C"><i class="fa-solid fa-table-cells"></i></span>
+      <div class="flex-1 min-w-0">
+        <p class="text-[15px] font-extrabold">公开我的打卡墙</p>
+        <p class="text-[12px] text-[#6F6259] font-semibold">好友可浏览你的足迹时间线</p>
+      </div>
+      <span class="shrink-0 w-[52px] h-[30px] rounded-full border-2 border-[#1A1410] relative" style="background:var(--coral)">
+        <span class="absolute top-[2px] right-[3px] w-[20px] h-[20px] rounded-full bg-white border-2 border-[#1A1410]"></span>
+      </span>
+    </div>
+
+    <!-- 入口列表 -->
+    <div class="stk divide-y divide-[#EFE0D2] mt-3.5">
+      <button class="w-full flex items-center gap-3 px-4 py-3.5"><span class="text-[18px] shrink-0" style="color:#B45309"><i class="fa-solid fa-shoe-prints"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">打卡足迹</p><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i></button>
+      <button class="w-full flex items-center gap-3 px-4 py-3.5"><span class="text-[18px] shrink-0" style="color:#0E7F78"><i class="fa-solid fa-folder-open"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">我的内容管理</p><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i></button>
+      <button class="w-full flex items-center gap-3 px-4 py-3.5"><span class="text-[18px] shrink-0" style="color:#B45309"><i class="fa-solid fa-coins"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">Token·积分钱包</p><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i></button>
+      <button class="w-full flex items-center gap-3 px-4 py-3.5"><span class="text-[18px] shrink-0" style="color:#C2410C"><i class="fa-solid fa-bag-shopping"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">商店 · 我的创作</p><span class="chip shrink-0 bg-white">3 件在架</span><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i></button>
+      <button class="w-full flex items-center gap-3 px-4 py-3.5"><span class="text-[18px] shrink-0" style="color:#6F6259"><i class="fa-solid fa-gear"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">设置与隐私</p><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i></button>
+    </div>
+
+    <!-- 状态样式:游客态 / 零足迹 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-user-secret"></i>状态样式 · 游客态 / 零足迹</span>
+      <div class="mt-3 space-y-2.5">
+        <div class="rounded-[16px] border-2 border-[#1A1410] bg-white p-3.5 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-[16px] border-2 border-dashed border-[#1A1410] flex items-center justify-center text-[22px] shrink-0" style="color:#6F6259"><i class="fa-solid fa-user"></i></div>
+          <div class="flex-1 min-w-0"><p class="text-[14px] font-black">游客模式</p><p class="text-[12px] text-[#6F6259] font-semibold">升级后可放置 / 生成 / 攒积分</p></div>
+          <button class="btn-hard h-[38px] px-4 text-[13px] text-white shrink-0" style="background:var(--coral)"><i class="fa-brands fa-weixin text-[13px]"></i>升级</button>
+        </div>
+        <div class="rounded-[16px] border-2 border-[#1A1410] bg-white p-4 flex flex-col items-center text-center">
+          <div class="stk-sm w-14 h-14 flex items-center justify-center text-[26px] rotate-3" style="color:#B45309"><i class="fa-solid fa-shoe-prints"></i></div>
+          <p class="text-[14px] font-bold mt-2">还没有足迹,去逛逛留下第一枚</p>
+          <button class="btn-hard h-[38px] px-6 text-[13px] mt-2.5 bg-white">去逛逛</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab4 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+</body>
+</html>

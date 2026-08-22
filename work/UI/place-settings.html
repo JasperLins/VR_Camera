@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S12 放置设置 · VR留念</title>
+<!-- 字号 px 等值;FR-03:可见性/失效三档/私密好友多选+口令;E20 警告;D-063:FA 图标+放置成功 Toast+真实化(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.tag{border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;background:#fff;white-space:nowrap}
+.tag-on{background:var(--coral);color:#fff}
+/* D-063 全局 Toast(G2):墨底白字胶囊 */
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:64px;background:var(--ink);color:#fff;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;box-shadow:2px 2px 0 rgba(26,20,16,.3);z-index:40;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-6">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">放置设置</h1>
+      <span class="chip ml-auto bg-white shrink-0"><i class="fa-solid fa-cube text-[11px]" style="color:#C2410C"></i>鲸鱼阿北</span>
+    </div>
+    <p class="text-[12px] text-[#6F6259] font-semibold num mt-1 ml-[46px]"><i class="fa-solid fa-location-crosshairs text-[10px]"></i> 30.2492°N, 120.1508°E · 海拔 8.6m</p>
+
+    <!-- 可见性单选 -->
+    <p class="lbl mt-4 mb-2">谁能看到</p>
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3.5">
+        <div class="flex items-center justify-between"><span class="text-[22px]" style="color:#0E7F78"><i class="fa-solid fa-earth-asia"></i></span><span class="w-6 h-6 rounded-full border-2 border-[#1A1410] bg-white"></span></div>
+        <p class="text-[16px] font-black mt-2">公开</p>
+        <p class="text-[12px] font-semibold text-[#6F6259]">出现在公共地图,人人可见</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] p-3.5" style="background:rgba(255,107,74,.12)">
+        <div class="flex items-center justify-between"><span class="text-[22px]" style="color:#C2410C"><i class="fa-solid fa-lock"></i></span><span class="w-6 h-6 rounded-full border-2 border-[#1A1410] flex items-center justify-center" style="background:var(--coral)"><i class="fa-solid fa-check text-white text-[11px]"></i></span></div>
+        <p class="text-[16px] font-black mt-2">私密</p>
+        <p class="text-[12px] font-semibold text-[#6F6259]">仅授权好友 + 口令解锁,默认永久</p>
+      </div>
+    </div>
+
+    <!-- 失效时间(公开时三档) -->
+    <p class="lbl mt-5 mb-2">公开内容的有效期</p>
+    <div class="stk p-3 flex gap-2">
+      <span class="tag flex-1 text-center">7 天</span>
+      <span class="tag tag-on flex-1 text-center">30 天</span>
+      <span class="tag flex-1 text-center">永久</span>
+    </div>
+    <p class="text-[12px] text-[#6F6259] font-semibold mt-1.5">默认 30 天,到期自动隐藏、可随时恢复原位;私密内容默认永久</p>
+
+    <!-- 私密配置 -->
+    <p class="lbl mt-5 mb-2">授权好友(私密)</p>
+    <div class="stk p-3.5">
+      <div class="flex gap-3">
+        <div class="relative shrink-0">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80" alt="好友陈其" class="w-[52px] h-[52px] rounded-[16px] object-cover border-2 border-[#1A1410]">
+          <span class="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-[#1A1410] flex items-center justify-center" style="background:var(--coral)"><i class="fa-solid fa-check text-white text-[9px]"></i></span>
+          <p class="text-[10px] font-extrabold text-center mt-1">@陈其</p>
+        </div>
+        <div class="relative shrink-0">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=96&q=80" alt="好友老周" class="w-[52px] h-[52px] rounded-[16px] object-cover border-2 border-[#1A1410]">
+          <span class="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-[#1A1410] flex items-center justify-center" style="background:var(--coral)"><i class="fa-solid fa-check text-white text-[9px]"></i></span>
+          <p class="text-[10px] font-extrabold text-center mt-1">@老周</p>
+        </div>
+        <div class="relative shrink-0 opacity-70">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&q=80" alt="好友小南" class="w-[52px] h-[52px] rounded-[16px] object-cover border-2 border-[#1A1410]">
+          <p class="text-[10px] font-extrabold text-center mt-1">@小南</p>
+        </div>
+        <button class="shrink-0 w-[52px] h-[52px] mt-0 rounded-[16px] border-2 border-dashed border-[#1A1410] bg-white flex items-center justify-center text-[18px] text-[#6F6259]"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <p class="text-[12px] text-[#6F6259] font-semibold mt-2.5">已授权 2 人 · 被移除后对方取景框中即刻上锁消失</p>
+    </div>
+
+    <!-- 口令生成 -->
+    <p class="lbl mt-5 mb-2">专属口令</p>
+    <div class="stk p-3.5 flex items-center gap-3">
+      <div class="flex gap-1.5 shrink-0">
+        <span class="w-8 h-11 rounded-[10px] border-2 border-[#1A1410] bg-[#FFF3DF] flex items-center justify-center num text-[18px]">7</span>
+        <span class="w-8 h-11 rounded-[10px] border-2 border-[#1A1410] bg-[#FFF3DF] flex items-center justify-center num text-[18px]">2</span>
+        <span class="w-8 h-11 rounded-[10px] border-2 border-[#1A1410] bg-[#FFF3DF] flex items-center justify-center num text-[18px]">4</span>
+        <span class="w-8 h-11 rounded-[10px] border-2 border-[#1A1410] bg-[#FFF3DF] flex items-center justify-center num text-[18px]">1</span>
+      </div>
+      <div class="flex-1 min-w-0 text-right">
+        <p class="text-[12px] font-semibold text-[#6F6259]">微信发口令或链接给好友<br>附一句话邀请文案模板</p>
+      </div>
+      <button class="btn-hard h-[40px] px-4 text-[13px] bg-white shrink-0"><i class="fa-regular fa-copy text-[12px]"></i>复制</button>
+    </div>
+
+    <!-- 确认放置 -->
+    <button class="btn-hard w-full h-[52px] text-[17px] text-white mt-6" style="background:var(--coral)"><i class="fa-solid fa-paper-plane"></i>确认放置</button>
+    <p class="text-center text-[12px] text-[#6F6259] font-semibold mt-2">放置成功后,锚点即刻出现在取景框</p>
+
+    <!-- 状态样式 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-triangle-exclamation"></i>状态样式 · 边界(E20 / 机审)</span>
+      <div class="mt-3 space-y-2">
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5" style="background:rgba(245,158,11,.12)">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-hand"></i></span><p class="text-[13px] font-bold">未选择好友:将没有人能看到这份私密内容</p>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5 bg-white">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-shield-halved"></i></span><p class="text-[13px] font-bold">机审拦截:内容未通过审核,可修改后重新提交</p>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5" style="background:rgba(78,205,196,.15)">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-hourglass-half"></i></span><p class="text-[13px] font-bold">放置中 Loading:按钮转菊花,完成后锚点弹出动效</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- D-063 全局反馈:放置成功 Toast(呈现 ≤2s 后自动消失) -->
+  <div class="toast"><i class="fa-solid fa-circle-check" style="color:#3BE39A"></i>放置成功!锚点已出现在取景框</div>
+  <span class="absolute left-1/2 -translate-x-1/2 bottom-40 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-[#1A1410] bg-white z-40" style="color:#6F6259">Toast ≤2s 自动消失</span>
+
+  <!-- 底部手势条(D-063) -->
+  <div class="shrink-0 bg-[#FFF9F5] pb-1.5 pt-0"><div class="mx-auto w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div></div>
+</div>
+</body>
+</html>

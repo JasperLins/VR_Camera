@@ -1,0 +1,20 @@
+{
+    "name": "VRM.Bootstrap",
+    "rootNamespace": "VRM.Bootstrap",
+    "references": [
+        "VRM.Core",
+        "VRM.Networking",
+        "VRM.UI",
+        "VRM.Map",
+        "VRM.AR"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「VR 留念」高保真静态原型 · v0.3.1 贴纸潮玩 · 产品级打磨</title>
+<!-- v0.3.1(D-063):产品级六维打磨(系统级仿真/FA 图标统一/内容真实化/地图细节/AR HUD/一致性);CDN jsDelivr 已校验 -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.wrap{width:100%;max-width:1380px;margin:0 auto;padding:20px 16px 60px}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.device{width:100%;max-width:431px;margin:0 auto;background:#1A1410;border-radius:44px;padding:18px;box-shadow:8px 8px 0 rgba(26,20,16,.9)}
+.device iframe{width:100%;height:852px;border:0;border-radius:28px;display:block;background:#FFF9F5}
+.cap{margin-top:14px;text-align:center}
+.wig{animation:wig 3.6s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 头部说明卡 -->
+  <div class="stk p-5 md:p-7">
+    <div class="flex items-start gap-4 flex-wrap">
+      <div class="w-[72px] h-[72px] rounded-[22px] flex items-center justify-center border-2 border-[#1A1410] shrink-0 wig" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)">
+        <i class="fa-solid fa-location-dot text-white text-[30px]"></i>
+      </div>
+      <div class="flex-1 min-w-[240px]">
+        <h1 class="text-[28px] md:text-[34px] font-black leading-tight">「VR 留念」高保真原型 <span class="px-2 py-0.5 rounded-xl align-middle text-[16px]" style="background:#FFD98E;border:2px solid #1A1410">v0.3.1 产品级打磨</span></h1>
+        <p class="text-[14px] font-semibold text-[#6F6259] mt-1.5">地理 AR 留念 App · 32 屏 · 393×852(iPhone 15 Pro)· 设计语言对标 Zenly(D-059),珊瑚橙暖色板(D-056),本轮 D-063 六维打磨消灭 demo 感</p>
+        <div class="flex gap-2 mt-3 flex-wrap">
+          <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C">📐 32/32 屏(P0×24 · P1×7 · P2×1)</span>
+          <span class="chip" style="background:rgba(255,179,71,.18)">🎨 贴纸 + 2px 墨描边 + 硬阴影</span>
+          <span class="chip" style="background:rgba(78,205,196,.15);color:#0E7F78">🚫 无横向滚动(D-058)</span>
+          <span class="chip bg-white">📦 Tailwind/FontAwesome · jsDelivr CDN</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 rounded-[16px] border-2 border-[#1A1410] px-4 py-3 text-[13px] font-semibold leading-relaxed" style="background:rgba(78,205,196,.12)">
+      <b>D-063 产品级六维打磨(本轮增量)</b>:① 系统级仿真——每屏状态栏 + 底部手势条,S8/S32 键盘弹层态,S12/S16/S19 放置/保存成功 Toast;② 图标体系统一——emoji 锚(🗿/🖼️/💬)全部替换为 FontAwesome(模型 fa-cube / 图片 fa-image / 文字 fa-comment-dots),勋章与功能入口同步,仅保留少量描边化装饰贴纸;③ 内容真实化——人名/标题/相对+绝对时间/规范距离/变异数字,列表屏 6-8 条起;④ 地图细节——西湖水系/绿地/主次路网分级/路名(南山路·西湖大道·延安路)/POI 小点,贴纸针仍是主角;⑤ AR 舞台 HUD——三分取景网格/对焦框/测光 EV hint/REC 角标(浏览态不用)+ 双色氛围光;⑥ 一致性——全站 2px 墨描边、硬阴影右下 4px、间距 4 的倍数、图片换更贴场景的城市街景/公园/夜景直链(range GET 206 验证)。
+    </div>
+    <div class="mt-4 rounded-[16px] border-2 border-[#1A1410] px-4 py-3 text-[13px] font-semibold leading-relaxed" style="background:rgba(255,179,71,.14)">
+      <b>Zenly 解构 → 本产品落法(得其神,不照抄)</b>:① 贴纸/模因化 → 内容卡与成就徽章贴纸化(墨描边+硬偏移阴影+微旋转);② 平涂撞色+黑描边 → 三色平涂分区卡 + 全站 2px 墨边,渐变收缩为霓虹强调(凸起相机钮/AR 深色舞台/加载);③ 超大字强对比 → 展示字层 44/32(余额/百分比/倒计时);④ 地图即社交场 → 内容标记为「贴纸针」(emoji+条数徽标),奶油底卡通地图;⑤ 手势优先+底部弹层 → 第三层一律圆角 28 底部弹层;⑥ 深色模式+霓虹 → AR 取景流为深色舞台+珊瑚霓虹,与暖白纸面构成「纸面↔舞台」双世界。解构来源:TechCrunch 2022 改版评测、人人都是产品经理 5.0 拆解、UX Collective 案例研究、Mobbin 档案(详见 docs/05-uiux/ui-spec.md §6.0)。
+    </div>
+    <div class="mt-3 grid md:grid-cols-2 gap-3">
+      <div class="rounded-[16px] border-2 border-[#1A1410] px-4 py-3 bg-white">
+        <p class="text-[13px] font-black">✔ 内嵌决策保持不变</p>
+        <p class="text-[12px] font-semibold text-[#6F6259] mt-1 leading-relaxed">D-023 套餐「即将开放」零购买按钮 · D-029 仅 Token 数 · D-021「扫码回到这里」· D-022 S6/S7 浮层 · D-030 游客登录引导 · D-031 隐私总览+逐项弹窗 · 5.10 同框上限 2;演示值:余额 80 / 套餐 60·190·480·1140 / 生成消耗 4。</p>
+      </div>
+      <div class="rounded-[16px] border-2 border-[#1A1410] px-4 py-3" style="background:rgba(78,205,196,.12)">
+        <p class="text-[13px] font-black">🏢 管理后台 A1–A6(不做高保真,去向交代)</p>
+        <p class="text-[12px] font-semibold text-[#6F6259] mt-1 leading-relaxed">A1 后台登录与 RBAC · A2 内容管理(锚点列表/地图预览/强制下架)· A3 审核工作流(机审复核/举报工单 48h SLA)· A4 用户与账本(流水/退款/积分调整)· A5 seeding 运营工具(≥50 锚点批量放置)· A6 运营数据看板 —— 均以 AntD Pro 后台实现,详见 ux-flows.md §8。</p>
+      </div>
+    </div>
+    <p class="text-[12px] font-semibold text-[#6F6259] mt-3">TabBar 豁免(A-701):S1/S2 引导流、S5–S20 与 S32 AR 全屏会话无 TabBar;3D 模型以类型色平涂+emoji 贴纸示意(设计选择,非占位符);AR 画面为实拍街景照片模拟。</p>
+  </div>
+
+  <!-- 屏幕画廊:≤640px 单列(D-058) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+
+    <div><div class="device"><iframe src="app-splash.html" loading="lazy" title="S1 启动与登录"></iframe></div><p class="cap text-[13px] font-extrabold">S1 · 启动与登录<div class="text-[12px] font-semibold text-[#6F6259]">协议勾选 / 微信登录 / 游客体验</div></p></div>
+    <div><div class="device"><iframe src="privacy-consent.html" loading="lazy" title="S2 隐私授权总览"></iframe></div><p class="cap text-[13px] font-extrabold">S2 · 隐私授权总览<div class="text-[12px] font-semibold text-[#6F6259]">三权限卡逐项同意(D-031)</div></p></div>
+    <div><div class="device"><iframe src="map-home.html" loading="lazy" title="S3 地图发现首页"></iframe></div><p class="cap text-[13px] font-extrabold">S3 · 地图发现首页<div class="text-[12px] font-semibold text-[#6F6259]">贴纸针 / 详情卡 / 空区域三出口</div></p></div>
+    <div><div class="device"><iframe src="hot-areas.html" loading="lazy" title="S4 热门区域列表"></iframe></div><p class="cap text-[13px] font-extrabold">S4 · 热门区域列表<div class="text-[12px] font-semibold text-[#6F6259]">区域卡 / 空态幽默化</div></p></div>
+    <div><div class="device"><iframe src="ar-view.html" loading="lazy" title="S5 AR 浏览取景框"></iframe></div><p class="cap text-[13px] font-extrabold">S5 · AR 浏览取景框<div class="text-[12px] font-semibold text-[#6F6259]">深色舞台 / 内容卡 / 雷达</div></p></div>
+    <div><div class="device"><iframe src="ar-align-overlay.html" loading="lazy" title="S6 对齐等待浮层"></iframe></div><p class="cap text-[13px] font-extrabold">S6 · 对齐等待浮层<div class="text-[12px] font-semibold text-[#6F6259]">扫描动画 / ≤15s 进度(D-022)</div></p></div>
+    <div><div class="device"><iframe src="ar-align-fail-overlay.html" loading="lazy" title="S7 对齐失败降级浮层"></iframe></div><p class="cap text-[13px] font-extrabold">S7 · 对齐失败降级浮层<div class="text-[12px] font-semibold text-[#6F6259]">重试 / 低精度继续 / 返回地图</div></p></div>
+    <div><div class="device"><iframe src="ar-private-lock.html" loading="lazy" title="S8 私密内容解锁浮层"></iframe></div><p class="cap text-[13px] font-extrabold">S8 · 私密内容解锁浮层<div class="text-[12px] font-semibold text-[#6F6259]">口令输入 / 解锁后虚线+锁</div></p></div>
+    <div><div class="device"><iframe src="ar-thermal-overlay.html" loading="lazy" title="S9 发热提示浮层"></iframe></div><p class="cap text-[13px] font-extrabold">S9 · 发热提示浮层<div class="text-[12px] font-semibold text-[#6F6259]">3s 倒计时 / 每会话一次</div></p></div>
+    <div><div class="device"><iframe src="place-mode.html" loading="lazy" title="S10 放置对位模式"></iframe></div><p class="cap text-[13px] font-extrabold">S10 · 放置对位模式<div class="text-[12px] font-semibold text-[#6F6259]">准星对位 / 他锚点变暗</div></p></div>
+    <div><div class="device"><iframe src="content-picker.html" loading="lazy" title="S11 内容来源选择"></iframe></div><p class="cap text-[13px] font-extrabold">S11 · 内容来源选择<div class="text-[12px] font-semibold text-[#6F6259]">官方库 / 我的模型 / 照片生成</div></p></div>
+    <div><div class="device"><iframe src="place-settings.html" loading="lazy" title="S12 放置设置"></iframe></div><p class="cap text-[13px] font-extrabold">S12 · 放置设置<div class="text-[12px] font-semibold text-[#6F6259]">可见性 / 失效三档 / 口令</div></p></div>
+    <div><div class="device"><iframe src="gen-upload.html" loading="lazy" title="S13 上传照片"></iframe></div><p class="cap text-[13px] font-extrabold">S13 · 上传照片<div class="text-[12px] font-semibold text-[#6F6259]">校验 / 版权提示 / 照片即删</div></p></div>
+    <div><div class="device"><iframe src="gen-config.html" loading="lazy" title="S14 标签配置面板"></iframe></div><p class="cap text-[13px] font-extrabold">S14 · 标签配置面板<div class="text-[12px] font-semibold text-[#6F6259]">标签驱动 / 消耗 −4(D-029)</div></p></div>
+    <div><div class="device"><iframe src="gen-progress.html" loading="lazy" title="S15 生成进度"></iframe></div><p class="cap text-[13px] font-extrabold">S15 · 生成进度<div class="text-[12px] font-semibold text-[#6F6259]">百分比 / 阶段步进 / 比例退款</div></p></div>
+    <div><div class="device"><iframe src="gen-result.html" loading="lazy" title="S16 结果预览"></iframe></div><p class="cap text-[13px] font-extrabold">S16 · 结果预览<div class="text-[12px] font-semibold text-[#6F6259]">四视角 / AI 标识 / 保存</div></p></div>
+    <div><div class="device"><iframe src="checkin-viewfinder.html" loading="lazy" title="S17 打卡取景模式"></iframe></div><p class="cap text-[13px] font-extrabold">S17 · 打卡取景模式<div class="text-[12px] font-semibold text-[#6F6259]">走动构图 / 3s 倒计时 / 快门</div></p></div>
+    <div><div class="device"><iframe src="companion-picker.html" loading="lazy" title="S18 同框角色面板"></iframe></div><p class="cap text-[13px] font-extrabold">S18 · 同框角色面板<div class="text-[12px] font-semibold text-[#6F6259]">双 Tab / 已选 ≤2(5.10)/ 伦理提示</div></p></div>
+    <div><div class="device"><iframe src="photo-preview.html" loading="lazy" title="S19 拍立得预览"></iframe></div><p class="cap text-[13px] font-extrabold">S19 · 拍立得预览<div class="text-[12px] font-semibold text-[#6F6259]">相纸水印 / 扫码回到这里(D-021)</div></p></div>
+    <div><div class="device"><iframe src="share-sheet.html" loading="lazy" title="S20 分享面板"></iframe></div><p class="cap text-[13px] font-extrabold">S20 · 分享面板<div class="text-[12px] font-semibold text-[#6F6259]">微信两态 / 积分 Toast / 回流说明</div></p></div>
+    <div><div class="device"><iframe src="content-manage.html" loading="lazy" title="S21 我的内容管理"></iframe></div><p class="cap text-[13px] font-extrabold">S21 · 我的内容管理<div class="text-[12px] font-semibold text-[#6F6259]">可见/隐藏/删除 三态 / 恢复原位</div></p></div>
+    <div><div class="device"><iframe src="wallet-home.html" loading="lazy" title="S22 Token·积分钱包"></iframe></div><p class="cap text-[13px] font-extrabold">S22 · Token·积分钱包<div class="text-[12px] font-semibold text-[#6F6259]">余额 80 大字 / 积分规则 / 赠送途径</div></p></div>
+    <div><div class="device"><iframe src="token-packages.html" loading="lazy" title="S23 Token 套餐页"></iframe></div><p class="cap text-[13px] font-extrabold">S23 · Token 套餐页<div class="text-[12px] font-semibold text-[#6F6259]">四档全「即将开放」零购买(D-023)</div></p></div>
+    <div><div class="device"><iframe src="ledger-detail.html" loading="lazy" title="S24 流水明细"></iframe></div><p class="cap text-[13px] font-extrabold">S24 · 流水明细<div class="text-[12px] font-semibold text-[#6F6259]">双 Tab / 类型筛选 / 分组列表</div></p></div>
+    <div><div class="device"><iframe src="settings.html" loading="lazy" title="S25 设置与隐私中心"></iframe></div><p class="cap text-[13px] font-extrabold">S25 · 设置与隐私中心<div class="text-[12px] font-semibold text-[#6F6259]">权限三卡 / 协议留痕 / 注销</div></p></div>
+    <div><div class="device"><iframe src="store-home.html" loading="lazy" title="S26 商店首页"></iframe></div><p class="cap text-[13px] font-extrabold">S26 · 商店首页<div class="text-[12px] font-semibold text-[#6F6259]">三区 Tab / 双币价格 / 已下架</div></p></div>
+    <div><div class="device"><iframe src="model-detail.html" loading="lazy" title="S27 模型详情"></iframe></div><p class="cap text-[13px] font-extrabold">S27 · 模型详情<div class="text-[12px] font-semibold text-[#6F6259]">四视角 / 支付双轨 / 点赞两态</div></p></div>
+    <div><div class="device"><iframe src="share-to-store.html" loading="lazy" title="S28 分享上架"></iframe></div><p class="cap text-[13px] font-extrabold">S28 · 分享上架<div class="text-[12px] font-semibold text-[#6F6259]">分享权声明 / 审核流转状态</div></p></div>
+    <div><div class="device"><iframe src="report-entry.html" loading="lazy" title="S29 举报入口"></iframe></div><p class="cap text-[13px] font-extrabold">S29 · 举报入口<div class="text-[12px] font-semibold text-[#6F6259]">理由单选 / 48h 人工复核承诺</div></p></div>
+    <div><div class="device"><iframe src="profile-home.html" loading="lazy" title="S30 个人主页"></iframe></div><p class="cap text-[13px] font-extrabold">S30 · 个人主页<div class="text-[12px] font-semibold text-[#6F6259]">足迹摘要 / 打卡墙开关 / 游客态</div></p></div>
+    <div><div class="device"><iframe src="footprints.html" loading="lazy" title="S31 打卡足迹"></iframe></div><p class="cap text-[13px] font-extrabold">S31 · 打卡足迹<div class="text-[12px] font-semibold text-[#6F6259]">时间线/地图双视图 / 成就贴纸</div></p></div>
+    <div><div class="device"><iframe src="comments-sheet.html" loading="lazy" title="S32 留言板"></iframe></div><p class="cap text-[13px] font-extrabold">S32 · 留言板<div class="text-[12px] font-semibold text-[#6F6259]">每人一条 / 24h 修改 / +2 积分</div></p></div>
+  </div>
+
+  <p class="text-center text-[12px] font-semibold text-[#6F6259] mt-8">「VR 留念」静态原型 · ui-spec v0.3 + D-063 产品级打磨 · 界面清单依据 ux-flows.md §5.1(S1–S32)· 屏内允许纵向滚动,画廊移动端单列</p>
+</div>
+</body>
+</html>

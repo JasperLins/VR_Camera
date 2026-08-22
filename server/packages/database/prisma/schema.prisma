@@ -1,0 +1,168 @@
+// 职责:核心数据模型 v1(users / token_accounts / token_ledger / gen_tasks / anchors)
+// 关联需求:FR-03/04/06/07;关联任务:PKG-08(L-2 建模)Sprint-0 先立骨架,B1 批次补全业务表
+// 规范:模型 PascalCase,@map 落 snake_case 表/列名(CONVENTIONS.md §3);全链坐标一律 WGS84(D-006)
+// 说明:PostGIS geography 列 + GiST 索引无法用 Prisma 表达,由 prisma/sql/001_postgis.sql 补丁落装
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ 用户与账号(FR-07 / PKG-08 L-5) ============
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  BANNED
+}
+
+model User {
+  id         String     @id @default(uuid())
+  nickname   String?
+  avatarUrl  String?
+  role       UserRole   @default(USER)
+  status     UserStatus @default(ACTIVE)
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  tokenAccount   TokenAccount?
+  genTasks       GenTask[]
+  anchors        Anchor[]
+
+  @@map("users")
+}
+
+// ============ Token 账本(FR-07 / PKG-13 P-1) ============
+// 权威余额只在服务端(A-405);流水只插入不更新;幂等键唯一索引防重复入账
+
+enum LedgerReason {
+  REGISTER_GRANT
+  GENERATION_DEBIT
+  GENERATION_REFUND_FULL
+  GENERATION_REFUND_PARTIAL
+  ACTIVITY_GRANT
+  ADMIN_ADJUST
+}
+
+model TokenAccount {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  balance   Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user          User               @relation(fields: [userId], references: [id])
+  ledgerEntries TokenLedgerEntry[]
+
+  @@map("token_accounts")
+}
+
+model TokenLedgerEntry {
+  id              String      @id @default(uuid())
+  accountId       String      @map("account_id")
+  delta           Int
+  reason          LedgerReason
+  idempotencyKey  String      @unique @map("idempotency_key")
+  refId           String?     @map("ref_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  account TokenAccount @relation(fields: [accountId], references: [id])
+
+  @@index([accountId, createdAt], map: "token_ledger_account_created_idx")
+  @@map("token_ledger")
+}
+
+// ============ 照片生成 3D 任务(FR-04 / PKG-14 O-1) ============
+// 状态机枚举值与 packages/shared 的 GenTaskStatus 一一对应(修改需双侧同步)
+
+enum GenTaskStatusDb {
+  DEDUCTED
+  SUBMITTED
+  GENERATING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED_ALL
+}
+
+enum GenProvider {
+  MESHY
+  RODIN
+}
+
+model GenTask {
+  id             String          @id @default(uuid())
+  userId         String          @map("user_id")
+  status         GenTaskStatusDb @default(DEDUCTED)
+  provider       GenProvider     @default(MESHY)
+  providerTaskId String?         @unique @map("provider_task_id")
+  photoOssKey    String?         @map("photo_oss_key")
+  glbOssKey      String?         @map("glb_oss_key")
+  thumbnailOssKeys String[]      @map("thumbnail_oss_keys")
+  params         Json?
+  progress       Int             @default(0)
+  errorCode      String?         @map("error_code")
+  refundToken    Int             @default(0) @map("refund_token")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([status, createdAt], map: "gen_tasks_status_created_idx")
+  @@map("gen_tasks")
+}
+
+// ============ 地理锚点(FR-03/FR-06 / PKG-16 N-1、PKG-20) ============
+// 经纬度 WGS84(Decimal 9,6);geography 生成列 + GiST 索引见 prisma/sql/001_postgis.sql
+// 海拔口径统一存 ARCore Geospatial 椭球高(altitude_source 标注来源,禁与 GPS 海拔混用,tech-stack §7.2)
+
+enum AnchorContentType {
+  MODEL
+  IMAGE
+  TEXT
+}
+
+enum AnchorVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum AnchorStatus {
+  VISIBLE
+  HIDDEN
+  DELETED
+}
+
+enum AltitudeSource {
+  GEOSPATIAL
+  GPS
+}
+
+model Anchor {
+  id             String           @id @default(uuid())
+  userId         String           @map("user_id")
+  contentType    AnchorContentType @map("content_type")
+  title          String
+  contentRef     String?          @map("content_ref")
+  latitude       Decimal          @db.Decimal(9, 6)
+  longitude      Decimal          @db.Decimal(9, 6)
+  altitude       Float
+  altitudeSource AltitudeSource   @default(GPS) @map("altitude_source")
+  visibility     AnchorVisibility @default(PUBLIC)
+  status         AnchorStatus     @default(VISIBLE)
+  expiresAt      DateTime?        @map("expires_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([status, expiresAt], map: "anchors_status_expires_idx")
+  @@map("anchors")
+}

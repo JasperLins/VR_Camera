@@ -1,0 +1,16 @@
+{
+    "name": "VRM.Networking",
+    "rootNamespace": "VRM.Networking",
+    "references": [
+        "VRM.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,20 @@
+/** 职责:服务端所有包共享的 TS 编译基线(strict + CommonJS,与 NestJS 10 兼容) */
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "exclude": ["node_modules", "dist", "coverage"]
+}

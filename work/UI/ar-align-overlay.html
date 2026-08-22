@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S6 对齐等待浮层 · VR留念</title>
+<!-- 字号 px 等值;D-022:GPS+罗盘对齐;≤15s 进度;>15s 自动转 S7;D-063:三分线+氛围光+FA 图标(A-732/733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.sweep{animation:sweep 2.6s linear infinite}
+@keyframes sweep{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.wave{animation:wave 2.2s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.12);opacity:.5}}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px);background-size:33.34% 33.34%}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <!-- D-063 氛围光:暗角 + 双色氛围晕 -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 44%,transparent 50%,rgba(20,14,10,.5) 100%),radial-gradient(46% 34% at 14% 86%,rgba(255,107,74,.15),transparent 100%),radial-gradient(40% 30% at 86% 12%,rgba(78,205,196,.11),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.55)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 顶部轻 HUD:经纬度 + 测光 hint -->
+  <div class="relative z-10 flex justify-center gap-2 mt-1 flex-wrap px-4">
+    <span class="chip-d hud"><i class="fa-solid fa-location-crosshairs text-[10px]" style="color:var(--coral)"></i>30.2490°N, 120.1531°E</span>
+    <span class="chip-d hud" style="border-color:rgba(255,255,255,.24)"><i class="fa-solid fa-sun text-[10px]" style="color:#FFD98E"></i>EV -0.3 · 点测光</span>
+  </div>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6">
+    <!-- 扫描动画:环视手势示意(手机 + 扩散波纹,FA 图标) -->
+    <div class="relative w-[150px] h-[150px] rounded-full hud flex items-center justify-center overflow-hidden">
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] h-[260px] rounded-full sweep" style="background:conic-gradient(from 0deg,rgba(255,107,74,.6),rgba(255,179,71,.3),transparent 55%)"></div>
+      <span class="absolute w-[150px] h-[150px] rounded-full border-2 wave" style="border-color:rgba(255,107,74,.5)"></span>
+      <span class="relative text-[52px]" style="color:#fff"><i class="fa-solid fa-mobile-screen-button"></i></span>
+    </div>
+
+    <h1 class="text-[26px] font-black text-center mt-6">正在对齐周围空间</h1>
+    <p class="text-[14px] font-semibold text-center mt-1.5" style="color:rgba(255,255,255,.75)">请持机缓慢环视四周,不要快速甩动</p>
+
+    <!-- 进度条(≤15s 口径) -->
+    <div class="w-full max-w-[280px] mt-7">
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="text-[12px] font-bold" style="color:rgba(255,255,255,.7)">空间对齐进度</span>
+        <span class="num text-[16px]" style="color:var(--coral)">62%</span>
+      </div>
+      <div class="h-[16px] rounded-full border-2 border-white/70 overflow-hidden" style="background:rgba(20,14,10,.5)">
+        <div class="h-full rounded-full" style="width:62%;background:linear-gradient(90deg,#FF6B4A,#FFB347)"></div>
+      </div>
+      <div class="flex justify-between mt-1.5"><span class="text-[11px] font-semibold num" style="color:rgba(255,255,255,.55)">9.3s</span><span class="text-[11px] font-semibold num" style="color:rgba(255,255,255,.55)">≤15s</span></div>
+    </div>
+
+    <div class="flex gap-2 mt-6 flex-wrap justify-center">
+      <span class="chip-d hud"><i class="fa-solid fa-compass text-[11px]" style="color:var(--coral)"></i>GPS + 罗盘双信号</span>
+      <span class="chip-d hud"><i class="fa-solid fa-eye text-[11px]" style="color:#3BE39A"></i>保持身体原地转动</span>
+    </div>
+  </main>
+
+  <div class="relative z-10 px-4 pb-4">
+    <div class="spec-d">
+      <span class="spec-lbl"><i class="fa-solid fa-hourglass-half"></i>状态样式 · 超时与重试(D-022)</span>
+      <p class="text-[12px] font-semibold mt-2" style="color:rgba(255,255,255,.8)">超过 15s 未成功 → 自动进入「对齐失败 / 精度不足」浮层(S7);重试时本浮层重新从头播放,不叠加新弹层。</p>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

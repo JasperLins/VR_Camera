@@ -1,0 +1,52 @@
+# ===== Unity (client/) =====
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+MemoryCaptures/
+Recordings/
+
+# Unity 自动生成的 IDE 工程文件
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+crashlytics-build.properties
+
+# ===== Node (server/ admin/) =====
+node_modules/
+dist/
+build/
+coverage/
+.nest-cache/
+*.tsbuildinfo
+
+# 环境变量与密钥(实值不入库)
+.env
+.env.*
+!.env.example
+*.pem
+*_key.json
+serviceAccountKey*.json
+
+# ===== 通用 =====
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/

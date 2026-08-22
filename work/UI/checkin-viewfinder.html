@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S17 打卡取景模式 · VR留念</title>
+<!-- 字号 px 等值;FR-05/FR-11:模型锚定不可拖,走动构图;3s 倒计时;D-063:三分线/对焦框/REC/测光/氛围光(A-732/733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.pulse{animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.55);opacity:.9}80%{transform:scale(1.9);opacity:0}100%{transform:scale(1.9);opacity:0}}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.13) 1px,transparent 1px);background-size:33.34% 33.34%}
+.focus-box{position:absolute;width:130px;height:150px;pointer-events:none}
+.focus-box span{position:absolute;width:20px;height:20px;border:2.5px solid #FFE3B3}
+.focus-box span:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;border-radius:8px 0 0 0}
+.focus-box span:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;border-radius:0 8px 0 0}
+.focus-box span:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;border-radius:0 0 0 8px}
+.focus-box span:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;border-radius:0 0 8px 0}
+.recdot{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 8px rgba(255,59,48,.9);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80" alt="打卡取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <!-- D-063 氛围光 -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 42%,transparent 54%,rgba(20,14,10,.42) 100%),radial-gradient(42% 30% at 14% 84%,rgba(255,107,74,.15),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(20,14,10,.5) 0%,rgba(20,14,10,0) 30%,rgba(20,14,10,0) 55%,rgba(20,14,10,.75) 100%)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 顶部:关闭 + 模式徽标 + REC(拍摄态)+ 测光 -->
+  <div class="relative z-10 px-4 mt-1 flex items-center gap-2 flex-wrap">
+    <button class="hud w-10 h-10 flex items-center justify-center text-[14px] shrink-0"><i class="fa-solid fa-chevron-left"></i></button>
+    <span class="chip-d hud" style="border-color:rgba(255,107,74,.6);color:#FF9B82"><i class="fa-solid fa-camera text-[11px]"></i>拍摄模式</span>
+    <span class="chip-d hud num" style="border-color:rgba(255,59,48,.65)"><span class="recdot"></span>REC 00:07</span>
+    <span class="chip-d hud ml-auto" style="border-color:rgba(255,255,255,.24)"><i class="fa-solid fa-sun text-[10px]" style="color:#FFD98E"></i>EV -0.3</span>
+  </div>
+  <div class="relative z-10 px-4 mt-1.5 flex justify-center">
+    <span class="chip-d hud text-center"><i class="fa-solid fa-cube text-[11px]" style="color:var(--coral)"></i>模型固定 · 走动构图</span>
+  </div>
+
+  <!-- 中央:锚定模型(不可拖拽)+ 对焦框 + 倒计时 -->
+  <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+    <div class="relative" style="margin-top:-60px">
+      <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] rounded-full pulse" style="background:rgba(255,107,74,.3)"></span>
+      <div class="focus-box absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"><span></span><span></span><span></span><span></span></div>
+      <div class="relative w-[96px] h-[96px] rounded-[28px] flex items-center justify-center border-2 border-white" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:0 18px 26px rgba(20,14,10,.45),inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-cube text-white text-[44px]"></i></div>
+      <span class="absolute left-1/2 -translate-x-1/2 w-16 h-2.5 rounded-full" style="bottom:-14px;background:rgba(20,14,10,.4);filter:blur(3px)"></span>
+    </div>
+  </div>
+  <!-- 3s 倒计时(Z3 展示字层) -->
+  <span class="absolute z-10 num text-[72px] left-1/2" style="top:31%;transform:translateX(-50%);text-shadow:0 0 26px rgba(255,107,74,.8)">3</span>
+
+  <!-- 底部操作排 -->
+  <div class="relative z-10 mt-auto px-4 pb-4">
+    <div class="flex items-center justify-between">
+      <button class="hud w-[52px] h-[52px] flex flex-col items-center justify-center gap-0.5" style="border-radius:18px">
+        <i class="fa-solid fa-user-plus text-[15px]" style="color:var(--coral)"></i><span class="text-[9px] font-extrabold">同框</span>
+      </button>
+      <!-- 快门大按钮 -->
+      <button class="relative w-[78px] h-[78px] rounded-full border-[3px] border-white flex items-center justify-center" style="box-shadow:0 0 20px rgba(255,107,74,.45)">
+        <span class="w-[60px] h-[60px] rounded-full border-2 border-white" style="background:var(--coral)"></span>
+      </button>
+      <button class="hud w-[52px] h-[52px] flex flex-col items-center justify-center gap-0.5" style="border-radius:18px">
+        <i class="fa-solid fa-images text-[15px]"></i><span class="text-[9px] font-extrabold">预览</span>
+      </button>
+    </div>
+    <p class="text-center text-[12px] font-semibold mt-3" style="color:rgba(255,255,255,.75)">点快门 → 3s 倒计时 → 白闪定格 · 模型锚定不可拖拽,靠走动找角度</p>
+
+    <div class="spec-d mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-people-group"></i>状态样式 · 同框与边界(5.10 / E22)</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-users text-[11px]" style="color:var(--coral)"></i> 同框角色 ≤2 个:单指拖动站位、双指旋转缩放朝向;被添加者零通知零回流</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,179,71,.6)"><i class="fa-solid fa-battery-quarter text-[11px]" style="color:#FFCF8E"></i> 低端设备:「性能不足,仅支持 1 个同框角色」</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-door-open text-[11px]"></i> 退出取景:二次确认「构图将丢失」防误触</div>
+      </div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

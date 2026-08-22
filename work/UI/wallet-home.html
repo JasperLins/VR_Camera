@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S22 Token·积分钱包 · VR留念</title>
+<!-- 字号 px 等值;FR-07/08:双轨资产;D-029 仅 Token 数;套餐「即将开放」;演示值 80/120;D-063:FA 图标+最近流水(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">我的钱包</h1>
+    </div>
+
+    <!-- 双轨资产总览:撞色块 + 超大数字(Z2/Z3) -->
+    <div class="mt-4 rounded-[24px] border-2 border-[#1A1410] p-5 relative overflow-hidden" style="background:var(--sun);box-shadow:5px 5px 0 #1A1410">
+      <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full" style="background:rgba(255,255,255,.35)"></div>
+      <div class="absolute right-8 bottom-2 text-[34px] rotate-12" style="color:#7A4A00"><i class="fa-solid fa-coins"></i></div>
+      <p class="lbl" style="color:#7A4A00">TOKEN 余额</p>
+      <p class="num text-[44px] leading-none mt-1">80<span class="text-[16px] ml-1.5">枚</span></p>
+      <div class="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[#1A1410] bg-white px-3 py-1">
+        <i class="fa-solid fa-star text-[11px]" style="color:#B45309"></i>
+        <span class="text-[13px] font-extrabold">积分 <span class="num text-[15px]">120</span> · 10 积分 ≈ 1 Token</span>
+      </div>
+    </div>
+
+    <!-- 最近流水(D-063 真实化:钱包常驻最近两笔) -->
+    <div class="stk mt-4 px-4 py-1 divide-y divide-[#EFE0D2]">
+      <div class="flex items-center gap-3 py-2.5">
+        <span class="text-[15px] shrink-0" style="color:#0C8A57"><i class="fa-solid fa-gift"></i></span>
+        <div class="flex-1 min-w-0"><p class="text-[13px] font-bold truncate">注册赠送</p><p class="text-[11px] font-semibold text-[#6F6259] num">08-01 10:22</p></div>
+        <span class="num text-[14px] shrink-0" style="color:#0C8A57">+50</span>
+      </div>
+      <div class="flex items-center gap-3 py-2.5">
+        <span class="text-[15px] shrink-0" style="color:#C2410C"><i class="fa-solid fa-cube"></i></span>
+        <div class="flex-1 min-w-0"><p class="text-[13px] font-bold truncate">照片生成 3D · 小满-Q版-0821</p><p class="text-[11px] font-semibold text-[#6F6259] num">昨天 21:14</p></div>
+        <span class="num text-[14px] shrink-0" style="color:#C2410C">−4</span>
+      </div>
+    </div>
+
+    <!-- 入口行 -->
+    <div class="stk mt-3 divide-y divide-[#EFE0D2]">
+      <button class="w-full flex items-center gap-3 px-4 py-3.5">
+        <span class="text-[18px] shrink-0"><i class="fa-solid fa-receipt"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">流水明细</p><i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i>
+      </button>
+      <button class="w-full flex items-center gap-3 px-4 py-3.5">
+        <span class="text-[18px] shrink-0"><i class="fa-solid fa-box-archive"></i></span><p class="text-[15px] font-extrabold flex-1 text-left">Token 套餐</p>
+        <span class="chip shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[10px]"></i>即将开放</span>
+        <i class="fa-solid fa-chevron-right text-[#6F6259] text-[12px]"></i>
+      </button>
+    </div>
+
+    <!-- 积分规则 -->
+    <p class="lbl mt-5 mb-2">积分规则</p>
+    <div class="stk p-4 space-y-2">
+      <div class="flex items-start gap-2.5"><span class="text-[15px] shrink-0" style="color:#0C8A57"><i class="fa-solid fa-circle-check"></i></span><p class="text-[13px] font-semibold flex-1">10 积分 ≈ 1 Token,仅可抵扣「商店·社区模型」下载</p></div>
+      <div class="flex items-start gap-2.5"><span class="text-[15px] shrink-0" style="color:#E8463A"><i class="fa-solid fa-ban"></i></span><p class="text-[13px] font-semibold flex-1">积分不能用于照片生成 3D 的 Token 消耗</p></div>
+      <div class="flex items-start gap-2.5"><span class="text-[15px] shrink-0" style="color:#B45309"><i class="fa-solid fa-calendar-day"></i></span><p class="text-[13px] font-semibold flex-1">积分按自然年清零,2026 年积分 12-31 前会提醒你用掉</p></div>
+    </div>
+
+    <!-- 赠送途径 -->
+    <p class="lbl mt-5 mb-2">Token 从哪来(现在全靠送)</p>
+    <div class="rounded-[20px] border-2 border-[#1A1410] px-4 py-3.5 flex items-center gap-3" style="background:rgba(78,205,196,.15)">
+      <div class="stk-sm w-12 h-12 flex items-center justify-center text-[22px] rotate-3 shrink-0" style="color:#0E7F78"><i class="fa-solid fa-gift"></i></div>
+      <div class="min-w-0">
+        <p class="text-[14px] font-black">注册赠送 50 · 节日活动发放</p>
+        <p class="text-[12px] font-semibold text-[#6F6259] mt-0.5">内购暂未开放;打卡 / 评论 / 作品被下载都能攒积分</p>
+      </div>
+    </div>
+
+    <!-- 状态样式 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-circle-info"></i>状态样式 · 空态与游客态</span>
+      <div class="mt-3 space-y-2">
+        <div class="rounded-[14px] border-2 border-[#1A1410] bg-white px-3 py-2.5 flex items-center gap-2.5">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-receipt"></i></span><p class="text-[13px] font-bold">还没有流水:第一笔赠送/消耗会出现在这里</p>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5" style="background:rgba(255,179,71,.12)">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-hand-peace"></i></span><p class="text-[13px] font-bold">游客态:登录后才能查看钱包与攒积分</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab4 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+</body>
+</html>

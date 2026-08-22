@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S21 我的内容管理 · VR留念</title>
+<!-- 字号 px 等值;FR-06 三态管理;D-063:列表填满(可见 5 条)+FA 图标+真实化条目(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.seg{border:2px solid var(--ink);border-radius:999px;padding:3px;display:flex;gap:2px;background:#fff}
+.seg span{border-radius:999px;padding:6px 10px;font-size:13px;font-weight:800}
+.seg-on{background:var(--coral);color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">我的内容</h1>
+      <button class="chip ml-auto bg-white shrink-0"><i class="fa-solid fa-check-double text-[10px]"></i>批量</button>
+    </div>
+
+    <!-- 三态分段 -->
+    <div class="seg mt-4">
+      <span class="seg-on flex-1 text-center">可见 5</span>
+      <span class="flex-1 text-center text-[#6F6259]">已隐藏 2</span>
+      <span class="flex-1 text-center text-[#6F6259]">已删除 1</span>
+    </div>
+
+    <!-- 可见列表(D-063:5 条真实化条目) -->
+    <div class="stk p-3.5 mt-4">
+      <div class="flex items-center gap-3">
+        <div class="w-[56px] h-[56px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] text-white shrink-0" style="background:linear-gradient(135deg,#FF8A6E,#FFB347)"><i class="fa-solid fa-cube"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57"><i class="fa-solid fa-earth-asia text-[10px]"></i>公开</span><span class="chip bg-white num">19 天后到期</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">在断桥给未来的我们</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2490°N · 放置于 08-12(10 天前)</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-eye-slash text-[11px]"></i>隐藏</button>
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-location-dot text-[11px]"></i>查看位置</button>
+      </div>
+    </div>
+
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <div class="w-[56px] h-[56px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] text-white shrink-0" style="background:linear-gradient(135deg,#7EDDD6,#4ECDC4)"><i class="fa-solid fa-image"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[10px]"></i>私密</span><span class="chip bg-white">授权 2 人</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">给陈其的生日鲸鱼</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2281°N · 永久</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-user-group text-[11px]"></i>管理授权</button>
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-eye-slash text-[11px]"></i>隐藏</button>
+      </div>
+    </div>
+
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <div class="w-[56px] h-[56px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] text-white shrink-0" style="background:linear-gradient(135deg,#FFD98E,#F59E0B)"><i class="fa-solid fa-comment-dots"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57"><i class="fa-solid fa-earth-asia text-[10px]"></i>公开</span><span class="chip bg-white num">27 天后到期</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">毕业快乐,2020-2026</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2512°N · 放置于 08-14(8 天前)</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-eye-slash text-[11px]"></i>隐藏</button>
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-location-dot text-[11px]"></i>查看位置</button>
+      </div>
+    </div>
+
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <div class="w-[56px] h-[56px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] text-white shrink-0" style="background:linear-gradient(135deg,#FF6B4A,#F05A38)"><i class="fa-solid fa-cube"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(29,201,129,.12);color:#0C8A57"><i class="fa-solid fa-earth-asia text-[10px]"></i>公开</span><span class="chip bg-white">永久</span><span class="chip bg-white num"><i class="fa-solid fa-heart text-[10px]" style="color:#E8463A"></i>158</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">湖滨夜景小电视</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2468°N · 放置于 07-30(23 天前)</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-eye-slash text-[11px]"></i>隐藏</button>
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-location-dot text-[11px]"></i>查看位置</button>
+      </div>
+    </div>
+
+    <div class="stk p-3.5 mt-3">
+      <div class="flex items-center gap-3">
+        <div class="w-[56px] h-[56px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] text-white shrink-0" style="background:linear-gradient(135deg,#9BE8E2,#4ECDC4)"><i class="fa-solid fa-image"></i></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap"><span class="chip" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[10px]"></i>私密</span><span class="chip bg-white">授权 1 人</span></div>
+          <p class="text-[15px] font-black mt-1 truncate">给一年后的我</p>
+          <p class="text-[12px] text-[#6F6259] font-semibold num">30.2441°N · 永久 · 2 天前</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-user-group text-[11px]"></i>管理授权</button>
+        <button class="btn-hard flex-1 h-[38px] text-[13px] bg-white"><i class="fa-solid fa-eye-slash text-[11px]"></i>隐藏</button>
+      </div>
+    </div>
+
+    <!-- 隐藏/删除 Tab 的条目样式(并列演示) -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-clock-rotate-left"></i>状态样式 · 已隐藏 Tab / 已删除 Tab(E23)</span>
+      <div class="mt-3 rounded-[16px] border-2 border-[#1A1410] bg-white p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="w-[48px] h-[48px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[20px] shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-comment-dots"></i></div>
+          <div class="flex-1 min-w-0">
+            <span class="chip" style="background:rgba(245,158,11,.12);color:#B45309">到期自动隐藏</span>
+            <p class="text-[14px] font-black mt-1 truncate">毕业季留言板</p>
+            <p class="text-[12px] text-[#6F6259] font-semibold">隐藏原因:7 天有效期已过</p>
+          </div>
+          <button class="btn-hard h-[36px] px-3.5 text-[12px] text-white shrink-0" style="background:var(--coral)">恢复原位</button>
+        </div>
+        <p class="text-[11px] text-[#6F6259] font-semibold mt-2.5">「恢复原位」= 回到原坐标原姿态,一键还原</p>
+      </div>
+      <div class="mt-2.5 rounded-[16px] border-2 border-[#1A1410] bg-white p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="w-[48px] h-[48px] rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[20px] shrink-0" style="background:#EFE0D2;color:#6F6259"><i class="fa-solid fa-trash-can"></i></div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[14px] font-black truncate">圣诞试摆雪花球</p>
+            <p class="text-[12px] font-semibold" style="color:#E8463A">回收站剩余 <span class="num">18</span> 天后永久删除</p>
+          </div>
+          <button class="btn-hard h-[36px] px-3.5 text-[12px] text-white shrink-0" style="background:var(--ink)">永久删除</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 空态 -->
+    <div class="spec mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-map"></i>状态样式 · 还没放置过内容</span>
+      <div class="flex flex-col items-center py-3">
+        <div class="stk-sm w-16 h-16 flex items-center justify-center text-[30px] rotate-3 wig" style="color:#6F6259"><i class="fa-solid fa-map"></i></div>
+        <p class="text-[14px] font-bold mt-2">地图上还没有你的脚印</p>
+        <button class="btn-hard h-[38px] px-6 text-[14px] text-white mt-2.5" style="background:var(--coral)">去放第一个</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab4 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+<style>.wig{animation:wig 3.6s ease-in-out infinite}@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}</style>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "@vrm/database",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Prisma schema + 迁移 + PostGIS 补丁:apps/api 与 apps/worker 共用的唯一数据访问出口",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "echo \"(database 包:迁移正确性由 migrate + db:patch 脚本验证,无独立单测)\" && exit 0",
+    "lint": "echo \"(database 包:无 TS 源码需 lint)\" && exit 0",
+    "generate": "prisma generate",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy && pnpm db:patch",
+    "db:patch": "prisma db execute --schema prisma/schema.prisma --file prisma/sql/001_postgis.sql",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "typescript": "^5.6.3"
+  }
+}

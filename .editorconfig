@@ -1,0 +1,24 @@
+# EditorConfig:全仓库统一基础格式(CONVENTIONS.md §格式的落地配置)
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+# Markdown 行尾双空格有语义(硬换行),不裁剪
+trim_trailing_whitespace = false
+
+[*.{cs,cs.meta}]
+indent_size = 4
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[Makefile]
+indent_style = tab

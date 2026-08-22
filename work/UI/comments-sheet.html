@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S32 留言板(P2) · VR留念</title>
+<!-- 字号 px 等值;FR-10/08:单向单次评论;24h 修改一次;锁定态;D-063:6 条成句留言+键盘弹层态+FA 图标(A-731/732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.caret{display:inline-block;width:2px;height:15px;background:var(--coral);animation:caret 1s step-end infinite;vertical-align:-2px}
+@keyframes caret{0%,100%{opacity:1}50%{opacity:0}}
+/* D-063 键盘弹层态:浅色拼音键盘 */
+.kbd{background:#F4EFE9;border-top:1.5px solid #D8CFC5;padding:8px 6px 6px}
+.kbd-row{display:flex;gap:4px;margin-bottom:5px}
+.kbd-key{flex:1;height:38px;border-radius:8px;background:#fff;border:1px solid #D8CFC5;box-shadow:0 1px 0 #D8CFC5;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#1A1410}
+.kbd-key.func{background:#E4DCD2;font-size:13px}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(26,20,16,.8);margin:4px auto 4px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.55)"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 底部弹层式留言板(Z5;AR 会话内浮层,豁免 TabBar)。键盘弹层态:输入聚焦 → 键盘顶起 -->
+  <main class="relative z-10 flex-1 overflow-y-auto bg-white border-t-2 border-[#1A1410] rounded-t-[28px] px-4 pt-2.5 pb-3" style="color:#1A1410;box-shadow:0 -8px 24px rgba(26,20,16,.25)">
+    <div class="w-9 h-1.5 rounded-full bg-[#1A1410]/20 mx-auto"></div>
+    <div class="flex items-center gap-2.5 mt-3">
+      <button class="w-9 h-9 rounded-[12px] border-2 border-[#1A1410] bg-white flex items-center justify-center text-[13px] shrink-0" style="box-shadow:2px 2px 0 #1A1410"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[21px] font-black">留言板</h1>
+      <span class="ml-auto inline-flex items-center gap-1 rounded-full border-2 border-[#1A1410] px-2.5 py-1 text-[11px] font-extrabold shrink-0" style="background:rgba(255,179,71,.35)"><i class="fa-solid fa-comment-dots text-[10px]"></i>每人一条 · 作者不可回复</span>
+    </div>
+    <p class="text-[12px] text-[#6F6259] font-semibold mt-1.5">给「在断桥给未来的我们」留下到访证明 · 数字留言簿</p>
+
+    <!-- 公开留言列表(D-063:6 条成句且各不相同) -->
+    <div class="mt-4 space-y-2.5">
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@老周</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-21 · 2 天前</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">带女儿来打卡,她说小鹿在跟她说再见。这个点我们还会再来。</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] p-3" style="background:rgba(255,179,71,.18);box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@Kiko在杭州</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-20</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">路过断桥三次,终于等到落日把湖面染成橘子的那一刻。</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@晚风收藏家</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-19</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">毕业第二年,替没到场的室友看了一眼,他说下次一定。</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@北纬三十度</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-18</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">坐标精准到吓人,昨天放的话今天就浮在同一个位置,赞。</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@大桔大利</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-16</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">游客也留个名,这种不买票的城市彩蛋请多来一点。</p>
+      </div>
+      <div class="rounded-[18px] border-2 border-[#1A1410] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+        <div class="flex items-center gap-2.5">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80" alt="留言者头像" class="w-8 h-8 rounded-full border-2 border-[#1A1410] object-cover">
+          <p class="text-[13px] font-extrabold flex-1 truncate">@Momo</p>
+          <p class="text-[11px] font-semibold text-[#6F6259] shrink-0 num">08-14</p>
+        </div>
+        <p class="text-[14px] font-semibold mt-2">和男朋友一人放了一条,约好十年后的 8 月 14 号一起回来看。</p>
+      </div>
+    </div>
+
+    <!-- 提交框(D-063 输入聚焦态:已输入 + 光标) -->
+    <div class="mt-4 rounded-[18px] border-2 border-[#FF6B4A] bg-white p-3" style="box-shadow:3px 3px 0 #1A1410">
+      <p class="text-[14px] font-semibold">断桥的风把我们留在这里,愿十年后的我们还是我们<span class="caret"></span></p>
+      <div class="flex items-center justify-between mt-2">
+        <p class="text-[11px] font-semibold text-[#6F6259] num">18 字 · 发布后 24h 内可修改一次</p>
+        <button class="h-[38px] px-5 rounded-full text-[13px] font-extrabold text-white border-2 border-[#1A1410]" style="background:var(--coral);box-shadow:0 3px 0 #1A1410">发布 +2 积分</button>
+      </div>
+    </div>
+
+    <!-- 状态样式:锁定 / 重复 / 机审中 -->
+    <div class="spec-d mt-4" style="color:#fff">
+      <span class="spec-lbl"><i class="fa-solid fa-lock"></i>状态样式 · 规则边界(E19)</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-lock text-[11px]" style="color:#FFCF8E"></i> 已留言:提交框替换为「你已留过言」+ 24h 内「修改一次」按钮,超时转锁定</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(232,70,58,.6)"><i class="fa-solid fa-hand text-[11px]" style="color:#FF8A7E"></i> 重复提交被拒:每个内容只能留言一次</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,179,71,.6)"><i class="fa-solid fa-magnifying-glass text-[11px]" style="color:#FFCF8E"></i> 机审中:留言暂不公开,通过后自动展示</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- D-063 键盘弹层态:浅色拼音键盘(输入聚焦中) -->
+  <div class="relative z-10 kbd">
+    <div class="flex items-center justify-between px-2 mb-1">
+      <span class="text-[11px] font-bold" style="color:#6F6259"><i class="fa-solid fa-globe"></i> 中文(拼音)</span>
+      <span class="text-[12px] font-extrabold" style="color:#C2410C">联想:我们/问候/未来</span>
+    </div>
+    <div class="kbd-row"><div class="kbd-key">q</div><div class="kbd-key">w</div><div class="kbd-key">e</div><div class="kbd-key">r</div><div class="kbd-key">t</div><div class="kbd-key">y</div><div class="kbd-key">u</div><div class="kbd-key">i</div><div class="kbd-key">o</div><div class="kbd-key">p</div></div>
+    <div class="kbd-row"><div class="kbd-key" style="flex:.5"></div><div class="kbd-key">a</div><div class="kbd-key">s</div><div class="kbd-key">d</div><div class="kbd-key">f</div><div class="kbd-key">g</div><div class="kbd-key">h</div><div class="kbd-key">j</div><div class="kbd-key">k</div><div class="kbd-key">l</div><div class="kbd-key" style="flex:.5"></div></div>
+    <div class="kbd-row"><div class="kbd-key" style="flex:1.4"><i class="fa-solid fa-arrow-up"></i></div><div class="kbd-key">z</div><div class="kbd-key">x</div><div class="kbd-key">c</div><div class="kbd-key">v</div><div class="kbd-key">b</div><div class="kbd-key">n</div><div class="kbd-key">m</div><div class="kbd-key" style="flex:1.4"><i class="fa-solid fa-delete-left"></i></div></div>
+    <div class="kbd-row"><div class="kbd-key func">123</div><div class="kbd-key func"><i class="fa-solid fa-globe"></i></div><div class="kbd-key" style="flex:4">空格</div><div class="kbd-key func" style="color:#C2410C">发送</div></div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

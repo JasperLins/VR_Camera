@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S4 热门区域列表 · VR留念</title>
+<!-- 字号 px 等值;区域卡贴纸化;D-063:6 张真实区域卡+FA 图标+规范距离(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--cream:#FFEED9;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <div class="flex items-center gap-3 mt-1">
+      <button class="stk-sm w-10 h-10 flex items-center justify-center text-[15px] shrink-0"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="stk-sm w-11 h-11 flex items-center justify-center text-[20px] rotate-3 shrink-0" style="color:#E8463A"><i class="fa-solid fa-fire"></i></div>
+      <div>
+        <h1 class="text-[24px] font-black leading-tight">热门区域</h1>
+        <p class="text-[13px] text-[#6F6259] font-semibold">内容最密的地方,先去那里开眼 · 2 小时前更新</p>
+      </div>
+    </div>
+
+    <!-- 区域卡 ×6(D-063 真实化) -->
+    <div class="stk p-3.5 mt-4">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1514924013411-cbf25faa35bb?w=140&q=80" alt="外滩代表图" class="w-[76px] h-[76px] rounded-[16px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.1 · 上海</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">外滩 AR 灯火墙</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip text-white" style="background:var(--coral)"><i class="fa-solid fa-location-dot text-[10px]"></i>46 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-train-subway text-[10px]"></i>2.4km</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <div class="stk p-3.5 mt-3.5">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=140&q=80" alt="鼓浪屿代表图" class="w-[76px] h-[76px] rounded-[16px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.2 · 厦门</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">鼓浪屿声音邮局</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-dot text-[10px]"></i>31 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-train text-[10px]"></i>跨城</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <div class="stk p-3.5 mt-3.5">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=140&q=80" alt="西湖代表图" class="w-[76px] h-[76px] rounded-[16px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.3 · 杭州</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">西湖断桥信物</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-dot text-[10px]"></i>27 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-car text-[10px]"></i>5.1km</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <div class="stk p-3.5 mt-3.5">
+      <div class="flex items-center gap-3">
+        <div class="w-[76px] h-[76px] rounded-[16px] border-2 border-[#1A1410] shrink-0 flex items-center justify-center text-[30px] text-white" style="background:linear-gradient(135deg,#FFB347,#FF6B4A)"><i class="fa-solid fa-lightbulb"></i></div>
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.4 · 北京</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">南锣鼓巷记忆灯</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-dot text-[10px]"></i>22 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-train-subway text-[10px]"></i>1.8km</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <div class="stk p-3.5 mt-3.5">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=140&q=80" alt="武林夜市代表图" class="w-[76px] h-[76px] rounded-[16px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.5 · 杭州</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">武林夜市烟火位</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-dot text-[10px]"></i>18 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-person-walking text-[10px]"></i>120m</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <div class="stk p-3.5 mt-3.5">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=140&q=80" alt="洪崖洞代表图" class="w-[76px] h-[76px] rounded-[16px] object-cover border-2 border-[#1A1410] shrink-0">
+        <div class="flex-1 min-w-0">
+          <span class="lbl">NO.6 · 重庆</span>
+          <h2 class="text-[18px] font-black mt-0.5 truncate">洪崖洞夜灯阶梯</h2>
+          <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span class="chip" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-location-dot text-[10px]"></i>15 处</span>
+            <span class="chip bg-white"><i class="fa-solid fa-train text-[10px]"></i>跨城</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-hard w-full h-[40px] text-[14px] mt-3 bg-white">去这里看看<i class="fa-solid fa-arrow-right text-[12px]"></i></button>
+    </div>
+
+    <!-- 空态 + 加载失败 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-fire-extinguisher"></i>状态样式 · 暂无热门区域 / 加载失败</span>
+      <div class="flex flex-col items-center py-3">
+        <div class="stk-sm w-16 h-16 flex items-center justify-center text-[30px] rotate-3 wig" style="color:#0E7F78"><i class="fa-solid fa-snowflake"></i></div>
+        <p class="text-[14px] font-bold mt-2">热门榜还在升温中…</p>
+        <p class="text-[12px] text-[#6F6259] font-semibold mt-0.5">加载失败时:显示重试贴纸按钮</p>
+        <button class="btn-hard h-[38px] px-6 text-[14px] mt-2.5 bg-white"><i class="fa-solid fa-rotate-right text-[12px]"></i>重试</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab1 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+<style>.wig{animation:wig 3.6s ease-in-out infinite}@keyframes wig{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}</style>
+</body>
+</html>

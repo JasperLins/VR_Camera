@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S23 Token 套餐页(即将开放) · VR留念</title>
+<!-- 字号 px 等值;D-023:四档全「即将开放」、零购买按钮、零价格元素;演示值 60/190/480/1140;D-063:FA 图标统一(A-732) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">Token 套餐</h1>
+      <span class="chip ml-auto shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[10px]"></i>即将开放</span>
+    </div>
+
+    <!-- 总声明:零购买(D-023) -->
+    <div class="mt-4 rounded-[20px] border-2 border-[#1A1410] px-4 py-3.5 flex items-center gap-3" style="background:rgba(255,179,71,.18)">
+      <span class="text-[22px] shrink-0"><i class="fa-solid fa-store-slash"></i></span>
+      <p class="text-[14px] font-bold leading-snug">充值购买还没开放。当前 Token 全部来自<b>赠送</b>:注册即送、活动再发。</p>
+    </div>
+
+    <!-- 四档卡:全禁用态(无任何购买按钮/价格元素) -->
+    <div class="grid grid-cols-2 gap-2.5 mt-4">
+      <div class="rounded-[20px] border-2 border-[#1A1410] bg-white p-4 opacity-90">
+        <div class="flex items-center justify-between"><span class="text-[24px]" style="color:#0C8A57"><i class="fa-solid fa-seedling"></i></span><span class="chip shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[9px]"></i>即将开放</span></div>
+        <p class="lbl mt-2.5">体验档</p>
+        <p class="num text-[28px] leading-none mt-0.5">60<span class="text-[12px] ml-1">Token</span></p>
+        <div class="h-[38px] mt-2.5 rounded-full flex items-center justify-center text-[12px] font-extrabold" style="background:#EFE0D2;color:#B4A79D">暂不可购</div>
+      </div>
+      <div class="rounded-[20px] border-2 border-[#1A1410] bg-white p-4 opacity-90">
+        <div class="flex items-center justify-between"><span class="text-[24px]" style="color:#0C8A57"><i class="fa-solid fa-leaf"></i></span><span class="chip shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[9px]"></i>即将开放</span></div>
+        <p class="lbl mt-2.5">标准档</p>
+        <p class="num text-[28px] leading-none mt-0.5">190<span class="text-[12px] ml-1">Token</span></p>
+        <div class="h-[38px] mt-2.5 rounded-full flex items-center justify-center text-[12px] font-extrabold" style="background:#EFE0D2;color:#B4A79D">暂不可购</div>
+      </div>
+      <div class="rounded-[20px] border-2 border-[#1A1410] bg-white p-4 opacity-90">
+        <div class="flex items-center justify-between"><span class="text-[24px]" style="color:#0C8A57"><i class="fa-solid fa-tree"></i></span><span class="chip shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[9px]"></i>即将开放</span></div>
+        <p class="lbl mt-2.5">常用档</p>
+        <p class="num text-[28px] leading-none mt-0.5">480<span class="text-[12px] ml-1">Token</span></p>
+        <div class="h-[38px] mt-2.5 rounded-full flex items-center justify-center text-[12px] font-extrabold" style="background:#EFE0D2;color:#B4A79D">暂不可购</div>
+      </div>
+      <div class="rounded-[20px] border-2 border-[#1A1410] bg-white p-4 opacity-90">
+        <div class="flex items-center justify-between"><span class="text-[24px]" style="color:#B45309"><i class="fa-solid fa-crown"></i></span><span class="chip shrink-0" style="background:rgba(245,158,11,.12);color:#B45309"><i class="fa-solid fa-lock text-[9px]"></i>即将开放</span></div>
+        <p class="lbl mt-2.5">重度档</p>
+        <p class="num text-[28px] leading-none mt-0.5">1140<span class="text-[12px] ml-1">Token</span></p>
+        <div class="h-[38px] mt-2.5 rounded-full flex items-center justify-center text-[12px] font-extrabold" style="background:#EFE0D2;color:#B4A79D">暂不可购</div>
+      </div>
+    </div>
+
+    <!-- 赠送引导 -->
+    <p class="lbl mt-5 mb-2">开放前,Token 这样攒</p>
+    <div class="stk p-4 space-y-2.5">
+      <div class="flex items-center gap-3"><span class="text-[18px] shrink-0" style="color:#0E7F78"><i class="fa-solid fa-gift"></i></span><p class="text-[13px] font-bold flex-1">注册赠送:新账号直接到账</p><span class="chip shrink-0" style="background:rgba(29,201,129,.12);color:#0C8A57">已到账</span></div>
+      <div class="flex items-center gap-3"><span class="text-[18px] shrink-0" style="color:#C2410C"><i class="fa-solid fa-bullhorn"></i></span><p class="text-[13px] font-bold flex-1">活动发放:节日 / 城市开启时限量送</p><span class="chip shrink-0 bg-white">留意通知</span></div>
+      <div class="flex items-center gap-3"><span class="text-[18px] shrink-0" style="color:#B45309"><i class="fa-solid fa-camera-retro"></i></span><p class="text-[13px] font-bold flex-1">打卡攒积分:积分可抵扣商店模型</p><span class="chip shrink-0 bg-white">每日 10 分</span></div>
+    </div>
+
+    <button class="btn-hard w-full h-[46px] text-[15px] mt-4 bg-white">回钱包看看余额</button>
+
+    <!-- 状态样式:二期转可购预留布局 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-arrow-up-right-dots"></i>状态样式 · 二期开放后(布局预留)</span>
+      <div class="mt-3 rounded-[20px] border-2 border-[#1A1410] bg-white p-4 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-[14px] border-2 border-[#1A1410] flex items-center justify-center text-[24px] shrink-0 text-white" style="background:linear-gradient(135deg,#FF8A6E,#FFB347)"><i class="fa-solid fa-leaf"></i></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[14px] font-black">标准档 190 Token</p>
+          <p class="text-[12px] font-semibold text-[#6F6259]">档位卡结构不变,底钮由「暂不可购」替换为支付入口(本期不实现)</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TabBar(A-701:Tab4 激活) -->
+  <nav class="shrink-0 bg-white border-t-2 border-[#1A1410] px-3 pt-1.5" style="box-shadow:0 -8px 24px rgba(26,20,16,.12)">
+    <div class="grid grid-cols-4 items-end">
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-map-location-dot"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">地图</span>
+      </div>
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -top-[30px] w-[56px] h-[56px] rounded-full border-2 border-[#1A1410] flex items-center justify-center text-white text-[19px]" style="background:linear-gradient(135deg,#FF6B4A,#FFB347);box-shadow:4px 4px 0 #1A1410,inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-camera"></i></span>
+        <span class="mt-[30px] text-[10px] font-extrabold text-[#6F6259] pb-1.5">AR 相机</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-[#6F6259] text-[14px]"><i class="fa-solid fa-store"></i></span>
+        <span class="text-[10px] font-extrabold text-[#6F6259]">商店</span>
+      </div>
+      <div class="flex flex-col items-center gap-1 pb-1.5">
+        <span class="w-[42px] h-[30px] rounded-xl flex items-center justify-center text-white text-[14px] border-2 border-[#1A1410]" style="background:var(--coral)"><i class="fa-solid fa-user"></i></span>
+        <span class="text-[10px] font-extrabold text-[#FF6B4A]">我的</span>
+      </div>
+    </div>
+    <div class="mx-auto mt-1 mb-1.5 w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div>
+  </nav>
+</div>
+</body>
+</html>

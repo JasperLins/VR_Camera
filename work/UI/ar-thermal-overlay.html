@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S9 发热提示浮层 · VR留念</title>
+<!-- 字号 px 等值;E7:AR 连续 >5min 发热治理;暂停追踪 3s 可忽略;每会话仅一次;D-063:三分线+氛围光+FA 图标(A-733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px);background-size:33.34% 33.34%}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 44%,transparent 48%,rgba(20,14,10,.52) 100%),radial-gradient(44% 32% at 86% 88%,rgba(255,107,74,.14),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.6)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-half text-[14px]"></i></span>
+  </header>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-5">
+    <div class="hud w-full max-w-[320px] p-6 text-center">
+      <div class="mx-auto w-[76px] h-[76px] rounded-[22px] flex items-center justify-center text-[34px] border-2 border-white/80 rotate-3" style="background:rgba(255,179,71,.3);color:#fff"><i class="fa-solid fa-moon"></i></div>
+      <h1 class="text-[24px] font-black mt-4">手机也想喘口气</h1>
+      <p class="text-[14px] font-semibold mt-1.5" style="color:rgba(255,255,255,.75)">连续 AR 超过 5 分钟,建议休息一下</p>
+
+      <!-- 3s 倒计时大数字(Z3 展示字层) -->
+      <div class="num text-[64px] leading-none mt-5" style="color:var(--coral);text-shadow:0 0 22px rgba(255,107,74,.55)">3</div>
+      <p class="text-[13px] font-bold mt-1.5" style="color:rgba(255,255,255,.7)">暂停追踪 3 秒后自动恢复</p>
+
+      <div class="h-[12px] rounded-full border border-white/60 overflow-hidden mt-4" style="background:rgba(20,14,10,.5)">
+        <div class="h-full rounded-full" style="width:66%;background:linear-gradient(90deg,#FF6B4A,#FFB347)"></div>
+      </div>
+
+      <button class="w-full h-[46px] rounded-full text-[15px] font-extrabold border-2 border-white mt-5 flex items-center justify-center gap-2" style="background:rgba(20,14,10,.5);box-shadow:0 4px 0 rgba(255,255,255,.7)">继续使用(可忽略)</button>
+      <p class="text-[11px] font-semibold mt-3" style="color:rgba(255,255,255,.55)">本会话只提醒这一次,不会再打扰</p>
+    </div>
+
+    <div class="spec-d w-full max-w-[320px] mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-temperature-half"></i>状态样式 · 规则(E7)</span>
+      <p class="text-[12px] font-semibold mt-2" style="color:rgba(255,255,255,.8)">触发:单次 AR 会话 >5min;倒计时结束自动恢复追踪,无需手动;每会话仅弹一次。</p>
+    </div>
+    <div class="home-ind"></div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+    "name": "VRM.AR",
+    "rootNamespace": "VRM.AR",
+    "references": [
+        "VRM.Core",
+        "VRM.Map"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

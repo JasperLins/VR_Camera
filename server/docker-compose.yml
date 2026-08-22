@@ -1,0 +1,36 @@
+# 职责:本地中间件拓扑唯一事实源(dev-environment.md §2「环境即代码」,本地=生产同构)
+# 用法:cd server && docker compose up -d
+# 镜像锁定大版本,不追新(AGENTS.md 纪律)
+services:
+  postgres:
+    # PostGIS 3.4 官方镜像,配套 PostgreSQL 16(tech-stack.md §2 方案 A)
+    image: postgis/postgis:16-3.4
+    container_name: vrm-postgres
+    environment:
+      POSTGRES_USER: vr
+      POSTGRES_PASSWORD: vrmemento
+      POSTGRES_DB: vrmemento
+    ports:
+      - '5432:5432'
+    volumes:
+      - vrm-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U vr -d vrmemento']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    # BullMQ 队列 / SSE pub-sub / 频控共用实例
+    image: redis:7-alpine
+    container_name: vrm-redis
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  vrm-pgdata:

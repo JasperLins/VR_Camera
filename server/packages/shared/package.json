@@ -1,0 +1,34 @@
+{
+  "name": "@vrm/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "跨 app 共享:环境变量校验/业务常量/错误码/生成任务状态机/响应契约",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "jest",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/src"]
+  }
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S5 AR 浏览取景框 · VR留念</title>
+<!-- 字号 px 等值;Z6 深色舞台:rgba(20,14,10,.62)+blur14+白18%描边+珊瑚霓虹;类型色 D-057;D-063:三分线/对焦框/测光 hint/氛围光(A-733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.neon{box-shadow:0 0 18px rgba(255,107,74,.5)}
+.pulse{animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.55);opacity:.9}80%{transform:scale(1.9);opacity:0}100%{transform:scale(1.9);opacity:0}}
+.sweep{animation:sweep 3s linear infinite}
+@keyframes sweep{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+/* D-063 相机 HUD 细节 */
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:33.34% 33.34%}
+.focus-box{position:absolute;width:86px;height:86px;pointer-events:none}
+.focus-box span{position:absolute;width:18px;height:18px;border:2.5px solid #FFE3B3}
+.focus-box span:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;border-radius:7px 0 0 0}
+.focus-box span:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;border-radius:0 7px 0 0}
+.focus-box span:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;border-radius:0 0 0 7px}
+.focus-box span:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;border-radius:0 0 7px 0}
+.focked{animation:fock 2.2s ease-in-out infinite}
+@keyframes fock{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <!-- 实拍取景背景(设计选择:街景照片模拟 AR 取景流,D-063 换黄昏街景更贴场景) -->
+  <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <!-- D-063 细腻氛围光:暗角 + 珊瑚/天青双色氛围晕 + 上下渐变遮罩 -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 42%,transparent 52%,rgba(20,14,10,.42) 100%),radial-gradient(46% 34% at 12% 84%,rgba(255,107,74,.16),transparent 100%),radial-gradient(40% 30% at 88% 10%,rgba(78,205,196,.12),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(20,14,10,.55) 0%,rgba(20,14,10,0) 26%,rgba(20,14,10,0) 55%,rgba(20,14,10,.78) 100%)"></div>
+  <!-- D-063 取景网格:三分线(低透明度) -->
+  <div class="grid3"></div>
+
+  <!-- 状态栏(白字) -->
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 顶部 HUD:返回 / 模式徽标 / 经纬度 / 附近 N 处 / 测光 hint / 放置+ -->
+  <div class="relative z-10 px-4 mt-1 flex items-start gap-2">
+    <button class="hud w-10 h-10 flex items-center justify-center text-[14px] shrink-0"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="flex flex-col gap-1.5 min-w-0">
+      <span class="chip-d hud" style="border-color:rgba(255,255,255,.35)"><i class="fa-solid fa-eye text-[11px]"></i>浏览模式</span>
+      <span class="chip-d hud"><i class="fa-solid fa-location-crosshairs text-[10px]" style="color:var(--coral)"></i>30.2490°N, 120.1531°E</span>
+      <span class="chip-d hud" style="border-color:rgba(255,255,255,.24)"><i class="fa-solid fa-sun text-[10px]" style="color:#FFD98E"></i>EV -0.3 · ISO 200 · 点测光</span>
+    </div>
+    <div class="ml-auto flex flex-col items-end gap-1.5 shrink-0">
+      <button class="hud w-10 h-10 flex items-center justify-center text-[16px] neon" style="color:var(--coral)"><i class="fa-solid fa-plus"></i></button>
+      <span class="chip-d hud">附近 3 处</span>
+    </div>
+  </div>
+
+  <!-- 15m 到达提示 -->
+  <div class="relative z-10 flex justify-center mt-3">
+    <span class="chip-d hud neon" style="border-color:rgba(255,107,74,.6)"><i class="fa-solid fa-person-walking text-[11px]"></i>再走 15m,内容将展开</span>
+  </div>
+
+  <!-- 3D 锚点:聚焦高亮(脉冲光环 + D-063 对焦框) -->
+  <div class="absolute z-10" style="left:50%;top:34%;transform:translate(-50%,-50%)">
+    <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full pulse" style="background:rgba(255,107,74,.35)"></span>
+    <div class="focus-box focked absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style="width:104px;height:104px"><span></span><span></span><span></span><span></span></div>
+    <div class="relative w-[64px] h-[64px] rounded-[20px] flex items-center justify-center border-2 border-white" style="background:var(--coral);box-shadow:0 0 22px rgba(255,107,74,.6),inset 0 0 0 3px rgba(255,255,255,.85)"><i class="fa-solid fa-cube text-white text-[26px]"></i></div>
+  </div>
+  <span class="absolute z-10 chip-d hud" style="left:50%;top:45%;transform:translate(-50%,0)">在断桥给未来的我们 · 点击聚焦</span>
+
+  <!-- 边缘箭头:仅指向最近视野外锚点 -->
+  <button class="absolute z-10 right-3 w-9 h-9 rounded-full flex items-center justify-center text-[13px] border-2 border-white neon" style="top:38%;background:var(--coral)"><i class="fa-solid fa-chevron-right"></i></button>
+
+  <!-- 底部:雷达 + 内容卡 -->
+  <div class="relative z-10 mt-auto px-4 pb-4">
+    <div class="flex items-end gap-3">
+      <!-- 72px 小雷达(锥形扫描 + 类型色光点) -->
+      <div class="relative w-[72px] h-[72px] rounded-full hud overflow-hidden shrink-0">
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] rounded-full sweep" style="background:conic-gradient(from 0deg,rgba(255,107,74,.55),rgba(255,179,71,.25),transparent 60%)"></div>
+        <span class="absolute w-2 h-2 rounded-full" style="left:24%;top:30%;background:var(--coral)"></span>
+        <span class="absolute w-2 h-2 rounded-full" style="left:62%;top:58%;background:var(--teal)"></span>
+        <span class="absolute w-2 h-2 rounded-full" style="left:44%;top:74%;background:var(--amber)"></span>
+        <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white"></span>
+      </div>
+      <div class="flex flex-col gap-1 mb-1">
+        <span class="chip-d hud"><i class="fa-solid fa-compass text-[11px]" style="color:var(--coral)"></i>雷达</span>
+        <span class="chip-d hud" style="border-color:rgba(255,255,255,.24)"><i class="fa-solid fa-video-slash text-[10px]"></i>浏览态无 REC</span>
+      </div>
+    </div>
+
+    <!-- 内容卡(深色玻璃 + 类型色标条,D-063 真实化) -->
+    <div class="hud mt-3 p-3.5" style="border-left:5px solid var(--coral)">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-d" style="border-color:var(--coral);color:var(--coral)"><i class="fa-solid fa-cube text-[10px]"></i>模型</span>
+        <span class="chip-d" style="border-color:rgba(29,201,129,.6);color:#3BE39A"><i class="fa-solid fa-earth-asia text-[10px]"></i>公开</span>
+      </div>
+      <div class="flex items-center justify-between gap-2 mt-2">
+        <div class="min-w-0">
+          <h2 class="text-[18px] font-black truncate">在断桥给未来的我们</h2>
+          <p class="text-[12px] font-semibold" style="color:rgba(255,255,255,.72)">@林小满 · 3 条内容 · 35m</p>
+        </div>
+        <button class="chip-d shrink-0" style="border-color:rgba(255,255,255,.35)"><i class="fa-regular fa-heart text-[11px]" style="color:var(--coral)"></i><span class="num">27</span></button>
+      </div>
+      <!-- 滑动预览:左右箭头 + 分页点 1/N -->
+      <div class="flex items-center justify-center gap-4 mt-3">
+        <button class="w-9 h-9 rounded-full flex items-center justify-center text-[12px] border-2 border-white" style="background:var(--coral)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full" style="background:var(--coral)"></span>
+          <span class="w-2 h-2 rounded-full" style="background:rgba(255,255,255,.4)"></span>
+          <span class="w-2 h-2 rounded-full" style="background:rgba(255,255,255,.4)"></span>
+        </div>
+        <span class="num text-[12px]" style="color:rgba(255,255,255,.72)">1/3</span>
+        <button class="w-9 h-9 rounded-full flex items-center justify-center text-[12px] border-2 border-white" style="background:var(--coral)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <p class="text-center text-[11px] font-semibold mt-1.5" style="color:rgba(255,255,255,.6)">左右滑动翻看同点内容 · 模型位置不变</p>
+    </div>
+
+    <!-- 状态样式合集(暗底虚线) -->
+    <div class="spec-d mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-circle-info"></i>状态样式 · 取景框边界场景</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="chip-d" style="border-color:rgba(255,107,74,.5);color:#FF9B82"><i class="fa-solid fa-ban text-[10px]"></i>单内容时:左右箭头置灰</span>
+          <span class="chip-d" style="border-color:rgba(255,179,71,.5);color:#FFCF8E"><i class="fa-solid fa-hourglass-half text-[10px]"></i>锚点加载中…</span>
+        </div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-person-walking-arrow-right text-[11px]" style="color:var(--coral)"></i> 你已离开该地点,当前为预览模式(内容转浮窗,不强制关闭)</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-triangle-exclamation text-[11px]" style="color:#FFCF8E"></i> 精度降级 · 模型位置可能偏移(顶部常驻小字)</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-style:dashed;border-color:rgba(245,158,11,.6)"><i class="fa-solid fa-lock text-[11px]" style="color:#FFCF8E"></i> 私密锚点:虚线 + 锁样式,仅持权好友可见(无权限者完全不可见)</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,255,255,.3)"><i class="fa-solid fa-battery-quarter text-[11px]"></i> 低端设备:内容转半透明浮窗渲染(降级不降可用)</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,255,255,.3)"><i class="fa-solid fa-wind text-[11px]"></i> 这里没有内容了 · 点箭头找下一个,或返回地图</div>
+      </div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

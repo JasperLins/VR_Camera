@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S20 分享面板 · VR留念</title>
+<!-- 字号 px 等值;D-021 主链路;E16 未装微信置灰;E18 积分上限;G4 积分 Toast;D-063:FA 图标+分享对象真实化(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 底部弹层式分享面板(Z5) -->
+  <main class="flex-1 overflow-y-auto bg-white border-t-2 border-[#1A1410] rounded-t-[28px] px-4 pt-2.5 pb-6" style="box-shadow:0 -8px 24px rgba(26,20,16,.2)">
+    <div class="w-9 h-1.5 rounded-full bg-[#1A1410]/20 mx-auto"></div>
+    <div class="flex items-center justify-between mt-3">
+      <h1 class="text-[21px] font-black">晒出去!</h1>
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- 分享对象(D-063 真实化:成片缩略) -->
+    <div class="mt-3 flex items-center gap-3 rounded-[16px] border-2 border-[#1A1410] bg-white p-2.5">
+      <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=120&q=80" alt="成片缩略" class="w-11 h-11 rounded-[10px] object-cover border-2 border-[#1A1410] shrink-0">
+      <div class="min-w-0"><p class="text-[13px] font-black truncate">在断桥给未来的我们 · 合影 1 张</p><p class="text-[11px] font-semibold text-[#6F6259] num">断桥 · 今天 17:42</p></div>
+    </div>
+
+    <!-- G4 积分 Toast(打卡入账) -->
+    <div class="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[#1A1410] px-3.5 py-1.5" style="background:var(--sun);box-shadow:2px 2px 0 #1A1410">
+      <i class="fa-solid fa-star text-[12px]"></i>
+      <span class="num text-[13px]">+2 积分</span>
+      <span class="text-[12px] font-extrabold">今日已获 4/10</span>
+    </div>
+
+    <!-- 三个分享目标(动作按钮,非链接) -->
+    <div class="grid grid-cols-3 gap-2.5 mt-4">
+      <button class="rounded-[18px] border-2 border-[#1A1410] bg-white py-3.5 flex flex-col items-center gap-1.5" style="box-shadow:3px 3px 0 #1A1410">
+        <i class="fa-brands fa-weixin text-[26px]" style="color:#1DC981"></i>
+        <span class="text-[12px] font-extrabold">微信好友</span>
+      </button>
+      <button class="rounded-[18px] border-2 border-[#1A1410] bg-white py-3.5 flex flex-col items-center gap-1.5" style="box-shadow:3px 3px 0 #1A1410">
+        <i class="fa-solid fa-camera-retro text-[24px]" style="color:#FF6B4A"></i>
+        <span class="text-[12px] font-extrabold">朋友圈</span>
+      </button>
+      <button class="rounded-[18px] border-2 border-[#1A1410] py-3.5 flex flex-col items-center gap-1.5" style="background:rgba(255,179,71,.35);box-shadow:3px 3px 0 #1A1410">
+        <i class="fa-solid fa-download text-[22px]"></i>
+        <span class="text-[12px] font-extrabold">保存本地</span>
+      </button>
+    </div>
+
+    <!-- D-021 回流说明 -->
+    <div class="mt-4 rounded-[20px] border-2 border-[#1A1410] px-4 py-3.5 flex items-center gap-3" style="background:rgba(255,107,74,.12)">
+      <div class="w-12 h-12 rounded-[14px] border-2 border-[#1A1410] bg-white flex items-center justify-center shrink-0 rotate-3">
+        <i class="fa-solid fa-qrcode text-[24px]"></i>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[14px] font-black">照片角上有张小地图码</p>
+        <p class="text-[12px] font-semibold text-[#6F6259] mt-0.5">好友扫码直达这个地点的 AR 页,不用装导航解释半天;微信卡片缩略图中若码太小,可长按识别</p>
+      </div>
+    </div>
+
+    <p class="text-[12px] text-[#6F6259] font-semibold mt-3"><i class="fa-solid fa-shoe-prints text-[11px]"></i> 足迹已自动记录 · 打卡积分次日 0 点重置</p>
+
+    <!-- 状态样式:未装微信 / 积分上限 / 分享失败 -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-circle-info"></i>状态样式 · 边界(E16 / E18)</span>
+      <div class="mt-3 space-y-2.5">
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="rounded-[16px] border-2 border-[#1A1410] py-3 flex flex-col items-center gap-1.5" style="background:#EFE0D2;color:#B4A79D;box-shadow:none">
+            <i class="fa-brands fa-weixin text-[24px]"></i><span class="text-[11px] font-extrabold">微信好友(未安装)</span>
+          </div>
+          <div class="rounded-[16px] border-2 border-[#1A1410] py-3 flex flex-col items-center gap-1.5" style="background:#EFE0D2;color:#B4A79D;box-shadow:none">
+            <i class="fa-solid fa-camera-retro text-[22px]"></i><span class="text-[11px] font-extrabold">朋友圈(未安装)</span>
+          </div>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 flex items-center gap-2.5" style="background:rgba(255,179,71,.12)">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-flag-checkered"></i></span><p class="text-[13px] font-bold">今日积分已达上限(10/10),打卡仍可保存照片</p>
+        </div>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 bg-white flex items-center gap-2.5">
+          <span class="text-[16px] shrink-0"><i class="fa-solid fa-rotate-right"></i></span><p class="text-[13px] font-bold">分享失败:可重试;已保存的本底照片不受影响</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部手势条(D-063) -->
+  <div class="shrink-0 bg-white pb-1.5 pt-0"><div class="mx-auto w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div></div>
+</div>
+</body>
+</html>

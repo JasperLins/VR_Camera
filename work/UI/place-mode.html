@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S10 放置对位模式 · VR留念</title>
+<!-- 字号 px 等值;FR-03:准星对位;他锚点变暗防误触;D-063:三分线/REC/测光/氛围光+FA 图标(A-732/733) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.breath{animation:breath 2s ease-in-out infinite}
+@keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:33.34% 33.34%}
+.recdot{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 8px rgba(255,59,48,.9);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <!-- D-063 氛围光 -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 42%,transparent 52%,rgba(20,14,10,.44) 100%),radial-gradient(44% 32% at 12% 86%,rgba(255,107,74,.14),transparent 100%),radial-gradient(38% 28% at 88% 12%,rgba(78,205,196,.10),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.45)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 顶部:返回 + 模式徽标 + REC 角标(取景态)+ 测光 hint -->
+  <div class="relative z-10 px-4 mt-1 flex items-center gap-2 flex-wrap">
+    <button class="hud w-10 h-10 flex items-center justify-center text-[14px] shrink-0"><i class="fa-solid fa-chevron-left"></i></button>
+    <span class="chip-d hud" style="border-color:rgba(255,179,71,.6);color:#FFCF8E"><i class="fa-solid fa-thumbtack text-[11px]"></i>放置模式</span>
+    <span class="chip-d hud num" style="border-color:rgba(255,59,48,.65)"><span class="recdot"></span>REC 00:42</span>
+    <span class="chip-d hud ml-auto" style="border-color:rgba(255,255,255,.24)"><i class="fa-solid fa-sun text-[10px]" style="color:#FFD98E"></i>EV -0.7</span>
+  </div>
+  <div class="relative z-10 px-4 mt-1.5 flex justify-between items-center">
+    <span class="chip-d hud num"><i class="fa-solid fa-location-crosshairs text-[10px]" style="color:var(--coral)"></i>30.2492°N, 120.1508°E</span>
+    <span class="chip-d hud"><i class="fa-solid fa-eye text-[10px]" style="color:rgba(255,255,255,.6)"></i>其他锚点已变暗</span>
+  </div>
+
+  <!-- 变暗的其他锚点(防误触,FA 类型锚) -->
+  <span class="absolute z-[5] w-10 h-10 rounded-[12px] flex items-center justify-center text-[16px] border border-white/30" style="left:18%;top:30%;background:rgba(255,107,74,.18);opacity:.4;color:#fff"><i class="fa-solid fa-cube"></i></span>
+  <span class="absolute z-[5] w-10 h-10 rounded-[12px] flex items-center justify-center text-[16px] border border-white/30" style="left:70%;top:36%;background:rgba(78,205,196,.18);opacity:.4;color:#fff"><i class="fa-solid fa-image"></i></span>
+
+  <!-- 中心准星(呼吸) -->
+  <div class="absolute inset-0 z-10 flex items-center justify-center">
+    <div class="relative w-[110px] h-[110px] rounded-full border-[3px] border-white breath" style="box-shadow:0 0 24px rgba(255,107,74,.55), inset 0 0 18px rgba(255,107,74,.3)">
+      <span class="absolute left-1/2 -translate-x-1/2 -top-[13px] w-[4px] h-[22px] rounded" style="background:var(--coral)"></span>
+      <span class="absolute left-1/2 -translate-x-1/2 -bottom-[13px] w-[4px] h-[22px] rounded" style="background:var(--coral)"></span>
+      <span class="absolute top-1/2 -translate-y-1/2 -left-[13px] h-[4px] w-[22px] rounded" style="background:var(--coral)"></span>
+      <span class="absolute top-1/2 -translate-y-1/2 -right-[13px] h-[4px] w-[22px] rounded" style="background:var(--coral)"></span>
+      <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full" style="background:var(--coral);box-shadow:0 0 12px rgba(255,107,74,.9)"></span>
+    </div>
+  </div>
+  <span class="absolute z-10 chip-d hud left-1/2" style="top:57%;transform:translateX(-50%)">把准星对准想放的位置</span>
+
+  <!-- 底部引导条 + 确认 -->
+  <div class="relative z-10 mt-auto px-4 pb-4">
+    <div class="hud p-4">
+      <div class="flex items-center gap-2.5">
+        <span class="text-[22px] shrink-0" style="color:var(--coral)"><i class="fa-solid fa-crosshairs"></i></span>
+        <p class="text-[14px] font-bold flex-1">对准位置 → 确认坐标<br><span class="text-[12px] font-semibold num" style="color:rgba(255,255,255,.65)">将记录当前姿态:30.2492°N 120.1508°E · 海拔 8.6m</span></p>
+      </div>
+      <button class="w-full h-[48px] rounded-full text-white text-[16px] font-extrabold border-2 border-white mt-3.5 flex items-center justify-center gap-2" style="background:var(--coral);box-shadow:0 4px 0 rgba(255,255,255,.85)">确认这个位置<i class="fa-solid fa-check"></i></button>
+    </div>
+    <div class="spec-d mt-3">
+      <span class="spec-lbl"><i class="fa-solid fa-mountain"></i>状态样式 · 对位异常</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(255,179,71,.6)"><i class="fa-solid fa-mountain-sun text-[11px]" style="color:#FFCF8E"></i> 海拔异常:此处海拔读数不稳定,建议到开阔平地</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-person-walking text-[11px]" style="color:var(--coral)"></i> 对位超时:请向任意方向走两步再试</div>
+      </div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

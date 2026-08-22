@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S8 私密内容解锁浮层 · VR留念</title>
+<!-- 字号 px 等值;FR-03:口令/链接校验;解锁后锚点虚线+锁;E25 口令错误;D-063:数字键盘弹层态 + FA 图标(A-731/732) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.btn-dark{display:flex;align-items:center;justify-content:center;gap:8px;border:2px solid #fff;border-radius:999px;font-weight:800;box-shadow:0 4px 0 rgba(255,255,255,.85)}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.grid3{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:33.34% 33.34%}
+/* D-063 键盘弹层态:深色数字键盘(口令为 4 位数字) */
+.kbd{background:rgba(28,20,15,.92);backdrop-filter:blur(16px);border-top:1.5px solid rgba(255,255,255,.14);padding:10px 14px 8px}
+.kbd-key{height:46px;border-radius:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:600;color:#fff}
+.kbd-key.small{font-size:15px;background:rgba(255,255,255,.08)}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:8px auto 4px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80" alt="AR 取景实景" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 40%,transparent 48%,rgba(20,14,10,.52) 100%),radial-gradient(44% 32% at 12% 88%,rgba(255,107,74,.13),transparent 100%)"></div>
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.58)"></div>
+  <div class="grid3"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-start px-5 pt-10 overflow-y-auto">
+    <div class="hud w-full max-w-[330px] p-5">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-[16px] flex items-center justify-center text-[26px] border-2 border-white/80 -rotate-3 shrink-0" style="background:rgba(245,158,11,.3);color:#fff"><i class="fa-solid fa-lock"></i></div>
+        <div>
+          <h1 class="text-[21px] font-black leading-tight">这里有一份私密内容</h1>
+          <p class="text-[13px] font-semibold" style="color:rgba(255,255,255,.72)">@林小满 给你留了点东西,输口令可见</p>
+        </div>
+      </div>
+
+      <!-- 口令输入:4 位数字格(第 3 位聚焦) -->
+      <div class="flex justify-center gap-2.5 mt-5">
+        <span class="w-[52px] h-[60px] rounded-[14px] border-2 border-white/70 flex items-center justify-center num text-[26px]" style="background:rgba(20,14,10,.5)">7</span>
+        <span class="w-[52px] h-[60px] rounded-[14px] border-2 border-white/70 flex items-center justify-center num text-[26px]" style="background:rgba(20,14,10,.5)">2</span>
+        <span class="w-[52px] h-[60px] rounded-[14px] border-2 flex items-center justify-center num text-[26px]" style="background:rgba(20,14,10,.5);border-color:var(--coral);box-shadow:0 0 14px rgba(255,107,74,.4)">4</span>
+        <span class="w-[52px] h-[60px] rounded-[14px] border-2 border-dashed border-white/40 flex items-center justify-center num text-[26px]" style="background:rgba(20,14,10,.5);color:rgba(255,255,255,.35)">_</span>
+      </div>
+
+      <button class="btn-dark w-full h-[48px] text-[16px] mt-5 text-white" style="background:var(--coral);border-color:#fff;box-shadow:0 4px 0 rgba(255,255,255,.85)"><i class="fa-solid fa-key text-[14px]"></i>解锁查看</button>
+      <p class="text-center text-[12px] font-semibold mt-3" style="color:rgba(255,255,255,.62)">收到的是链接?点开链接会自动校验,无需输口令</p>
+    </div>
+
+    <!-- 状态样式:口令错误 / 冷却 / 解锁后锚点形态 -->
+    <div class="spec-d w-full max-w-[330px] mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-key"></i>状态样式 · 校验边界(E25)</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(232,70,58,.7)"><i class="fa-solid fa-hand text-[11px]" style="color:#FF8A7E"></i> 口令不正确,请核对后重试(连续 5 次失败进入 10 分钟冷却)</div>
+        <div class="hud px-3 py-2.5 text-[12px] font-semibold flex items-center gap-2.5" style="border-radius:12px;border-style:dashed;border-color:rgba(245,158,11,.7)">
+          <span class="w-9 h-9 rounded-[10px] flex items-center justify-center text-[15px] border border-dashed border-white/70 shrink-0" style="background:rgba(245,158,11,.3);color:#fff"><i class="fa-solid fa-cube"></i></span>
+          解锁后:锚点以「虚线 + 锁」呈现,仅持权好友可见;作者移除授权后自动重新上锁
+        </div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-wand-magic-sparkles text-[11px]" style="color:#3BE39A"></i> 校验通过:锚点弹出惊喜动效后内容浮现</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- D-063 键盘弹层态:深色数字键盘(输入聚焦中) -->
+  <div class="relative z-10 kbd mt-auto">
+    <div class="flex items-center justify-between px-1 mb-1.5">
+      <span class="text-[11px] font-semibold" style="color:rgba(255,255,255,.55)"><i class="fa-solid fa-circle-info"></i> 口令键盘 · 安全键盘</span>
+      <span class="text-[12px] font-bold" style="color:#3BE39A"><i class="fa-solid fa-shield-halved text-[11px]"></i> 加密输入</span>
+    </div>
+    <div class="grid grid-cols-3 gap-2">
+      <div class="kbd-key num">1</div><div class="kbd-key num">2</div><div class="kbd-key num">3</div>
+      <div class="kbd-key num">4</div><div class="kbd-key num">5</div><div class="kbd-key num">6</div>
+      <div class="kbd-key num">7</div><div class="kbd-key num">8</div><div class="kbd-key num">9</div>
+      <div class="kbd-key small" style="color:rgba(255,255,255,.6)">紧急求助</div><div class="kbd-key num">0</div><div class="kbd-key small"><i class="fa-solid fa-delete-left"></i></div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</div>
+</body>
+</html>

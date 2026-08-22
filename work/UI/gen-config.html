@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S14 标签配置面板 · VR留念</title>
+<!-- 字号 px 等值;FR-04/FR-12:标签驱动无角色名输入框;D-029 仅 Token 数;D-023 余额不足只引导赠送;演示值 80/-4;D-063:FA 图标统一(A-732) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410;--ink2:#6F6259;--paper:#FFF9F5;--line:#EFE0D2}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:var(--paper);display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink2)}
+.stk{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 rgba(26,20,16,.92)}
+.stk-sm{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:2px 2px 0 var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;line-height:1.25}
+.btn-hard{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);border-radius:999px;font-weight:800;box-shadow:0 4px 0 var(--ink);transition:transform .12s ease,box-shadow .12s ease;user-select:none;cursor:pointer}
+.btn-hard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.spec{border:2px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.06);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.tag{border:2px solid var(--ink);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:800;background:#fff;white-space:nowrap}
+.tag-on{background:var(--coral);color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-[#1A1410] rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-4 pt-2 pb-6">
+    <div class="flex items-center gap-2.5 mt-1">
+      <button class="stk-sm w-9 h-9 flex items-center justify-center text-[13px]"><i class="fa-solid fa-chevron-left"></i></button>
+      <h1 class="text-[22px] font-black">想要什么风格?</h1>
+      <!-- G1 Token 余额胶囊(D-029 只显 Token 数) -->
+      <span class="chip ml-auto shrink-0" style="background:rgba(255,107,74,.12);color:#C2410C"><i class="fa-solid fa-coins text-[11px]"></i>80</span>
+    </div>
+    <div class="flex items-center gap-2 mt-2.5 ml-[46px]">
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80" alt="源照片" class="w-9 h-9 rounded-[10px] object-cover border-2 border-[#1A1410]">
+      <div><p class="text-[13px] font-bold">IMG_20260821_小满.jpg</p><p class="text-[11px] font-semibold text-[#6F6259]">选标签就行,不用懂任何建模参数</p></div>
+    </div>
+
+    <!-- 整体风格 -->
+    <p class="lbl mt-4 mb-2">整体风格</p>
+    <div class="flex gap-2 flex-wrap">
+      <span class="tag">卡通</span>
+      <span class="tag tag-on">Q 版</span>
+      <span class="tag">写实</span>
+      <span class="tag">低多边形</span>
+      <span class="tag">原创动漫风</span>
+    </div>
+
+    <!-- 材质 -->
+    <p class="lbl mt-4 mb-2">材质</p>
+    <div class="flex gap-2 flex-wrap">
+      <span class="tag tag-on">哑光</span>
+      <span class="tag">光泽</span>
+      <span class="tag">金属</span>
+      <span class="tag">陶瓷</span>
+    </div>
+
+    <!-- 贴图精度 -->
+    <p class="lbl mt-4 mb-2">贴图精度</p>
+    <div class="flex gap-2">
+      <span class="tag flex-1 text-center tag-on">2K</span>
+      <span class="tag flex-1 text-center">4K</span>
+      <span class="tag flex-1 text-center">8K</span>
+    </div>
+
+    <!-- 附加 -->
+    <p class="lbl mt-4 mb-2">附加工艺</p>
+    <div class="flex gap-2">
+      <span class="tag flex-1 text-center tag-on">PBR 材质</span>
+      <span class="tag flex-1 text-center">优化拓扑</span>
+    </div>
+
+    <!-- API 参数预览(折叠) -->
+    <details class="stk mt-4 px-4 py-3">
+      <summary class="text-[13px] font-extrabold cursor-pointer list-none flex items-center justify-between">API 参数预览(给技术同学) <i class="fa-solid fa-chevron-down text-[11px] text-[#6F6259]"></i></summary>
+      <div class="mt-2.5 pt-2.5 border-t border-[#EFE0D2] text-[12px] font-semibold text-[#6F6259] leading-relaxed">
+        style: chibi_q · material: matte · texture: 2k · extras: pbr<br>无角色名输入框:名称由系统生成,杜绝提示注入
+      </div>
+    </details>
+
+    <!-- Token 消耗实时预览(D-029:仅 Token 数) -->
+    <div class="mt-4 rounded-[20px] border-2 border-[#1A1410] px-4 py-3.5 flex items-center gap-3" style="background:rgba(255,179,71,.18)">
+      <div class="stk-sm w-12 h-12 flex items-center justify-center text-[22px] shrink-0" style="color:#B45309"><i class="fa-solid fa-coins"></i></div>
+      <div class="flex-1 min-w-0">
+        <p class="lbl">本次生成消耗</p>
+        <p class="num text-[32px] leading-none mt-0.5">−4 <span class="text-[14px] font-extrabold">Token</span></p>
+      </div>
+      <div class="text-right shrink-0">
+        <p class="text-[12px] font-bold text-[#6F6259]">余额 80</p>
+        <p class="text-[12px] font-extrabold" style="color:#0E7F78">生成后剩 76</p>
+      </div>
+    </div>
+    <p class="text-[12px] text-[#6F6259] font-semibold mt-1.5">标签组合变化时,消耗即时刷新</p>
+
+    <button class="btn-hard w-full h-[52px] text-[17px] text-white mt-4" style="background:var(--coral)"><i class="fa-solid fa-wand-magic-sparkles"></i>开始生成</button>
+
+    <!-- 状态样式:余额不足(D-023:无购买按钮,只引导赠送) -->
+    <div class="spec mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-circle-exclamation"></i>状态样式 · Token 余额不足(E15 / D-023)</span>
+      <div class="mt-3 rounded-[18px] border-2 border-[#1A1410] bg-white p-4 text-center">
+        <div class="stk-sm w-14 h-14 mx-auto flex items-center justify-center text-[24px] rotate-3" style="color:#B45309"><i class="fa-solid fa-coins"></i></div>
+        <p class="text-[16px] font-black mt-2.5">Token 不够啦</p>
+        <p class="text-[13px] font-semibold text-[#6F6259] mt-1">余额 2 · 本次需要 4</p>
+        <div class="rounded-[14px] border-2 border-[#1A1410] px-3 py-2.5 mt-3 text-left" style="background:rgba(78,205,196,.15)">
+          <p class="text-[13px] font-bold"><i class="fa-solid fa-gift text-[12px]" style="color:#0E7F78"></i> 免费获取 Token 的途径</p>
+          <p class="text-[12px] font-semibold text-[#6F6259] mt-0.5">注册赠送 · 节日活动发放 · 打卡攒积分(积分可抵扣商店模型)</p>
+        </div>
+        <button class="btn-hard h-[42px] px-6 text-[14px] mt-3 bg-white">去钱包看看</button>
+        <p class="text-[11px] font-semibold text-[#6F6259] mt-2">内购暂未开放,全站无购买入口</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部手势条(D-063) -->
+  <div class="shrink-0 bg-[#FFF9F5] pb-1.5 pt-0"><div class="mx-auto w-[124px] h-[5px] rounded-full bg-[#1A1410]"></div></div>
+</div>
+</body>
+</html>

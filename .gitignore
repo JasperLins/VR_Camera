@@ -1,0 +1,62 @@
+# ============================================================
+# VR 留念(vr-memento)仓库根 .gitignore
+# 覆盖:Unity(client/)+ Node(server/ admin/)+ 通用
+# 红线:环境变量实值、密钥文件一律不入库(见 CONVENTIONS.md)
+# ============================================================
+
+# ===== Unity (client/) =====
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+MemoryCaptures/
+Recordings/
+
+# Unity 自动生成的 IDE 工程文件
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+crashlytics-build.properties
+
+# ===== Node (server/ admin/) =====
+node_modules/
+dist/
+build/
+coverage/
+.nest-cache/
+*.tsbuildinfo
+.turbo/
+
+# 环境变量与密钥(实值不入库)
+.env
+.env.*
+!.env.example
+*.pem
+*_key.json
+serviceAccountKey*.json
+
+# ===== 通用 =====
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+
+# ZCode/IDE 会话产物(本地工作文件,不属于工程)
+.zcode/

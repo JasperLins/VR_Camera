@@ -1,0 +1,16 @@
+{
+    "name": "VRM.UI",
+    "rootNamespace": "VRM.UI",
+    "references": [
+        "VRM.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

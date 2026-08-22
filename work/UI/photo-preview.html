@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S19 拍立得预览 · VR留念</title>
+<!-- 字号 px 等值;FR-05/D-021:拍立得水印+开关记忆;D-063:城市街景成片+FA 图标+保存成功 Toast(A-732/735) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<style>
+:root{--coral:#FF6B4A;--sun:#FFB347;--teal:#4ECDC4;--amber:#F59E0B;--ink:#1A1410}
+html,body{margin:0;padding:0;background:#140E0A}
+body{font-family:-apple-system,"SF Pro Text","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;overflow-wrap:anywhere}
+.stage{width:100%;max-width:393px;height:852px;margin:0 auto;position:relative;overflow:hidden;background:#140E0A;display:flex;flex-direction:column}
+.num{font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud{background:rgba(20,14,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18);border-radius:18px;color:#fff}
+.chip-d{display:inline-flex;align-items:center;gap:4px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.spec-d{border:1.5px dashed var(--amber);border-radius:18px;background:rgba(245,158,11,.08);padding:12px}
+.spec-lbl{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.toast-d{position:absolute;left:50%;transform:translateX(-50%);bottom:96px;background:rgba(20,14,10,.9);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;z-index:40;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.home-ind{width:124px;height:5px;border-radius:999px;background:rgba(255,255,255,.75);margin:6px auto 8px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img src="https://images.unsplash.com/photo-1514924013411-cbf25faa35bb?w=800&q=80" alt="打卡成片背景" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0" style="background:rgba(20,14,10,.5)"></div>
+
+  <header class="relative shrink-0 flex items-center justify-between px-6 pt-3.5 pb-1 text-white z-10">
+    <span class="num text-[15px]">9:41</span>
+    <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[96px] h-[27px] bg-black rounded-full"></span>
+    <span class="flex items-center gap-1.5 text-[11px]"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full text-[14px]"></i></span>
+  </header>
+
+  <!-- 顶部:返回 + 模式徽标 -->
+  <div class="relative z-10 px-4 mt-1 flex items-center gap-2">
+    <button class="hud w-10 h-10 flex items-center justify-center text-[14px]"><i class="fa-solid fa-chevron-left"></i></button>
+    <span class="chip-d hud" style="border-color:rgba(255,179,71,.6);color:#FFCF8E"><i class="fa-regular fa-image text-[11px]"></i>预览模式</span>
+    <span class="chip-d hud ml-auto num" style="border-color:rgba(255,255,255,.24)">17:42 快门</span>
+  </div>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-5">
+    <!-- 拍立得相纸(A-725 装饰件微旋转) -->
+    <div class="w-full max-w-[300px] bg-white p-2.5 pb-0" style="border:2px solid #1A1410;border-radius:10px;box-shadow:6px 6px 0 #1A1410;transform:rotate(-1.5deg)">
+      <div class="relative rounded-[6px] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=600&q=80" alt="打卡成片" class="w-full h-[300px] object-cover">
+        <!-- 模型贴纸(合成示意,与 S17 同一锚点内容) -->
+        <span class="absolute" style="left:58%;top:52%;transform:translate(-50%,-50%) rotate(-4deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.4));color:#fff"><i class="fa-solid fa-cube text-[46px]"></i></span>
+      </div>
+      <!-- 水印条(D-021) -->
+      <div class="flex items-center justify-between px-1 py-2.5" style="color:#1A1410">
+        <div class="min-w-0">
+          <p class="text-[11px] font-extrabold leading-tight num">30.2490°N, 120.1531°E<br>2026.08.22 · 断桥</p>
+          <p class="text-[10px] font-bold mt-0.5" style="color:#FF6B4A">扫码回到这里</p>
+        </div>
+        <i class="fa-solid fa-qrcode text-[30px] shrink-0" style="color:#1A1410"></i>
+      </div>
+    </div>
+
+    <!-- 水印开关(记忆偏好) -->
+    <div class="hud w-full max-w-[300px] mt-5 px-4 py-3 flex items-center gap-3">
+      <i class="fa-solid fa-qrcode text-[16px]" style="color:var(--coral)"></i>
+      <div class="flex-1 min-w-0">
+        <p class="text-[14px] font-extrabold">位置水印</p>
+        <p class="text-[11px] font-semibold" style="color:rgba(255,255,255,.65)">好友扫码即可回到这个点 · 偏好会被记住</p>
+      </div>
+      <span class="shrink-0 w-[52px] h-[30px] rounded-full border-2 border-white/80 relative" style="background:var(--coral)">
+        <span class="absolute top-[2px] right-[3px] w-[20px] h-[20px] rounded-full bg-white"></span>
+      </span>
+    </div>
+
+    <div class="flex gap-3 w-full max-w-[300px] mt-4">
+      <button class="flex-1 h-[46px] rounded-full text-[15px] font-extrabold border-2 border-white bg-white/10 flex items-center justify-center gap-2" style="box-shadow:0 4px 0 rgba(255,255,255,.6)"><i class="fa-solid fa-rotate-left text-[13px]"></i>重拍</button>
+      <button class="flex-1 h-[46px] rounded-full text-white text-[15px] font-extrabold border-2 border-white flex items-center justify-center gap-2" style="background:var(--coral);box-shadow:0 4px 0 rgba(255,255,255,.6)"><i class="fa-solid fa-share-nodes text-[13px]"></i>保存并分享</button>
+    </div>
+
+    <!-- 状态样式 -->
+    <div class="spec-d w-full max-w-[300px] mt-4">
+      <span class="spec-lbl"><i class="fa-solid fa-floppy-disk"></i>状态样式 · 保存与记忆(E17)</span>
+      <div class="mt-2.5 space-y-2">
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-circle-check text-[11px]" style="color:#3BE39A"></i> 保存成功:Toast「已存入相册」≤2s 后进入分享面板</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px;border-color:rgba(232,70,58,.6)"><i class="fa-solid fa-circle-xmark text-[11px]" style="color:#FF8A7E"></i> 保存失败:显示原因 + 重试;照片临时保留在本会话</div>
+        <div class="hud px-3 py-2 text-[12px] font-semibold" style="border-radius:12px"><i class="fa-solid fa-brain text-[11px]" style="color:#FFCF8E"></i> 水印开关记忆:关过一次,下次默认关</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- D-063 全局反馈:保存成功 Toast(暗舞台版,≤2s) -->
+  <div class="toast-d"><i class="fa-solid fa-circle-check" style="color:#3BE39A"></i>已存入相册 · 1 张</div>
+
+  <div class="relative z-10"><div class="home-ind"></div></div>
+</div>
+</body>
+</html>
