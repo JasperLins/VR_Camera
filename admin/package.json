@@ -1,0 +1,26 @@
+{
+  "name": "@vrm/admin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VR 留念管理后台(AntD + Vite):内容管理/强制下架/举报工单(PKG-22 / T21)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "antd": "^5.21.0",
+    "dayjs": "^1.11.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

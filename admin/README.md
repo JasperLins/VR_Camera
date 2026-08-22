@@ -1,25 +1,34 @@
-# admin/ — VR 留念管理后台(占位)
+# admin/ — VR 留念管理后台(AntD + Vite)
 
-> **状态:B3 批次(PKG-22)开工,当前仅有本说明文件。**
+## 职责(PKG-22 / T21)
 
-## 规划要点(work/docs 既有决策)
+- 内容管理:全量锚点列表(状态过滤/AI 标识列)+ 强制下架(U-1/U-2);
+- 举报工单:SLA 排序列表(超时红标)+ 受理→复核→处置流转,处置结论必填(U-3);
+- 登录 RBAC:deviceId 走服务端 `/v1/auth/guest` 复用 JWT,role=ADMIN 放行,普通用户 40300 拒绝。
 
-| 项 | 口径 |
+## 文件
+
+| 文件 | 说明 |
 |---|---|
-| 技术栈 | Ant Design Pro(React 18 + TS,D-026);与后端同语言,monorepo 外独立目录 |
-| 用户 | 内部 ≤10 人(A-406),无对外暴露 |
-| 实现深度 | 不做高保真,按 6 屏简表实现(D-040) |
-| 部署 | 构建产物 → OSS 静态托管,同 API 网关 |
+| src/api.ts | 统一信封解包/鉴权注入的 fetch 客户端 |
+| src/App.tsx | 登录门卫 + 侧边栏骨架(双页) |
+| src/pages/Login.tsx | deviceId 登录(RBAC 校验) |
+| src/pages/ContentPage.tsx | 内容管理 + 强制下架 |
+| src/pages/ReportsPage.tsx | 举报工单处置流 |
 
-## 六屏简表(A1–A6,feature-list U-1~U-4)
+## 运行
 
-| 屏 | 功能 | 对应任务 |
-|---|---|---|
-| A1 | 登录与 RBAC | U-1 |
-| A2 | 内容管理(锚点列表/地图预览/强制下架) | U-2 |
-| A3 | 审核工作流(机审复核/模型抽检/举报工单 48h SLA) | U-3 |
-| A4 | 用户与账本(Token 流水/人工退款/积分调整) | U-4 |
-| A5 | seeding 运营工具(官方库/批量放置/城市配置) | U-5(B4) |
-| A6 | 运营看板(DAU/打卡/生成成功率) | U-6(B4) |
+```bash
+# 前提:服务端 api 已起(默认 http://127.0.0.1:3000)
+pnpm i
+pnpm dev     # http://localhost:5173(dev 代理 /v1 → 3000)
+pnpm build   # 产物 dist/
+```
 
-开工时:先读 `work/docs/08-handoff/ai-dev-handoff.md` §5 与本文件,脚手架用 AntD Pro 官方模板,接口契约从 server OpenAPI(/docs)生成。
+演示账号:先在 server/ 执行 `node scripts/seed-admin.ts`(默认 deviceId `admin-demo-0001`),
+后台登录页输入该 deviceId。正式员工账号体系属 B5 上线轨道。
+
+## 注意
+
+- pnpm 11 供应链防护:`pnpm-workspace.yaml` allowBuilds 已放行 esbuild;
+- 新增带安装脚本的依赖需同步增补 allowBuilds。
