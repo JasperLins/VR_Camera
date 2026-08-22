@@ -17,11 +17,8 @@ CREATE TYPE "ModerationScene" AS ENUM ('NICKNAME', 'ANCHOR_TITLE', 'REPORT_TEXT'
 -- CreateEnum
 CREATE TYPE "PointsReason" AS ENUM ('CHECKIN', 'UPLOAD', 'DOWNLOADED', 'COMMENT', 'LIKED', 'PURCHASE', 'STORE_REDEEM', 'ADMIN_ADJUST');
 
--- DropIndex
-DROP INDEX "anchors_geog_gist";
-
 -- AlterTable
-ALTER TABLE "anchors" DROP COLUMN "geog",
+ALTER TABLE "anchors"
 ADD COLUMN     "ai_generated" BOOLEAN NOT NULL DEFAULT false;
 
 -- CreateTable
