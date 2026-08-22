@@ -5,6 +5,7 @@
  */
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { User } from '@vrm/database';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -19,16 +20,16 @@ export class TokenController {
 
   @Get('balance')
   @ApiOperation({ summary: 'Token 余额(权威值,客户端仅展示缓存,A-405)' })
-  async balance(@CurrentUser('sub') userId: string): Promise<{ balance: number }> {
-    return { balance: await this.tokenService.getBalance(userId) };
+  async balance(@CurrentUser() user: User): Promise<{ balance: number }> {
+    return { balance: await this.tokenService.getBalance(user.id) };
   }
 
   @Get('entries')
   @ApiOperation({ summary: 'Token 流水分页(时间倒序)' })
   async entries(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser() user: User,
     @Query() pagination: PaginationDto
   ): Promise<{ items: unknown[]; total: number; page: number; pageSize: number }> {
-    return this.tokenService.listEntries(userId, pagination.page, pagination.pageSize);
+    return this.tokenService.listEntries(user.id, pagination.page, pagination.pageSize);
   }
 }

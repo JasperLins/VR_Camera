@@ -45,7 +45,7 @@
 
 | # | 事项 | 影响范围 | 解法位置 |
 |---|---|---|---|
-| A | **未解** Docker Desktop 代理(127.0.0.1:10808)WSL2 内不可达,镜像拉不下来 | 迁移执行、health 运行时验收 | server/README.md §6(三选一方案);修复后跑 `pnpm db:up && pnpm migrate:dev && pnpm db:patch && pnpm dev` |
+| ~~A~~ | ✅ 已解(2026-08-23):Docker 镜像就位+中间件全链路验收(health/迁移/登录/赠送 80 实测通过);**拉新镜像**需 1 分钟窗口操作(server/README §6),一劳永逸方案待用户在 v2rayN 开 Allow LAN | 日常开发无影响 | server/README.md §6 |
 | ~~B~~ | ✅ 已解(2026-08-23):Unity 6000.0.82f1 已装(`D:\Unity\`),工程验证通过 | — | 命令行验证法已写入 client/README.md §2 |
 | C | 真机预研 PR-1(锚定)/PR-2(高德 SDK)/PR-3(Meshy 连通) | 决定 B2 锚定/地图/生成实现方案与 RA-2/3/4 复审卡 | 需 ≥3 台 ARCore 机型 |
 | D | 阿里云 ECS/RDS/OSS 开通、微信开放平台资质、ICP/算法备案、Meshy key | B1 末期联调与上线轨道(不阻塞开发);WECHAT_APPID/SECRET 留空时微信登录有明确防线 | work/AGENTS.md §3 人工环节清单 |
@@ -73,7 +73,7 @@
 | git 远程 | git@github.com:JasperLins/VR_Camera.git(main 分支) |
 | 版本锁定 | NestJS 10 / Prisma 5.22 / BullMQ 5 / TS 5.6 / zod 3 / @nestjs/jwt 10.2 / AR Foundation 6.0.3 |
 | 常用命令 | server/:pnpm i · pnpm -r lint/test/build · pnpm db:up · pnpm migrate:dev · pnpm dev(详见 server/README.md §2) |
-| 已踩坑 | ① Prisma 关系字段反向缺失会 P1012;② TS enum 成员不能单独命名导入;③ pnpm 11 拦截 postinstall 需 allowBuilds;④ Bootstrap 不能放 Core(循环依赖),已独立 VRM.Bootstrap;⑤ C# 数字分隔符字面量易错数量级(Conv 偏心率曾写成 6.69e-4,靠基准单测拦下);⑥ npmmirror 缺 @nestjs/jwt@10.2.2,用 10.2.0;⑦ spec 桩需自带事务回滚语义(快照还原法) |
+| 已踩坑 | ① Prisma 关系字段反向缺失会 P1012;② TS enum 成员不能单独命名导入;③ pnpm 11 拦截 postinstall 需 allowBuilds;④ Bootstrap 不能放 Core(循环依赖),已独立 VRM.Bootstrap;⑤ C# 数字分隔符字面量易错数量级(Conv 偏心率曾写成 6.69e-4,靠基准单测拦下);⑥ npmmirror 缺 @nestjs/jwt@10.2.2,用 10.2.0;⑦ spec 桩需自带事务回滚语义(快照还原法);⑧ Docker Desktop 把系统代理注入 dockerd 独立网络命名空间(隔离回环不可达),settings-store manual 配置对注入无效、wc.dat 有旧缓存——拉新镜像走 server/README §6 窗口流程;⑨ Ubuntu WSL 的 postgres 经 mirrored 网络占用 5432 回环 → 本地 PG 端口 55432,连接串用 127.0.0.1 勿用 localhost(IPv6 优先会超时);⑩ prisma migrate dev 非交互终端必须带 --name;⑪ PG advisory lock 残留 → 重启 vrm-postgres 容器;⑫ JWT 守卫把 req.user 换成 User 对象,控制器取 sub 会得到 undefined |
 
 ## 6. 会话记录索引
 
@@ -82,4 +82,5 @@
 | 1 | 2026-08-22 | 规划+初始化+Sprint-0 AI 侧地基(server 全绿/client 源码/规范文档/推送) | 396693c |
 | 2 | 2026-08-22 | 建立 PROGRESS.md 断点续接机制 | 5bb4dfb |
 | 3 | 2026-08-23 | client Unity 验证(编译 0 error + 15/15 单测,修 Conv 常量 bug);B1 服务端:PKG-13 Token 账本全套 + PKG-08 auth(游客/微信/JWT)+ SSE 骨架 + auth_identities schema;52 用例全绿 | 8b3130f |
-| 4 | 2026-08-23 | PKG-09 客户端基础面:A-2 App 壳(TabBar 四格+凸起相机钮/A-701 豁免)、A-3 AuthSession 游客登录对接、A-4 设备分级、A-6 贴纸组件库+设计令牌、Editor 建场景菜单;EditMode 30/30(修 3 个编译错:Graphic 私有 API/圆形网格/UIVertex 大小写/结构体 as) | (本次提交) |
+| 4 | 2026-08-23 | PKG-09 客户端基础面:A-2 App 壳(TabBar 四格+凸起相机钮/A-701 豁免)、A-3 AuthSession 游客登录对接、A-4 设备分级、A-6 贴纸组件库+设计令牌、Editor 建场景菜单;EditMode 30/30(修 3 个编译错:Graphic 私有 API/圆形网格/UIVertex 大小写/结构体 as) | f2cf669 |
+| 5 | 2026-08-23 | Docker 环境修复+PKG-08/13 运行时验收:定位三层根因(系统代理注入独立 netns/wc.dat 缓存/Ubuntu WSL 占 5432),镜像就位,首次迁移+PostGIS 落库,health/guest 登录/赠送 80/幂等全链路 curl 实测通过;修 token.controller CurrentUser 字段 bug;本地 PG 端口改 55432 | (本次提交) |

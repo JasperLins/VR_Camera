@@ -11,7 +11,8 @@ services:
       POSTGRES_PASSWORD: vrmemento
       POSTGRES_DB: vrmemento
     ports:
-      - '5432:5432'
+      # 宿主端口 55432:5432 已被 Ubuntu(WSL,mirrored 网络)的 PostgreSQL 占用
+      - '55432:5432'
     volumes:
       - vrm-pgdata:/var/lib/postgresql/data
     healthcheck:

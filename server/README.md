@@ -97,7 +97,7 @@ B2 将新增:`workers/generation.worker.ts`(PKG-14 生成任务消费:轮询 Mes
 | `API_PORT` | 3000 | API 监听端口 |
 | `LOG_LEVEL` | info | debug/info/warn/error |
 | `DATABASE_URL` | 本地 docker 同构值 | 生产为阿里云 RDS(必须显式注入) |
-| `REDIS_URL` | redis://localhost:6379 | 生产为云数据库 Redis |
+| `REDIS_URL` | redis://127.0.0.1:6379 | 生产为云数据库 Redis |
 | `JWT_SECRET` | 开发默认值 | **生产必须改强随机**(携带开发默认值将拒绝启动,env.ts superRefine) |
 | `WECHAT_APPID` / `WECHAT_SECRET` | 空 | 微信开放平台移动应用(人工资质环节;留空时微信登录返回 50001 明确提示) |
 
@@ -113,13 +113,22 @@ NestJS 10.x / Prisma 5.22 / BullMQ 5.x / TS 5.6 / Jest 29 / ESLint 9 / zod 3。�
 4. 纯逻辑抽 `<domain>.logic.ts` + 同目录 spec(覆盖率 ≥70%);
 5. app.module.ts imports 注册,swagger tag 命名与模块一致。
 
-## 6. 已知环境阻塞(2026-08-22 登记,待处理后删除本节)
+## 6. Docker 环境:已修复与拉镜像方法(2026-08-23 更新)
 
-Docker Desktop 代理配置指向 `127.0.0.1:10808`,WSL2 内守护进程无法回连宿主回环地址,镜像拉取失败
-(`proxyconnect tcp: dial tcp 127.0.0.1:10808: connect: connection refused`)。**服务端代码本身不受影响(单测/构建全绿)**。
+**现状:已修复可用**——postgis/redis 镜像已在本地,迁移+PostGIS 补丁+health+登录全链路验收通过,日常开发(compose/migrate/联调)不需要再拉镜像。
 
-处理任选其一后,依次执行:`pnpm db:up && pnpm migrate:dev && pnpm db:patch && pnpm dev`,验收 `curl http://localhost:3000/v1/health` 返回 `{"code":0,...,"dependencies":{"db":"up","redis":"up"}}`:
+背景坑(备案):本机 Docker Desktop 会把 Windows 系统代理(`127.0.0.1:10808`)注入 dockerd,而 dockerd 运行在独立网络命名空间(隔离回环,物理不可达)→ 拉镜像报 `proxyconnect connection refused`;且 `settings-store.json` 的 manual 代理配置对守护进程注入无效。已配国内镜像源(`~/.docker/daemon.json` registry-mirrors:docker.1ms.run / daocloud / xuanyuan)。
 
-1. 代理软件开启「允许来自局域网的连接」(绑定 0.0.0.0),并把 Docker Desktop 代理改为 `http://<本机IP>:10808`;
-2. 或在方便重启 WSL 时执行 `wsl --shutdown` 使 `.wslconfig` 的 `networkingMode=mirrored` 生效(注意会终止所有 WSL 发行版,含 Ubuntu);
-3. 或为 Docker 配置国内镜像加速并关闭代理。
+**需要拉新镜像时(约 1 分钟窗口操作)**:
+
+1. 关闭系统代理(v2rayN 切「清空系统代理」,或 设置→网络→代理→关);
+2. 重启 Docker 引擎:`wsl --terminate docker-desktop`,再重启 Docker Desktop;
+3. `docker pull <镜像>`(自动走国内镜像源);
+4. 重新打开 v2rayN 系统代理(不影响已拉取的镜像)。
+
+**一劳永逸(待用户操作)**:v2rayN 勾选「允许来自局域网的连接(Allow LAN)」后,在 Docker Desktop GUI → Settings → Resources → Proxies 手动配置 `http://host.docker.internal:10808`(10808 为 HTTP/SOCKS 混合端口,已验证可作 HTTP 代理),再冷重启验证 GUI 配置是否对守护进程生效。
+
+**其他本机事实**:
+- 本地 PostgreSQL 端口是 **55432**(Ubuntu WSL 内的 PostgreSQL 通过 mirrored 网络占用了 5432 回环,连接串一律用 127.0.0.1,勿用 localhost——本机 localhost 优先解析 IPv6 会超时);
+- `prisma migrate dev` 在非交互终端必须带 `--name`,否则挂起;
+- 迁移报 advisory lock 超时 = 有残留连接持有锁,重启 vrm-postgres 容器即可。

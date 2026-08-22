@@ -88,7 +88,7 @@ flowchart LR
 |---|---|---|
 | Node.js | 20 LTS(文档口径);实测 24.x 兼容 | ✅ v24.19.0(偏差已登记 dev-log) |
 | pnpm | ≥8,registry 建议 npmmirror | ✅ 已装 |
-| Docker Desktop | 用于本地 PostgreSQL 16+PostGIS / Redis 7 | ✅ 已装(用前启动守护进程) |
+| Docker Desktop | 本地中间件已就绪(PG16+PostGIS 端口 **55432** / Redis 6379);拉新镜像方法见 server/README.md §6 | ✅ 可用 |
 | Unity | **Unity 6 LTS(6000.0.x)+ Android Build Support 全套** | ⏳ 待安装(见 client/README.md) |
 | Git | ≥2.30 | ✅ 已装 |
 

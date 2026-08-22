@@ -12,7 +12,7 @@ describe('validateEnv', () => {
     expect(env.NODE_ENV).toBe('development');
     expect(env.API_PORT).toBe(3000);
     expect(env.LOG_LEVEL).toBe('info');
-    expect(env.REDIS_URL).toBe('redis://localhost:6379');
+    expect(env.REDIS_URL).toBe('redis://127.0.0.1:6379');
   });
 
   it('API_PORT 字符串被 coerce 为数字', () => {
@@ -21,7 +21,7 @@ describe('validateEnv', () => {
 
   it('缺少 DATABASE_URL 时回落本地默认值(与 docker-compose 同构,生产必须显式注入)', () => {
     const env = validateEnv({ API_PORT: '3000' });
-    expect(env.DATABASE_URL).toContain('postgresql://vr:vrmemento@localhost:5432/vrmemento');
+    expect(env.DATABASE_URL).toContain('postgresql://vr:vrmemento@127.0.0.1:55432/vrmemento');
   });
 
   it('DATABASE_URL 提供空串时抛错(错配启动即失败)', () => {

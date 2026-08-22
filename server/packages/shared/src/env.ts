@@ -16,8 +16,8 @@ export const EnvSchema = z
     DATABASE_URL: z
       .string()
       .min(1)
-      .default('postgresql://vr:vrmemento@localhost:5432/vrmemento?schema=public'),
-    REDIS_URL: z.string().url().default('redis://localhost:6379'),
+      .default('postgresql://vr:vrmemento@127.0.0.1:55432/vrmemento?schema=public'),
+    REDIS_URL: z.string().url().default('redis://127.0.0.1:6379'),
     JWT_SECRET: z.string().min(16).default('dev-insecure-jwt-secret-change-me'),
     WECHAT_APPID: z.string().optional(),
     WECHAT_SECRET: z.string().optional()
