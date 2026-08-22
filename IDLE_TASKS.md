@@ -19,36 +19,36 @@
 
 ## 2. 任务队列(按序执行)
 
-### 阶段 0:B1 收尾(闸门:无,立即可做)
+### 阶段 0:B1 收尾(闸门:无,立即可做)—— ✅ 2026-08-23 会话 6 完成 T1-T3
 
-- [ ] **T0 AppShell 白屏修复的批处理验证**(client):跑 Unity EditMode 全量(含新增 AppShellTests),失败则修到绿。验收:全绿 + Console 无 error。
-- [ ] **T1 L-2 业务表补全**(server):anchor_grants(私密授权名单)/share_tokens(口令哈希)/reports(举报工单)/moderation_records(审核留痕)/points_accounts + points_ledger(积分账本,只插入+幂等)建模 + 迁移落地。验收:`prisma migrate dev` 无 drift,`migrate deploy` 幂等。
-- [ ] **T2 SSE 多实例互通 demo**(server):`scripts/sse-demo.sh`:两 API 实例(3000/3001)→ `redis-cli publish vrm:task:t1` → 断言两个 `/v1/tasks/t1/events` 均收到。验收:脚本可重复执行全绿(PKG-08 L-6 验收线)。
-- [ ] **T3 频控基础件**(server):common/rate-limit(Redis 固定窗口,按 userId+路由键)+ 守卫封装 + 单测。验收:单测绿,可被 S-1/P-4 复用。
+- [ ] **T0 AppShell 白屏修复的批处理验证**(client):**顺延——Unity 编辑器持续占用(PID 31948,EditorInstance 锁活),批处理无法运行**;关闭 Unity 后按 client/README §2 执行。
+- [x] **T1 L-2 业务表补全**(server):8 表落地(anchor_grants/share_tokens/reports/moderation_records/points_accounts+points_ledger/agreement_versions/consent_records + anchors.ai_generated);迁移 20260822180906 + PostGIS 并入迁移链 20260823000000(⚠ migrate diff --from-schema-datasource 会 DROP postgis 对象,见 PROGRESS §5 ⑬);`migrate deploy` 幂等已验证(全量 reset 重放)。
+- [x] **T2 SSE 多实例互通 demo**(server):`scripts/sse-demo.sh` 可重复执行 PASS(subscribers=2);附带修复全局信封拦截器污染 SSE 流(SkipEnvelope + headersSent 防线)。
+- [x] **T3 频控基础件**(server):common/rate-limit 固定窗口(Redis INCR+EXPIRE)+ @RateLimit 装饰器守卫 + 11 单测;已接入 guest 登录/checkin/报告触点。
 
-### 阶段 1:B2 服务端核心引擎 ⛔闸门:B1 DoD 签字(未签字则停在 T3 后等待)
+### 阶段 1:B2 服务端核心引擎 —— ✅ 2026-08-23 会话 6 全部完成(用户明示豁免签字闸门,待人工复核项见 PROGRESS §3-E)
 
-- [ ] **T4 M-1 附近内容接口**(server):modules/geo:`ST_DWithin`(参数化 $queryRaw)+ 海拔 ±5m + 可见性过滤 + 分页;seed 脚本(1 万锚点,杭州湖滨中心)+ P95 计时脚本。验收:本地 P95 <500ms 数字记 dev-log;过滤逻辑纯函数单测。
-- [ ] **T5 M-2 geohash 聚合**(server):geohash 编码纯函数(精度 1-7)+ zoom 分级 + cell/count/top_content 聚合接口。验收:聚合纯函数单测 ≥70% + 本地 DB e2e。
-- [ ] **T6 M-3 热门区域聚合**(server):区域密度 Top N 接口(打卡数暂以锚点数代理,S-1 落地后切换)。
-- [ ] **T7 O-1+O-6 生成网关服务层**(server):Gen3DProvider TS 接口 + 任务创建(扣 Token 同事务/幂等 `gen-debit:taskId`)+ 状态机守卫(复用 canTransition)+ 标签→参数映射(结构化枚举,禁 prompt 字符串)。验收:并发创建幂等单测 + 非法迁移拒绝单测。
-- [ ] **T8 O-3 Worker 消费骨架**(server):generation.worker:BullMQ 消费 → **mock provider**(可配时延/失败率)→ 进度 Redis 发布(vrm:task:id)→ 终态退款(调 TokenService 既有 credit;O-4 真实资金终态属人工批次)。验收:mock 全链路集成测试(创建→进度→完成/失败退款/取消比例退)。
-- [ ] **T9 生成任务端点**(server):POST /v1/gen/tasks、GET /v1/gen/tasks/:id(轮询兜底)、取消(比例退款 computeCancelRefund)。验收:e2e(mock provider)。
-- [ ] **T10 R-1+R-5 机审与同意留痕**(server):ContentSafetyProvider 抽象 + mock 适配器(配置化敏感词)+ 统一入口;协议版本表 + 单独同意记录接口(D-031)。验收:单测。
-- [ ] **T11 Q-5+R-4 举报与 AI 标识**(server):reports 状态机(受理→复核→处置,48h SLA 字段)+ 举报接口;锚点/任务的 AI 生成标识字段下发。验收:状态机单测。
-- [ ] **T12 P-3 积分服务**(server):六类获取入账/单向抵扣 10:1(复用只插入+幂等账本模式)+ 余额接口。验收:并发幂等单测。
-- [ ] **T13 P-4+S-1 防刷与打卡**(server):防刷纯函数规则集(同内容一次/最低字数/新号冷却/每日上限/设备指纹)+ 打卡上报(+2/同锚点每日首次/日上限 10)。验收:规则全表单测(PKG-18 验收线)。
+- [x] **T4 M-1 附近内容接口**:geo 模块 ST_DWithin 参数化查询 + 海拔 ±5m + 可见性三通道过滤;seed-anchors.ts(1 万,湖滨)+ bench-nearby.ts;**P95=12.1ms@500m / 22.5ms@5km**(记 dev-log);纯函数单测 + curl e2e。
+- [x] **T5 M-2 geohash 聚合**:encode/decode 纯函数(Wikipedia 基准向量验证)+ zoom 分级 + aggregateClusters;18 单测 + e2e。
+- [x] **T6 M-3 热门区域**:ST_GeoHash 密度 Top N(打卡口径待 S-1 流水落库后切换);e2e 通过。
+- [x] **T7 O-1+O-6**:GenerationService(扣 60 与建任务同事务/幂等 gen-debit:taskId)+ TokenService tx 透传;标签→参数映射收敛 @vrm/shared(结构化枚举)。
+- [x] **T8 O-3 Worker**:generation.processor(受理→进度→终态;FAILED/REFUNDED_ALL 全额退;DEDUCTED 停滞扫描超时退款)+ worker-token SQL 级幂等入账;6 集成测试(脚本化 provider)。
+- [x] **T9 端点**:POST/GET/cancel /v1/gen/tasks;**live e2e**:全链路 SSE 帧 0/20/41/62/82/100+glbOssKey;取消@40%→退36;e2e-gen.py 可复跑。
+- [x] **T10 R-1+R-5**:ContentSafetyProvider + mock(CONTENT_SAFETY_WORDS)+ 全量留痕;五项协议自举 + 同意记录/查询接口(D-031)。
+- [x] **T11 Q-5+R-4**:report 状态机(受理→复核→处置 + 48h SLA/超时标记)+ 重复举报去重;anchor.ai_generated 下发(详情/geo/admin)。
+- [x] **T12 P-3 积分**:PointsService(六类幂等入账 + STORE_REDEEM 年上限 2000=D-045 + 10:1 粒度 + 原子扣)。
+- [x] **T13 P-4+S-1**:防刷规则引擎纯函数(5 规则全表单测 + dailyCap 覆盖)+ 打卡(+2/同锚点每日幂等/日上限 10/toast 载荷);B2 四模块 e2e-b2.py 12/12。
 
-### 阶段 2:B3 体验闭环 ⛔闸门:B2 DoD 签字
+### 阶段 2:B3 体验闭环 —— 服务端 T14-T16 + admin T21 完成(2026-08-23 会话 6);client T17-T20 顺延(Unity 占用)
 
-- [ ] **T14 N-1+N-3 放置与管理接口**(server):放置校验(坐标/可见性/失效枚举 7d/30d/永久,私密默认永久)+ 隐藏/重开恢复原位/删除(30 天回收字段)。验收:e2e + 私密仅授权可见单测。
-- [ ] **T15 N-4 私密鉴权与口令**(server):授权名单判定 + 口令生成/校验(哈希存储)。验收:单测。
-- [ ] **T16 N-2 生命周期调度实现**(server):lifecycle-scan.worker 真实实现(部分索引扫描→到期隐藏→留痕)+ BullMQ repeat。验收:过期数据注入式单测。
-- [ ] **T17 K-1/K-2/K-4 钱包页**(client):wallet-home(S22)/token-packages(S23 四档「即将开放」,D-023 零购买)/ledger-detail(S24);Token 只显数值(D-029)。还原 work/UI 原型。验收:EditMode + 留人工走查清单。
-- [ ] **T18 G-1~G-3 我的内容管理页**(client):三 Tab(可见/已隐藏/已删除)+ 隐藏/重开/删除确认。
-- [ ] **T19 E-1~E-3+E-5 生成流程页**(client):gen-upload(≤10MB/≥512 校验)/人脸单独同意弹窗(拒绝阻断)/gen-config(标签)/gen-result(进度+保存);上传端点占位(OSS STS 属人工)。验收:页面流转 + EditMode。
-- [ ] **T20 地图层骨架**(client):详情卡(B-6)/空区三出口(B-7)/热门区域列表(B-8)/聚合胶囊(B-5 数据侧);高德 SDK 留桩 AMapBridge(真瓦片待 PR-2+key)。验收:桩数据驱动渲染 + EditMode。
-- [ ] **T21 U-1~U-3 admin 后台**(web):AntD Pro 脚手架 + 登录 RBAC(复用服务端 JWT)+ 内容管理/强制下架 + 审核工作流页。验收:`pnpm build` 绿 + 路由守卫演示账号。
+- [x] **T14 N-1+N-3 放置与管理**:POST /v1/anchors(标题机审/WGS84/7d/30d/永久,私密强制永久 D-012)+ 详情(R-4 标识)+ 三态列表 + 隐藏/重开恢复原位/软删 30 天回收(回收期恢复落 HIDDEN);e2e-b3 20/20。
+- [x] **T15 N-4 私密鉴权与口令**:授权名单追加/移除(移除即重新上锁)+ 8 位数字口令(sha256 存储/重生成作废旧令)+ 校验 5 次失败冷却 10 分钟 + 24h 解锁会话;无权限完全不可见(40301)。
+- [x] **T16 N-2 生命周期调度**:scanExpiredAnchors 条件批量 VISIBLE→HIDDEN + BullMQ 5 分钟 repeat;过期行实测命中(留痕=结构化日志,事件表待后台需求)。
+- [ ] **T17 K-1/K-2/K-4 钱包页**(client):**顺延——Unity 编辑器占用,批处理验证不可运行**(服务端余额/流水端点已就绪:/v1/ledger/balance|entries)。
+- [ ] **T18 G-1~G-3 我的内容管理页**(client):**顺延同上**(服务端三态列表/隐藏/重开/删除端点已就绪:/v1/anchors)。
+- [ ] **T19 E-1~E-3+E-5 生成流程页**(client):**顺延同上**(服务端生成全链路 + 人脸同意留痕接口已就绪:/v1/gen/tasks + /v1/consents)。
+- [ ] **T20 地图层骨架**(client):**顺延同上**(数据侧已就绪:/v1/geo/nearby|clusters|hot-regions)。
+- [x] **T21 U-1~U-3 admin 后台**:Vite+React+AntD(AntD Pro 轻量等价实现)+ 登录 RBAC(复用 JWT,role=ADMIN)+ 内容管理/强制下架 + 工单处置流;`pnpm build` 绿 + 演示账号 seed-admin.ts(deviceId admin-demo-0001)+ live 实测(普通用户 40300/下架/流转)。
 
 ### 阶段 3:B4/B5 ⛔闸门:B3 DoD 签字(列出但默认锁定)
 

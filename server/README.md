@@ -1,7 +1,7 @@
 # server/ — VR 留念服务端(NestJS 10 monorepo)
 
 > 后端工程:pnpm workspace 管理 2 个应用 + 2 个共享包,TypeScript 单语言栈(tech-stack 方案 A)。
-> 当前状态:**Sprint-0 工程地基完成,lint / test(29 用例)/ build 全绿**;中间件运行时验证待环境就绪(见 §6)。
+> 当前状态:**B1/B2/B3(服务端+admin)完成:lint / test(122 用例)/ build 全绿,12 业务模块 + 4 套 live e2e 全 PASS**;Meshy/高德/OSS/微信等外部依赖均为 mock 或留桩(人工环节,见 work/AGENTS.md §3)。
 
 ## 1. 目录结构与逐文件说明
 
@@ -86,6 +86,18 @@ B2 将新增:`workers/generation.worker.ts`(PKG-14 生成任务消费:轮询 Mes
 | `pnpm dev` | 起 api(3000)+ worker(需中间件已起) |
 | `pnpm build` / `pnpm test` / `pnpm lint` | 三大门禁(DoD 构建绿) |
 | `pnpm db:studio` | Prisma Studio 数据浏览 |
+
+**验收/联调脚本(B1-B3 交付,均可重复执行)**
+
+| 脚本 | 作用 | 前提 |
+|---|---|---|
+| `bash scripts/sse-demo.sh` | SSE 多实例互通验收(两 API 实例经 Redis pub/sub 同收进度帧) | api 已构建、中间件起 |
+| `node --no-warnings scripts/seed-anchors.ts` | 1 万锚点种子(杭州湖滨,P95 压测数据) | 中间件起 |
+| `node --no-warnings scripts/bench-nearby.ts` | 附近查询 P95 计时(500m/5km 各档) | 先 seed-anchors |
+| `node --no-warnings scripts/seed-admin.ts` | admin 演示账号(deviceId 默认 admin-demo-0001 → role=ADMIN) | 中间件起 |
+| `python scripts/e2e-gen.py [--cancel]` | 生成任务全链路 e2e(创建→SSE 进度→终态;--cancel 演示比例退款) | api + worker 已起 |
+| `python scripts/e2e-b2.py <anchorId>` | B2 四模块 e2e(协议同意/机审/举报/打卡幂等) | api 已起(可先 seed-anchors 取 anchorId) |
+| `python scripts/e2e-b3.py` | B3 锚点域 e2e(放置/三态/私密/口令/到期) | api 已起 |
 
 ## 3. 环境变量(.env)
 
