@@ -10,13 +10,24 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
 import { RateLimitModule } from './common/rate-limit/rate-limit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { GenerationModule } from './modules/generation/generation.module';
 import { GeoModule } from './modules/geo/geo.module';
 import { HealthModule } from './modules/health/health.module';
 import { LedgerModule } from './modules/ledger/ledger.module';
 import { SseModule } from './modules/sse/sse.module';
 
 @Module({
-  imports: [PrismaModule, RedisModule, RateLimitModule, AuthModule, LedgerModule, SseModule, GeoModule, HealthModule],
+  imports: [
+    PrismaModule,
+    RedisModule,
+    RateLimitModule,
+    AuthModule,
+    LedgerModule,
+    SseModule,
+    GeoModule,
+    GenerationModule,
+    HealthModule
+  ],
   providers: [
     // 全局异常过滤器:所有未捕获异常统一落装为业务错误信封
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },

@@ -38,3 +38,8 @@ export const QUEUE = Object.freeze({
   /** 内容生命周期到期扫描(PKG-20,定时) */
   LIFECYCLE_SCAN: 'vrm.lifecycle-scan'
 } as const);
+
+/** 任务进度 Redis 频道名(worker 发布与 API SSE 订阅共用,禁止散落拼字符串) */
+export function taskChannel(taskId: string): string {
+  return `vrm:task:${taskId}`;
+}

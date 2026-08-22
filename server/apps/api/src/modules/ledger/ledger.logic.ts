@@ -4,6 +4,7 @@
  * 口径:取消按进度比例退款(80% 进度退 20%,tech-stack §7.1 状态机注释)
  */
 import { TOKEN_ECONOMY } from '@vrm/shared';
+import { buildIdempotencyKey, IdempotencyKind } from '@vrm/shared';
 
 /** 取消退款的进度步进上限(超过该进度不可取消,由状态机层守卫) */
 export const CANCEL_PROGRESS_CEILING = 99;
@@ -18,24 +19,9 @@ export function computeCancelRefund(cost: number, progressPercent: number): numb
   return Math.min(Math.max(refund, 0), cost);
 }
 
-/** 幂等键种类的集中定义(账本 idempotency_key 的格式唯一来源,禁止散落拼字符串) */
-export const IdempotencyKind = {
-  REGISTER_GRANT: 'register-grant',
-  GEN_DEBIT: 'gen-debit',
-  GEN_REFUND_FULL: 'gen-refund-full',
-  GEN_REFUND_CANCEL: 'gen-refund-cancel',
-  ADMIN_ADJUST: 'admin-adjust'
-} as const;
-
-export type IdempotencyKindValue = (typeof IdempotencyKind)[keyof typeof IdempotencyKind];
-
-/** 构造幂等键:kind:refId(同一业务动作重放命中同一条流水) */
-export function buildIdempotencyKey(kind: IdempotencyKindValue, refId: string): string {
-  if (!refId) {
-    throw new Error('幂等键 refId 不能为空');
-  }
-  return `${kind}:${refId}`;
-}
+// 幂等键构造与种类已上移 @vrm/shared(apis/api 与 apps/worker 共用),此处重导出保持既有导入路径
+export { buildIdempotencyKey, IdempotencyKind };
+export type { IdempotencyKindValue } from '@vrm/shared';
 
 /** 余额充足判定(纯函数,service 层据此决定是否抛 INSUFFICIENT_TOKEN) */
 export function isSufficient(balance: number, amount: number): boolean {

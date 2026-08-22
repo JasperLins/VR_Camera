@@ -20,7 +20,19 @@ export const EnvSchema = z
     REDIS_URL: z.string().url().default('redis://127.0.0.1:6379'),
     JWT_SECRET: z.string().min(16).default('dev-insecure-jwt-secret-change-me'),
     WECHAT_APPID: z.string().optional(),
-    WECHAT_SECRET: z.string().optional()
+    WECHAT_SECRET: z.string().optional(),
+    /** 3D 生成服务商:mock(默认,本地全链联调)/ meshy(待 PR-3 预研后实装) */
+    GEN3D_PROVIDER: z.enum(['mock', 'meshy']).default('mock'),
+    /** mock 供应商单任务模拟时长(毫秒) */
+    MOCK_GEN_DELAY_MS: z.coerce.number().int().min(100).default(4000),
+    /** mock 供应商注入失败率(0-1,测试/演练用) */
+    MOCK_GEN_FAIL_RATE: z.coerce.number().min(0).max(1).default(0),
+    /** 生成任务提交超时(毫秒):DEDUCTED 停滞超过该时长未受理 → REFUNDED_ALL */
+    GEN_SUBMIT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(300_000),
+    /** Meshy API key(人工环节;留空时 meshy 适配器明确报 50001) */
+    MESHY_API_KEY: z.string().optional(),
+    /** 内容安全敏感词(mock 机审用,逗号分隔;真实供应商接入属人工批次) */
+    CONTENT_SAFETY_WORDS: z.string().default('')
   })
   .superRefine((env, ctx) => {
     if (env.NODE_ENV === 'production' && env.JWT_SECRET === 'dev-insecure-jwt-secret-change-me') {

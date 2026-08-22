@@ -44,6 +44,9 @@ importers:
       '@vrm/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      bullmq:
+        specifier: ^5.21.0
+        version: 5.81.3
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1

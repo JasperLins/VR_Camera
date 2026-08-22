@@ -63,50 +63,54 @@ export class TokenService {
     );
   }
 
-  /** 入账(赠送/退款/人工调整):金额>0,余额只增;账户不存在则先建 */
+  /** 入账(赠送/退款/人工调整):金额>0,余额只增;账户不存在则先建;tx 透传则并入调用方事务 */
   async credit(
     userId: string,
     amount: number,
     reason: LedgerReason,
     idempotencyKey: string,
-    refId?: string
+    refId?: string,
+    tx?: Tx
   ): Promise<LedgerMutationResult> {
     assertValidAmount(amount);
-    return this.prisma.$transaction(async (tx) => {
-      const { entry, created } = await this.insertEntry(tx, userId, amount, reason, idempotencyKey, refId);
+    const run = async (client: Tx): Promise<LedgerMutationResult> => {
+      const { entry, created } = await this.insertEntry(client, userId, amount, reason, idempotencyKey, refId);
       if (!created) {
-        return this.replayResult(tx, userId, entry);
+        return this.replayResult(client, userId, entry);
       }
 
-      const accountId = await this.resolveAccountId(tx, userId);
-      const account = await tx.tokenAccount.update({
+      const accountId = await this.resolveAccountId(client, userId);
+      const account = await client.tokenAccount.update({
         where: { id: accountId },
         data: { balance: { increment: amount } }
       });
       return { created: true, balanceAfter: account.balance, entryId: entry.id };
-    });
+    };
+    return tx ? run(tx) : this.prisma.$transaction(run);
   }
 
   /**
    * 原子扣减(生成消费等):余额不足抛 INSUFFICIENT_TOKEN(D-029 红线:引导赠送途径,无充值入口)
    * 幂等:同 key 重放返回首次结果;异参重放(key 复用但金额/原因不同)抛 DUPLICATED_IDEMPOTENCY
+   * tx 透传时并入调用方事务(生成任务「扣 Token 与建任务同事务」口径,PKG-14 O-1)
    */
   async debit(
     userId: string,
     amount: number,
     reason: LedgerReason,
     idempotencyKey: string,
-    refId?: string
+    refId?: string,
+    tx?: Tx
   ): Promise<LedgerMutationResult> {
     assertValidAmount(amount);
-    return this.prisma.$transaction(async (tx) => {
-      const { entry, created } = await this.insertEntry(tx, userId, -amount, reason, idempotencyKey, refId);
+    const run = async (client: Tx): Promise<LedgerMutationResult> => {
+      const { entry, created } = await this.insertEntry(client, userId, -amount, reason, idempotencyKey, refId);
       if (!created) {
-        return this.replayResult(tx, userId, entry);
+        return this.replayResult(client, userId, entry);
       }
 
       // 原子扣减:条件 UPDATE,0 行命中即余额不足(整个事务回滚,流水不留痕)
-      const updated = await tx.tokenAccount.updateMany({
+      const updated = await client.tokenAccount.updateMany({
         where: { userId, balance: { gte: amount } },
         data: { balance: { decrement: amount } }
       });
@@ -114,9 +118,10 @@ export class TokenService {
         throw BizException.of(AppErrorCode.INSUFFICIENT_TOKEN, 'Token 余额不足(可通过活动获得赠送)');
       }
 
-      const account = await tx.tokenAccount.findUnique({ where: { userId } });
+      const account = await client.tokenAccount.findUnique({ where: { userId } });
       return { created: true, balanceAfter: account?.balance ?? 0, entryId: entry.id };
-    });
+    };
+    return tx ? run(tx) : this.prisma.$transaction(run);
   }
 
   // ---- 内部:流水插入(幂等冲突识别)与重放 ----

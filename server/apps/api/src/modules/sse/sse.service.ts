@@ -5,7 +5,7 @@
  */
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { env } from '@vrm/shared';
+import { env, taskChannel } from '@vrm/shared';
 import Redis from 'ioredis';
 
 export interface SseMessage {
@@ -14,10 +14,7 @@ export interface SseMessage {
   type?: string;
 }
 
-/** 任务进度频道名(worker 发布与 SSE 订阅共用,禁止散落拼字符串) */
-export function taskChannel(taskId: string): string {
-  return `vrm:task:${taskId}`;
-}
+export { taskChannel };
 
 @Injectable()
 export class SseService implements OnModuleDestroy {
