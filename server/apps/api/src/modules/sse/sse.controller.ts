@@ -7,9 +7,11 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { Observable } from 'rxjs';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { SkipEnvelope } from '../../common/interceptors/envelope.interceptor';
 import { SseMessage, SseService, taskChannel } from './sse.service';
 
 @ApiTags('sse')
+@SkipEnvelope()
 @UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class SseController {

@@ -1,5 +1,5 @@
-// 职责:核心数据模型 v1(users / token_accounts / token_ledger / gen_tasks / anchors)
-// 关联需求:FR-03/04/06/07;关联任务:PKG-08(L-2 建模)Sprint-0 先立骨架,B1 批次补全业务表
+// 职责:核心数据模型 v2(users / token / gen_tasks / anchors + B1 业务表:授权/口令/举报/审核/积分/协议)
+// 关联需求:FR-03/04/05/06/07/08/12;关联任务:PKG-08(L-2)+ T1 业务表补全(IDLE_TASKS)
 // 规范:模型 PascalCase,@map 落 snake_case 表/列名(CONVENTIONS.md §3);全链坐标一律 WGS84(D-006)
 // 说明:PostGIS geography 列 + GiST 索引无法用 Prisma 表达,由 prisma/sql/001_postgis.sql 补丁落装
 
@@ -55,8 +55,12 @@ model User {
 
   identities     AuthIdentity[]
   tokenAccount   TokenAccount?
+  pointsAccount  PointsAccount?
   genTasks       GenTask[]
   anchors        Anchor[]
+  grantsReceived AnchorGrant[]
+  reportsFiled   Report[]
+  consents       ConsentRecord[]
 
   @@map("users")
 }
@@ -178,12 +182,200 @@ model Anchor {
   altitudeSource AltitudeSource   @default(GPS) @map("altitude_source")
   visibility     AnchorVisibility @default(PUBLIC)
   status         AnchorStatus     @default(VISIBLE)
+  /// AI 生成标识(R-4):内容来源为生成任务时为 true,详情/商店页强制展示「AI 生成」
+  aiGenerated    Boolean          @default(false) @map("ai_generated")
   expiresAt      DateTime?        @map("expires_at")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+  grants      AnchorGrant[]
+  shareTokens ShareToken[]
 
   @@index([status, expiresAt], map: "anchors_status_expires_idx")
   @@map("anchors")
+}
+
+// ============ 私密授权与口令(FR-03 / PKG-15 N-4) ============
+// 授权名单:移除好友后对方取景框重新上锁消失(UX §4.5);口令哈希存储(sha256,禁止明文)
+
+model AnchorGrant {
+  id          String   @id @default(uuid())
+  anchorId    String   @map("anchor_id")
+  granteeId   String   @map("grantee_id")
+  grantedById String?  @map("granted_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  anchor  Anchor @relation(fields: [anchorId], references: [id])
+  grantee User   @relation(fields: [granteeId], references: [id])
+
+  @@unique([anchorId, granteeId], map: "anchor_grants_anchor_grantee_key")
+  @@index([granteeId], map: "anchor_grants_grantee_idx")
+  @@map("anchor_grants")
+}
+
+model ShareToken {
+  id        String    @id @default(uuid())
+  anchorId  String    @map("anchor_id")
+  /// sha256(口令)——口令明文仅在生成时返回一次,库内只存哈希
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime? @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  anchor Anchor @relation(fields: [anchorId], references: [id])
+
+  @@index([anchorId], map: "share_tokens_anchor_idx")
+  @@map("share_tokens")
+}
+
+// ============ 举报工单(FR-12 / PKG-17 Q-5) ============
+// 状态机:RECEIVED(受理)→ REVIEWING(复核)→ RESOLVED/DISMISSED(处置);48h SLA 由 sla_deadline 承载
+
+enum ReportTargetType {
+  ANCHOR
+  GEN_TASK
+  USER
+}
+
+enum ReportReason {
+  COPYRIGHT
+  ILLEGAL_CONTENT
+  OTHER
+}
+
+enum ReportStatus {
+  RECEIVED
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+model Report {
+  id            String          @id @default(uuid())
+  reporterId    String          @map("reporter_id")
+  targetType    ReportTargetType @map("target_type")
+  targetId      String          @map("target_id")
+  /// 举报对象摘要(标题/缩略图引用等,受理时快照,防原对象事后变更)
+  targetSummary String?         @map("target_summary")
+  reason        ReportReason
+  /// 补充说明(举报文本,提交前过 R-1 机审)
+  note          String?
+  status        ReportStatus    @default(RECEIVED)
+  /// 48h 人工复核 SLA 截止(= createdAt + 48h,索引供后台超时预警)
+  slaDeadline   DateTime        @map("sla_deadline")
+  handledById   String?         @map("handled_by_id")
+  resolution    String?
+  resolvedAt    DateTime?       @map("resolved_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+
+  reporter User @relation(fields: [reporterId], references: [id])
+
+  @@index([status, slaDeadline], map: "reports_status_sla_idx")
+  @@index([targetType, targetId], map: "reports_target_idx")
+  @@map("reports")
+}
+
+// ============ 审核留痕(PKG-17 R-1) ============
+// 所有机审调用一律落记录(含通过),供举报复核/下架申诉回溯;只插入不更新
+
+enum ModerationVerdict {
+  PASS
+  REJECT
+  MARK_REVIEW
+}
+
+enum ModerationScene {
+  NICKNAME
+  ANCHOR_TITLE
+  REPORT_TEXT
+  CHECKIN_TEXT
+  GEN_PARAMS
+  STORE_ITEM
+}
+
+model ModerationRecord {
+  id         String            @id @default(uuid())
+  scene      ModerationScene
+  /// 目标类型(自由字符串:report/anchor/gen_task/…,区别于举报的枚举口径)
+  targetType String            @map("target_type")
+  targetId   String            @map("target_id")
+  provider   String
+  verdict    ModerationVerdict
+  riskWords  String[]          @map("risk_words")
+  detail     Json?
+  createdAt  DateTime          @default(now()) @map("created_at")
+
+  @@index([targetType, targetId], map: "moderation_records_target_idx")
+  @@map("moderation_records")
+}
+
+// ============ 积分账本(FR-05/FR-08 / PKG-18 P-3) ============
+// 与 Token 账本同构:只插入不更新 + 幂等键唯一;六类获取 + 商店抵扣支出(D-009:10:1 单向)
+
+enum PointsReason {
+  CHECKIN
+  UPLOAD
+  DOWNLOADED
+  COMMENT
+  LIKED
+  PURCHASE
+  STORE_REDEEM
+  ADMIN_ADJUST
+}
+
+model PointsAccount {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  balance   Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user          User                @relation(fields: [userId], references: [id])
+  ledgerEntries PointsLedgerEntry[]
+
+  @@map("points_accounts")
+}
+
+model PointsLedgerEntry {
+  id             String        @id @default(uuid())
+  accountId      String        @map("account_id")
+  delta          Int
+  reason         PointsReason
+  idempotencyKey String        @unique @map("idempotency_key")
+  refId          String?       @map("ref_id")
+  createdAt      DateTime      @default(now()) @map("created_at")
+
+  account PointsAccount @relation(fields: [accountId], references: [id])
+
+  @@index([accountId, createdAt], map: "points_ledger_account_created_idx")
+  @@map("points_ledger")
+}
+
+// ============ 协议版本与同意留痕(PKG-17 R-5 / D-031) ============
+// 敏感权限逐项单独同意:key 枚举收敛在服务端代码(privacy-overview/camera/location/album/face-photo)
+
+model AgreementVersion {
+  id          String   @id @default(uuid())
+  key         String
+  version     String
+  title       String
+  contentUrl  String?  @map("content_url")
+  effectiveAt DateTime @default(now()) @map("effective_at")
+
+  @@unique([key, version], map: "agreement_versions_key_version_key")
+  @@map("agreement_versions")
+}
+
+model ConsentRecord {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  agreementKey String   @map("agreement_key")
+  version      String
+  accepted     Boolean
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, agreementKey], map: "consent_records_user_key_idx")
+  @@map("consent_records")
 }

@@ -69,6 +69,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       this.logger.warn(`${request.method} ${request.url} -> ${status} [${requestId}] ${message}`);
     }
 
+    // SSE 等流式响应 headers 已发出:只能记录,不可再写 HTTP 状态(否则二次抛错)
+    if (response.headersSent) {
+      this.logger.warn(`headers already sent, drop error body [${requestId}] ${message}`);
+      return;
+    }
     response.status(status).json({ code, message, data: null, requestId });
   }
 }

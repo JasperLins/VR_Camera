@@ -4,6 +4,7 @@
  */
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RateLimit, RateLimitGuard } from '../../common/rate-limit/rate-limit.guard';
 import { CurrentUser } from './current-user.decorator';
 import { AuthService, AuthResult } from './auth.service';
 import { GuestLoginDto, WechatLoginDto } from './dto/auth.dto';
@@ -16,6 +17,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('guest')
+  @UseGuards(RateLimitGuard)
+  @RateLimit({ limit: 10, windowSeconds: 60, scope: 'auth:guest' })
   @ApiOperation({ summary: '游客登录(浏览态,D-030);新用户自动注册赠送 80 Token' })
   async guest(@Body() dto: GuestLoginDto): Promise<AuthResult> {
     return this.authService.guestLogin(dto.deviceId);
