@@ -11,6 +11,9 @@ namespace VRM.UI
     {
         public static AppShell Instance { get; private set; }
 
+        /// <summary>根 Canvas(AppShell 构建时创建;层级结构的锚点)</summary>
+        private Transform _canvas;
+
         private TabBarView _tabBar;
 
         /// <summary>场景加载后自动建壳(RuntimeInitializeOnLoadMethod 对每个 Play 会话生效一次)</summary>
@@ -33,22 +36,22 @@ namespace VRM.UI
             BuildRootCanvas();
 
             var pagesRoot = new GameObject("Pages", typeof(RectTransform));
-            pagesRoot.transform.SetParent(transform.parent, false);
+            pagesRoot.transform.SetParent(_canvas, false);
             var pagesRect = (RectTransform)pagesRoot.transform;
             Stretch(pagesRect, bottom: 96f); // 让出 TabBar 高度
 
             RegisterPage(MapHomePage.Build(pagesRect.transform));
             RegisterPage(StoreHomePage.Build(pagesRect.transform));
             RegisterPage(ProfileHomePage.Build(pagesRect.transform));
-            RegisterPage(ArCameraEntryPage.Build(transform.parent));
+            RegisterPage(ArCameraEntryPage.Build(_canvas));
 
             _tabBar = TabBarView.Build(
-                transform.parent,
+                _canvas,
                 pageId => PageRouter.TryNavigateTo(pageId),
                 () => PageRouter.TryNavigateTo(nameof(ArCameraEntryPage)));
             UIShell.RegisterTabBar(_tabBar.gameObject);
 
-            LoadingOverlay.Build(transform.parent);
+            LoadingOverlay.Build(_canvas);
 
             PageRouter.Navigated += OnNavigated;
             PageRouter.TryNavigateTo(TabBarSpec.DefaultPageId);
@@ -59,11 +62,14 @@ namespace VRM.UI
 
         private void BuildRootCanvas()
         {
+            // Canvas 独立为根对象:不能把 AppShell 挂到 Canvas 下再反向父引用(循环父链会被
+            // Unity 静默拒绝,导致页面全部落到世界根、Canvas 空置 —— Play 白屏的根因,勿改回)
             var canvasGo = new GameObject("RootCanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            canvasGo.transform.SetParent(transform, false);
+            DontDestroyOnLoad(canvasGo);
             var canvas = canvasGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 0;
+            _canvas = canvasGo.transform;
 
             // 参考分辨率 1080×2340(原型设备壳基准),matchHeight 保宽度自适应
             var scaler = canvasGo.GetComponent<CanvasScaler>();
@@ -77,8 +83,7 @@ namespace VRM.UI
                 DontDestroyOnLoad(es);
             }
 
-            UIShell.CanvasTransform = canvas.transform;
-            transform.SetParent(canvas.transform, false);
+            UIShell.CanvasTransform = _canvas;
         }
 
         private static void RegisterPage(Page page)
