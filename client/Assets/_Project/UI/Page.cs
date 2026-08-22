@@ -13,6 +13,9 @@ namespace VRM.UI
         /// <summary>是否参与页面栈 Back 导航(AR 全屏会话等豁免屏返回 false)</summary>
         public virtual bool PushToStack => true;
 
+        /// <summary>是否显示 TabBar(A-701 豁免:S1/S2 与 AR 全屏会话 S5-S20、S32 返回 false)</summary>
+        public virtual bool ShowsTabBar => true;
+
         /// <summary>每次显示时回调(param 来自 NavigateTo 的透传)</summary>
         public virtual void OnShow(object param)
         {

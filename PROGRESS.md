@@ -14,15 +14,15 @@
 4. `CONVENTIONS.md` —— 编码规范(文件头注释/公共抽取/错误码);
 5. 即将开工的批次在 `work/docs/03-requirements/feature-list.md` 中的子任务行(工时/依赖/一句线验收)。
 
-## 1. 当前断点(最近一次更新:2026-08-23)
+## 1. 当前断点(最近一次更新:2026-08-23 会话 4)
 
 | 项 | 状态 |
 |---|---|
-| 位置 | **B1 服务端部分完成**(PKG-13 全部 + PKG-08 auth/SSE);client 已过 Unity 编译+单测验证;下一步见 §4 |
-| git | 已推送 `origin/main`(含本次 B1 提交) |
-| server | ✅ lint / test(52 用例)/ build 全绿;Prisma schema 已加 auth_identities(**迁移未执行**——Docker 代理阻断,§3-A) |
-| client | ✅ **Unity 验证通过**:6000.0.82f1 批处理编译 0 error + EditMode 15/15 全绿(修复过 Conv 偏心率常量数量级 bug);真机出包验证待用户手动(client/README.md §2 后三项) |
-| admin | 未开工(规划 B3/PKG-22,见 admin/README.md) |
+| 位置 | **B1 大部分完成**:PKG-13 全部 + PKG-08 auth/SSE + PKG-09 客户端基础面(A-2/3/4/6);仅剩迁移执行(Docker)与 L-2 业务表补全 |
+| git | 已推送 `origin/main` |
+| server | ✅ lint / test(52)/ build 全绿;auth_identities 迁移未执行(Docker 阻断 §3-A) |
+| client | ✅ Unity 验证:编译 0 error + **EditMode 30/30 全绿**(Conv 基准/信封契约/设备分级/登录会话/TabBar 规格);真机出包走查待人工 |
+| admin | 未开工(B3/PKG-22) |
 
 ## 2. 已完成清单(勾选项为「已实现且已验证」)
 
@@ -36,8 +36,8 @@
 - [x] **PKG-13 Token 账本(B1)**:原子扣减(条件 UPDATE)/幂等重放(同参返回/异参报 40902)/注册赠 80/取消比例退款纯函数 + 28 用例全绿
 - [x] **PKG-08 auth+SSE(B1 部分)**:游客登录(deviceId 复用)/微信登录(未配置资质明确报 50001)/JWT+守卫;SSE `/v1/tasks/:id/events`(Redis pub/sub);schema 已加 auth_identities
 - [x] 说明文档体系:根/server/client/admin README + 9 个模块级 README(逐文件功能表)
-- [ ] **B1 剩余**:PKG-09 客户端基础面(4 Tab 壳/登录对接/设备分级/组件视觉版,Unity 已装可开工)
-- [ ] Prisma 迁移执行(auth_identities 等待 Docker 修复后 `pnpm migrate:dev`)
+- [x] **PKG-09 客户端基础面(B1)**:A-2 App 壳(AppShell+TabBar 四格+中央凸起渐变相机钮,A-701 豁免联动)/ A-3 AuthSession 游客静默登录+令牌注入 / A-4 DeviceTierDetector / A-6 贴纸组件库(StickerTheme 设计令牌/StickerUi/Toast/Loading/EmptyState/GradientImage/RoundedSpriteFactory)+ Editor 建场景菜单;新增 15 用例,合计 30/30
+- [ ] B1 收尾:Prisma 迁移执行(§3-A)、L-2 业务表补全(好友授权/口令/举报/审核)、SSE 多实例 demo、4 Tab 壳真机走查(APK 出包,人工)
 - [ ] PKG-04/05/06(PR-1/2/3 三项真机预研)——人工主导,未开始
 - [ ] client 真机出包验证(Build Settings 切 Android / Package Name / Hello 场景真机 Run)
 
@@ -52,19 +52,15 @@
 
 ## 4. 下一步开工清单
 
-**优先级 1:PKG-09 客户端基础面(9 人日,Unity 已就绪)**
-- A-2 App 壳:4 Tab + 相机凸起(还原 work/UI/map-home 等;TabBar 豁免 A-701);PageRouter 已就绪,需要建首场景与页面预制体;
-- A-3 登录对接:`client/Networking` 的 IAuthTokenProvider 实现接 `POST /v1/auth/guest`(服务端已就绪);
-- A-4 设备分级检测(SystemInfo 填充 AppConfig.SetDeviceTier);
-- A-6 通用组件贴纸视觉版(色板 ui-spec §7.1:珊瑚 #FF6B4A/墨描边 2px/硬阴影)。
+**优先级 1:B1 收尾(依赖 §3-A Docker 修复 + 一次人工 Play 走查)**
+- Docker 修复后:`pnpm db:up && pnpm migrate:dev && pnpm db:patch && pnpm dev` → curl 全链路实测(guest 登录→余额 80→/me);
+- L-2 业务表补全:好友授权/私密口令/举报工单/审核记录(B3 各包用);
+- 人工:Unity 打开 client → 菜单「VRM→工程设置→创建 Main 场景」→ Play 走查 4 Tab 壳(client/README.md §5 有验收点)。
 
-**优先级 2:PKG-08 收尾(依赖 §3-A Docker 修复)**
-- `pnpm migrate:dev` 落 auth_identities 迁移;起服务实测 guest 登录 → 余额 80 → /v1/auth/me 全链路(curl);
-- SSE 多实例互通 demo(两实例 + Redis pub/sub)。
-
-**之后:B2 批次(PKG-10 地理查询 / 12 AR 相机层 / 14 生成网关 / 17 审核版权 / 18 积分打卡)**
-- PKG-10 可先做:geohash 聚合纯逻辑 + ST_DWithin 查询(依赖迁移落库);
-- PKG-14 的 Gen3DProvider 抽象可先行(Meshy 适配器等 PR-3 结论)。
+**优先级 2:B2 批次(PKG-10 地理查询 / 12 AR 相机层 / 14 生成网关 / 17 审核版权 / 18 积分打卡)**
+- PKG-10 可先做:geohash 聚合纯逻辑 + ST_DWithin 查询 + P95 压测脚本(依赖迁移落库);
+- PKG-14 的 Gen3DProvider 抽象 + 任务状态机服务化可先行(Meshy 适配器等 PR-3 结论);
+- PKG-18 积分服务纯逻辑(打卡+2/日上限10/防刷规则)无依赖可先写。
 
 ## 5. 环境事实(已探明,新会话直接引用)
 
@@ -85,4 +81,5 @@
 |---|---|---|---|
 | 1 | 2026-08-22 | 规划+初始化+Sprint-0 AI 侧地基(server 全绿/client 源码/规范文档/推送) | 396693c |
 | 2 | 2026-08-22 | 建立 PROGRESS.md 断点续接机制 | 5bb4dfb |
-| 3 | 2026-08-23 | client Unity 验证(编译 0 error + 15/15 单测,修 Conv 常量 bug);B1 服务端:PKG-13 Token 账本全套 + PKG-08 auth(游客/微信/JWT)+ SSE 骨架 + auth_identities schema;52 用例全绿 | (本次提交) |
+| 3 | 2026-08-23 | client Unity 验证(编译 0 error + 15/15 单测,修 Conv 常量 bug);B1 服务端:PKG-13 Token 账本全套 + PKG-08 auth(游客/微信/JWT)+ SSE 骨架 + auth_identities schema;52 用例全绿 | 8b3130f |
+| 4 | 2026-08-23 | PKG-09 客户端基础面:A-2 App 壳(TabBar 四格+凸起相机钮/A-701 豁免)、A-3 AuthSession 游客登录对接、A-4 设备分级、A-6 贴纸组件库+设计令牌、Editor 建场景菜单;EditMode 30/30(修 3 个编译错:Graphic 私有 API/圆形网格/UIVertex 大小写/结构体 as) | (本次提交) |

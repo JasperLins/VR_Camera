@@ -1,13 +1,9 @@
 {
-    "name": "VRM.Bootstrap",
-    "rootNamespace": "VRM.Bootstrap",
+    "name": "VRM.Auth",
+    "rootNamespace": "VRM.Auth",
     "references": [
         "VRM.Core",
-        "VRM.Networking",
-        "VRM.UI",
-        "VRM.Map",
-        "VRM.AR",
-        "VRM.Auth"
+        "VRM.Networking"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

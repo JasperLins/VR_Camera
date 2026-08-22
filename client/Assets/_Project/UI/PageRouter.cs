@@ -16,6 +16,9 @@ namespace VRM.UI
 
         public static string CurrentPageId => _current?.PageId ?? string.Empty;
 
+        /// <summary>导航完成通知(参数=当前页);AppShell 据此切换 TabBar 显隐(A-701)</summary>
+        public static event Action<Page> Navigated;
+
         public static void Register(Page page)
         {
             if (page == null)
@@ -47,6 +50,7 @@ namespace VRM.UI
 
             _current = target;
             target.OnShow(param);
+            Navigated?.Invoke(target);
             return true;
         }
 
@@ -68,6 +72,7 @@ namespace VRM.UI
 
             _current = Stack.Pop();
             _current.OnShow(null);
+            Navigated?.Invoke(_current);
         }
 
         /// <summary>测试/重登清场用</summary>

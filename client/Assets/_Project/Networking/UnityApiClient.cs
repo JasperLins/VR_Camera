@@ -14,11 +14,17 @@ namespace VRM.Networking
     public sealed class UnityApiClient : IApiClient
     {
         private readonly ApiClientOptions _options;
-        private readonly IAuthTokenProvider _auth;
+        private IAuthTokenProvider _auth;
 
         public UnityApiClient(ApiClientOptions options, IAuthTokenProvider auth = null)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _auth = auth;
+        }
+
+        /// <summary>登录会话就绪后注入鉴权提供方(Bootstrap 装配顺序:先客户端后会话)</summary>
+        public void SetAuthProvider(IAuthTokenProvider auth)
+        {
             _auth = auth;
         }
 

@@ -6,7 +6,8 @@
         "VRM.Networking",
         "VRM.UI",
         "VRM.Map",
-        "VRM.AR"
+        "VRM.AR",
+        "VRM.Auth"
     ],
     "includePlatforms": [
         "Editor"
