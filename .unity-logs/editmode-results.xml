@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="15" result="Failed(Child)" total="15" passed="14" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.1505222">
+  <test-suite type="TestSuite" id="1000" name="client" fullname="client" runstate="Runnable" testcasecount="15" result="Failed" site="Child" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.150522" total="15" passed="14" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1022" name="VRM.Tests.dll" fullname="D:/createIdear/VR_Camera/client/Library/ScriptAssemblies/VRM.Tests.dll" runstate="Runnable" testcasecount="15" result="Failed" site="Child" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.142670" total="15" passed="14" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="40020" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1004" name="ApiEnvelopeParseTests" fullname="ApiEnvelopeParseTests" classname="ApiEnvelopeParseTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.116042" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1006" name="ParseEnvelope_BusinessError_MapsCodeAndMessage" fullname="ApiEnvelopeParseTests.ParseEnvelope_BusinessError_MapsCodeAndMessage" methodname="ParseEnvelope_BusinessError_MapsCodeAndMessage" classname="ApiEnvelopeParseTests" runstate="Runnable" seed="278664920" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.026971" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1008" name="ParseEnvelope_InvalidJson_FailsWithParseErrorCode" fullname="ApiEnvelopeParseTests.ParseEnvelope_InvalidJson_FailsWithParseErrorCode" methodname="ParseEnvelope_InvalidJson_FailsWithParseErrorCode" classname="ApiEnvelopeParseTests" runstate="Runnable" seed="739508863" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.001057" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1007" name="ParseEnvelope_NullData_ReturnsDefault" fullname="ApiEnvelopeParseTests.ParseEnvelope_NullData_ReturnsDefault" methodname="ParseEnvelope_NullData_ReturnsDefault" classname="ApiEnvelopeParseTests" runstate="Runnable" seed="127661706" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000632" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1005" name="ParseEnvelope_Success_UnwrapsData" fullname="ApiEnvelopeParseTests.ParseEnvelope_Success_UnwrapsData" methodname="ParseEnvelope_Success_UnwrapsData" classname="ApiEnvelopeParseTests" runstate="Runnable" seed="1543474089" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.074255" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1009" name="ConvTests" fullname="ConvTests" classname="ConvTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.017674" total="6" passed="5" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1015" name="DistanceMeters_KnownPair_MatchesHaversine" fullname="ConvTests.DistanceMeters_KnownPair_MatchesHaversine" methodname="DistanceMeters_KnownPair_MatchesHaversine" classname="ConvTests" runstate="Runnable" seed="2125001902" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.002882" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1011" name="Gcj02ToWgs84_RoundTrip_Beijing_RecoversOriginal" fullname="ConvTests.Gcj02ToWgs84_RoundTrip_Beijing_RecoversOriginal" methodname="Gcj02ToWgs84_RoundTrip_Beijing_RecoversOriginal" classname="ConvTests" runstate="Runnable" seed="882546072" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000569" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1012" name="Gcj02ToWgs84_RoundTrip_HangzhouFirstCity_RecoversOriginal" fullname="ConvTests.Gcj02ToWgs84_RoundTrip_HangzhouFirstCity_RecoversOriginal" methodname="Gcj02ToWgs84_RoundTrip_HangzhouFirstCity_RecoversOriginal" classname="ConvTests" runstate="Runnable" seed="425141586" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000145" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1014" name="Wgs84ToGcj02_Beijing_OffsetWithinKnownRange" fullname="ConvTests.Wgs84ToGcj02_Beijing_OffsetWithinKnownRange" methodname="Wgs84ToGcj02_Beijing_OffsetWithinKnownRange" classname="ConvTests" runstate="Runnable" seed="2064978851" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.004793" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1010" name="Wgs84ToGcj02_BeijingReference_MatchesPublicBaseline" fullname="ConvTests.Wgs84ToGcj02_BeijingReference_MatchesPublicBaseline" methodname="Wgs84ToGcj02_BeijingReference_MatchesPublicBaseline" classname="ConvTests" runstate="Runnable" seed="627457275" result="Failed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.006254" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  经度与公开基准不一致
+  Expected: 116.410244499169d +/- 1.0000000000000001E-09d
+  But was:  116.41025225956774d
+]]></message>
+            <stack-trace><![CDATA[at ConvTests.Wgs84ToGcj02_BeijingReference_MatchesPublicBaseline () [0x0001d] in D:\createIdear\VR_Camera\client\Assets\_Project\Tests\ConvTests.cs:18
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1013" name="Wgs84ToGcj02_OutOfChina_PassthroughUnchanged" fullname="ConvTests.Wgs84ToGcj02_OutOfChina_PassthroughUnchanged" methodname="Wgs84ToGcj02_OutOfChina_PassthroughUnchanged" classname="ConvTests" runstate="Runnable" seed="676925942" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.001415" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1016" name="ServiceRegistryTests" fullname="ServiceRegistryTests" classname="ServiceRegistryTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.006450" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1021" name="Register_NullService_Throws" fullname="ServiceRegistryTests.Register_NullService_Throws" methodname="Register_NullService_Throws" classname="ServiceRegistryTests" runstate="Runnable" seed="654892631" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.003460" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1018" name="Register_SameInterfaceTwice_LastWins" fullname="ServiceRegistryTests.Register_SameInterfaceTwice_LastWins" methodname="Register_SameInterfaceTwice_LastWins" classname="ServiceRegistryTests" runstate="Runnable" seed="56251948" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000631" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1017" name="Register_ThenResolve_ReturnsSameInstance" fullname="ServiceRegistryTests.Register_ThenResolve_ReturnsSameInstance" methodname="Register_ThenResolve_ReturnsSameInstance" classname="ServiceRegistryTests" runstate="Runnable" seed="1194354882" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000302" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1019" name="Resolve_Unregistered_ThrowsWithTypeName" fullname="ServiceRegistryTests.Resolve_Unregistered_ThrowsWithTypeName" methodname="Resolve_Unregistered_ThrowsWithTypeName" classname="ServiceRegistryTests" runstate="Runnable" seed="2077973964" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000262" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1020" name="TryResolve_Unregistered_ReturnsFalseAndNull" fullname="ServiceRegistryTests.TryResolve_Unregistered_ReturnsFalseAndNull" methodname="TryResolve_Unregistered_ReturnsFalseAndNull" classname="ServiceRegistryTests" runstate="Runnable" seed="436133870" result="Passed" start-time="2026-08-22 12:08:10Z" end-time="2026-08-22 12:08:10Z" duration="0.000141" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: D:/createIdear/VR_Camera/.unity-logs/editmode-results.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

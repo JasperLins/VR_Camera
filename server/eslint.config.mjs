@@ -19,5 +19,12 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-interface': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }]
     }
+  },
+  {
+    // 测试桩(jest mock 的宽松参数类型)放开 any 限制——生产代码仍按 warn 收敛
+    files: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
   }
 );

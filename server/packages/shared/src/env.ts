@@ -7,17 +7,30 @@ import { z } from 'zod';
 
 /** 环境变量 schema:新增配置必须同步改 .env.example 与 server/README.md(三处同步)
  *  防线:非法格式启动即失败;DATABASE_URL 提供与 docker-compose 同构的本地默认值,
- *  生产部署必须显式注入(连接失败同样启动即失败) */
-export const EnvSchema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-  DATABASE_URL: z
-    .string()
-    .min(1)
-    .default('postgresql://vr:vrmemento@localhost:5432/vrmemento?schema=public'),
-  REDIS_URL: z.string().url().default('redis://localhost:6379')
-});
+ *  生产部署必须显式注入(连接失败同样启动即失败);生产携带开发 JWT 密钥直接拒绝启动 */
+export const EnvSchema = z
+  .object({
+    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+    LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+    DATABASE_URL: z
+      .string()
+      .min(1)
+      .default('postgresql://vr:vrmemento@localhost:5432/vrmemento?schema=public'),
+    REDIS_URL: z.string().url().default('redis://localhost:6379'),
+    JWT_SECRET: z.string().min(16).default('dev-insecure-jwt-secret-change-me'),
+    WECHAT_APPID: z.string().optional(),
+    WECHAT_SECRET: z.string().optional()
+  })
+  .superRefine((env, ctx) => {
+    if (env.NODE_ENV === 'production' && env.JWT_SECRET === 'dev-insecure-jwt-secret-change-me') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['JWT_SECRET'],
+        message: '生产环境必须显式配置 JWT_SECRET(开发默认密钥禁止上生产)'
+      });
+    }
+  });
 
 export type Env = z.infer<typeof EnvSchema>;
 

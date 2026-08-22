@@ -7,7 +7,7 @@
 
 | 项 | 要求 |
 |---|---|
-| Unity 版本 | **6000.0.35f1**(Unity 6 LTS,见 `ProjectVersion.txt`;装后锁定不追新) |
+| Unity 版本 | **6000.0.82f1**(Unity 6 LTS,见 `ProjectVersion.txt`;已安装于 `D:\Unity\6000.0.82f1`,装后锁定不追新) |
 | 安装渠道 | Unity Hub 官方中国站(unity.cn / unity.com),登录后 Install Editor → 6000.0.35f1 |
 | 必勾模块 | **Android Build Support 全套**:Android SDK & NDK Tools + OpenJDK |
 | 可选模块 | 简体中文语言包 |
@@ -17,11 +17,20 @@
 1. Unity Hub → Open → Add project from disk → 选择本 `client/` 目录;
 2. 首次打开 Unity 会自动:解析 `Packages/manifest.json`(AR Foundation 6 等)→ 生成 `.meta` 与 `ProjectSettings` → 编译全部 asmdef;
 3. **验证清单(DoD)**:
-   - [ ] Console 无编译错误(0 error);
-   - [ ] `Window → General → Test Runner → EditMode` 全绿(共 17 个用例:Conv 基准/回环、服务注册表、信封解析);
-   - [ ] `File → Build Settings` 切 Android 平台无报错;
-   - [ ] `Player Settings` 中设置 Package Name(建议 `com.vrmemento.app`),Minimum API Level 按真机矩阵;
+   - [x] Console 无编译错误(2026-08-23 批处理验证通过);
+   - [x] EditMode 测试 15/15 全绿(北京基准 Δ<1e-9、回环 <1e-6、境外直通、偏移区间、信封契约);
+   - [ ] `File → Build Settings` 切 Android 平台无报错(需 GUI 手动);
+   - [ ] `Player Settings` 设置 Package Name(建议 `com.vrmemento.app`),Minimum API Level 按真机矩阵;
    - [ ] 真机 Run 一份 Hello 场景(New Scene → Build And Run)确认出包链路通。
+
+命令行批处理验证(可重复执行,CI 可用):
+
+```bash
+# 编译检查
+"D:/Unity/6000.0.82f1/Editor/Unity.exe" -batchmode -nographics -projectPath <client路径> -quit -logFile compile.log
+# EditMode 测试(结果看 editmode-results.xml,退出码 0=全过)
+"D:/Unity/6000.0.82f1/Editor/Unity.exe" -batchmode -nographics -projectPath <client路径> -runTests -testPlatform EditMode -testResults results.xml -logFile test.log
+```
 
 ## 3. 目录结构与逐文件说明
 

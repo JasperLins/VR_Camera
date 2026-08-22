@@ -35,9 +35,10 @@ server/
 | `src/common/dto/pagination.dto.ts` | 分页公共 DTO:列表接口继承,禁止重复声明 page/pageSize |
 | `src/common/prisma/prisma.service.ts` / `.module.ts` | 全局 Prisma 客户端(连接生命周期管理,@Global) |
 | `src/common/redis/redis.module.ts` | 全局共享 ioredis 连接(探活/缓存/SSE pub-sub 用;BullMQ 自建连接) |
-| `src/modules/health/health.service.ts` | DB/Redis 探活,汇总 ok/degraded(不抛异常,探针恒 200) |
-| `src/modules/health/health.controller.ts` | `GET /v1/health` 路由 |
-| `src/modules/health/health.module.ts` | 模块装配 |
+| `src/modules/health/…` | 健康检查:`GET /v1/health` DB/Redis 探活(恒 200,不抛异常) |
+| `src/modules/auth/…` | 认证(B1/PKG-08):游客登录(deviceId 复用)/微信登录(code→openid,未配置资质明确报错)/JWT 会话+守卫 |
+| `src/modules/ledger/…` | Token 账本(B1/PKG-13):原子扣减/幂等重放/注册赠送 80/余额与流水;纯逻辑在 ledger.logic.ts |
+| `src/modules/sse/…` | SSE 推送(B1/PKG-08):`GET /v1/tasks/:id/events`,Redis pub/sub 桥接(B2 生成进度接入) |
 | `*.spec.ts` | 单测:控制器委托/service 四种依赖组合 |
 
 **请求流转**:`Request → EnvelopeInterceptor(发 requestId)→ Guard/Pipe → Controller → Service → BizException?→ GlobalExceptionFilter(错误信封)或 EnvelopeInterceptor(成功信封)→ Response`
@@ -97,6 +98,8 @@ B2 将新增:`workers/generation.worker.ts`(PKG-14 生成任务消费:轮询 Mes
 | `LOG_LEVEL` | info | debug/info/warn/error |
 | `DATABASE_URL` | 本地 docker 同构值 | 生产为阿里云 RDS(必须显式注入) |
 | `REDIS_URL` | redis://localhost:6379 | 生产为云数据库 Redis |
+| `JWT_SECRET` | 开发默认值 | **生产必须改强随机**(携带开发默认值将拒绝启动,env.ts superRefine) |
+| `WECHAT_APPID` / `WECHAT_SECRET` | 空 | 微信开放平台移动应用(人工资质环节;留空时微信登录返回 50001 明确提示) |
 
 ## 4. 版本锁定(不追新,AGENTS.md 纪律)
 

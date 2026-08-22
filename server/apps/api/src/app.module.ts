@@ -8,10 +8,13 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { EnvelopeInterceptor } from './common/interceptors/envelope.interceptor';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
+import { LedgerModule } from './modules/ledger/ledger.module';
+import { SseModule } from './modules/sse/sse.module';
 
 @Module({
-  imports: [PrismaModule, RedisModule, HealthModule],
+  imports: [PrismaModule, RedisModule, AuthModule, LedgerModule, SseModule, HealthModule],
   providers: [
     // 全局异常过滤器:所有未捕获异常统一落装为业务错误信封
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },

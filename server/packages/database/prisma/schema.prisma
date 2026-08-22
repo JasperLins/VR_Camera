@@ -24,6 +24,26 @@ enum UserStatus {
   BANNED
 }
 
+/// 第三方身份绑定(游客按 deviceId 复用账号;微信按 openid,D-030 游客仅浏览)
+enum AuthProvider {
+  GUEST
+  WECHAT
+}
+
+model AuthIdentity {
+  id               String       @id @default(uuid())
+  userId           String       @map("user_id")
+  provider         AuthProvider
+  providerUserId   String       @map("provider_user_id")
+  createdAt        DateTime     @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerUserId], map: "auth_identities_provider_uid_key")
+  @@index([userId], map: "auth_identities_user_idx")
+  @@map("auth_identities")
+}
+
 model User {
   id         String     @id @default(uuid())
   nickname   String?
@@ -33,6 +53,7 @@ model User {
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime   @updatedAt @map("updated_at")
 
+  identities     AuthIdentity[]
   tokenAccount   TokenAccount?
   genTasks       GenTask[]
   anchors        Anchor[]

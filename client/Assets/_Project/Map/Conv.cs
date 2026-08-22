@@ -10,8 +10,8 @@ namespace VRM.Map
 {
     public static class Conv
     {
-        private const double SemiMajor = 6378245.0;               // 克拉索夫斯基椭球长半轴
-        private const double EccentricitySq = 0.6_6934_2162_2965_9423e-3; // 第一偏心率平方
+        private const double SemiMajor = 6378245.0;                      // 克拉索夫斯基椭球长半轴
+        private const double EccentricitySq = 6.69342162296594323e-3;    // 第一偏心率平方
 
         /// <summary>WGS84 → GCJ-02(地图显示用);境外点原样直通</summary>
         public static GeoPoint Wgs84ToGcj02(GeoPoint wgs)
