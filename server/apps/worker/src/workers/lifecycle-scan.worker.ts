@@ -1,8 +1,7 @@
 /**
- * 职责:生命周期到期扫描 Worker(占位骨架)——按锚点 expires_at 批量隐藏到期内容
- * 关联需求:FR-06;关联任务:PKG-20(N-2,B3 批次实现真实逻辑:
- *   扫描 anchors_visible_expires_part 部分索引 → 到期行置 HIDDEN → 事件留痕)
- * 说明:prisma 连接已注入(B3 实现时直接使用);当前仅保留占位 tick。
+ * 职责:生命周期到期扫描——VISIBLE 且 expires_at 已过的锚点批量转 HIDDEN(数据保留,重开恢复原位)
+ * 关联需求:FR-06;关联任务:PKG-20(N-2/T16);扫描走 anchors_visible_expires_part 部分索引
+ * 留痕:每轮扫描输出结构化日志(扫描时间/命中数);后台看板接入时可换写事件表
  */
 import { Logger } from '@nestjs/common';
 import type { Worker as BullWorker } from 'bullmq';
@@ -13,14 +12,23 @@ import { QUEUE } from '@vrm/shared';
 
 const logger = new Logger('LifecycleScanWorker');
 
-export function createLifecycleScanWorker(connection: IORedis, _prisma: PrismaClient): BullWorker {
+/** 单轮扫描:到期锚点 VISIBLE→HIDDEN(条件更新天然幂等,重复扫描零副作用) */
+export async function scanExpiredAnchors(prisma: PrismaClient): Promise<{ hidden: number; scannedAt: string }> {
+  const scannedAt = new Date().toISOString();
+  const result = await prisma.anchor.updateMany({
+    where: { status: 'VISIBLE', expiresAt: { lte: new Date() } },
+    data: { status: 'HIDDEN' }
+  });
+  if (result.count > 0) {
+    logger.log(`lifecycle scan: ${result.count} anchor(s) expired -> HIDDEN [${scannedAt}]`);
+  }
+  return { hidden: result.count, scannedAt };
+}
+
+export function createLifecycleScanWorker(connection: IORedis, prisma: PrismaClient): BullWorker {
   return new Worker(
     QUEUE.LIFECYCLE_SCAN,
-    async () => {
-      // TODO(PKG-20/B3):到期锚点批量隐藏(见文件头说明),当前仅保留占位实现
-      logger.log('lifecycle scan tick (placeholder — implemented in PKG-20)');
-      return { scannedAt: new Date().toISOString() };
-    },
+    async () => scanExpiredAnchors(prisma),
     { connection, concurrency: 1 }
   );
 }

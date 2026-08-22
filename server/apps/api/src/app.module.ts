@@ -10,6 +10,7 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
 import { RateLimitModule } from './common/rate-limit/rate-limit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AnchorsModule } from './modules/anchors/anchor.module';
 import { CheckinModule } from './modules/checkin/checkin.module';
 import { GenerationModule } from './modules/generation/generation.module';
 import { GeoModule } from './modules/geo/geo.module';
@@ -30,6 +31,7 @@ import { SseModule } from './modules/sse/sse.module';
     SseModule,
     GeoModule,
     GenerationModule,
+    AnchorsModule,
     SafetyModule,
     ReportModule,
     PointsModule,

@@ -27,6 +27,14 @@ async function bootstrap(): Promise<void> {
   // 队列声明:入队方(apps/api)与消费方(本进程)引用 shared 的同一常量 QUEUE.*
   const generationQueue = new Queue(QUEUE.GENERATION, { connection });
 
+  // 生命周期扫描:5 分钟一轮 repeat job(幂等扫描,重复投递零副作用)
+  const lifecycleQueue = new Queue(QUEUE.LIFECYCLE_SCAN, { connection });
+  await lifecycleQueue.add(
+    'scan',
+    {},
+    { jobId: 'lifecycle-scan-tick', repeat: { every: 300_000 }, removeOnComplete: 100, removeOnFail: 100 }
+  );
+
   // 生成消费者:mock/meshy 供应商按 env 装配(外部 key 全缺时 mock 保真联调)
   const provider = createGen3DProvider();
   const workers = [
@@ -46,6 +54,7 @@ async function bootstrap(): Promise<void> {
   const shutdown = async (signal: string) => {
     logger.warn(`${signal} received, shutting down...`);
     await Promise.allSettled(workers.map((w) => w.close()));
+    await lifecycleQueue.close();
     await generationQueue.close();
     await prisma.$disconnect();
     connection.quit();
