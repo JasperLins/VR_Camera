@@ -10,10 +10,14 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { RedisModule } from './common/redis/redis.module';
 import { RateLimitModule } from './common/rate-limit/rate-limit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CheckinModule } from './modules/checkin/checkin.module';
 import { GenerationModule } from './modules/generation/generation.module';
 import { GeoModule } from './modules/geo/geo.module';
 import { HealthModule } from './modules/health/health.module';
 import { LedgerModule } from './modules/ledger/ledger.module';
+import { PointsModule } from './modules/points/points.module';
+import { ReportModule } from './modules/report/report.module';
+import { SafetyModule } from './modules/safety/safety.module';
 import { SseModule } from './modules/sse/sse.module';
 
 @Module({
@@ -26,6 +30,10 @@ import { SseModule } from './modules/sse/sse.module';
     SseModule,
     GeoModule,
     GenerationModule,
+    SafetyModule,
+    ReportModule,
+    PointsModule,
+    CheckinModule,
     HealthModule
   ],
   providers: [

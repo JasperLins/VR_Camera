@@ -1,10 +1,12 @@
 /**
  * 职责:Token 账本服务——注册赠送/原子扣减/退款/余额与流水查询(A-405:权威余额仅服务端)
- * 关联需求:FR-07;关联任务:PKG-13(P-1)
+ * 关联需求:FR-07;关联任务:PKG-13(P-1)+ PKG-14(tx 透传)
  * 实现要点:
  *  - 扣减原子性:updateMany 带 balance >= amount 条件(单条 UPDATE 自带行锁,天然原子);
  *  - 幂等:流水表 idempotency_key 唯一索引,同参重放返回既有结果,异参重放报 DUPLICATED_IDEMPOTENCY;
- *  - 流水只插入不更新(tech-stack §7.2);余额变更与流水同事务。
+ *  - 流水只插入不更新(tech-stack §7.2);余额变更与流水同事务;
+ *  - 事务安全口径:PG 事务内语句失败即中止(25P02),故幂等冲突的复核一律在事务外预查/补查,
+ *    绝不在中止事务内继续查询(2026-08-23 打卡幂等链路实测踩坑)。
  */
 import { Injectable } from '@nestjs/common';
 import { Prisma, LedgerReason, TokenLedgerEntry } from '@vrm/database';
@@ -73,26 +75,28 @@ export class TokenService {
     tx?: Tx
   ): Promise<LedgerMutationResult> {
     assertValidAmount(amount);
-    const run = async (client: Tx): Promise<LedgerMutationResult> => {
-      const { entry, created } = await this.insertEntry(client, userId, amount, reason, idempotencyKey, refId);
-      if (!created) {
-        return this.replayResult(client, userId, entry);
-      }
+    const replay = await this.matchReplay(userId, amount, reason, idempotencyKey);
+    if (replay) {
+      return replay;
+    }
 
+    const flow = async (client: Tx): Promise<LedgerMutationResult> => {
       const accountId = await this.resolveAccountId(client, userId);
+      const entry = await client.tokenLedgerEntry.create({
+        data: { accountId, delta: amount, reason, idempotencyKey, refId }
+      });
       const account = await client.tokenAccount.update({
         where: { id: accountId },
         data: { balance: { increment: amount } }
       });
       return { created: true, balanceAfter: account.balance, entryId: entry.id };
     };
-    return tx ? run(tx) : this.prisma.$transaction(run);
+    return this.runGuarded(flow, userId, amount, reason, idempotencyKey, tx);
   }
 
   /**
    * 原子扣减(生成消费等):余额不足抛 INSUFFICIENT_TOKEN(D-029 红线:引导赠送途径,无充值入口)
    * 幂等:同 key 重放返回首次结果;异参重放(key 复用但金额/原因不同)抛 DUPLICATED_IDEMPOTENCY
-   * tx 透传时并入调用方事务(生成任务「扣 Token 与建任务同事务」口径,PKG-14 O-1)
    */
   async debit(
     userId: string,
@@ -103,12 +107,13 @@ export class TokenService {
     tx?: Tx
   ): Promise<LedgerMutationResult> {
     assertValidAmount(amount);
-    const run = async (client: Tx): Promise<LedgerMutationResult> => {
-      const { entry, created } = await this.insertEntry(client, userId, -amount, reason, idempotencyKey, refId);
-      if (!created) {
-        return this.replayResult(client, userId, entry);
-      }
+    const replay = await this.matchReplay(userId, -amount, reason, idempotencyKey);
+    if (replay) {
+      return replay;
+    }
 
+    const flow = async (client: Tx): Promise<LedgerMutationResult> => {
+      const accountId = await this.resolveAccountId(client, userId);
       // 原子扣减:条件 UPDATE,0 行命中即余额不足(整个事务回滚,流水不留痕)
       const updated = await client.tokenAccount.updateMany({
         where: { userId, balance: { gte: amount } },
@@ -117,46 +122,60 @@ export class TokenService {
       if (updated.count === 0) {
         throw BizException.of(AppErrorCode.INSUFFICIENT_TOKEN, 'Token 余额不足(可通过活动获得赠送)');
       }
-
+      const entry = await client.tokenLedgerEntry.create({
+        data: { accountId, delta: -amount, reason, idempotencyKey, refId }
+      });
       const account = await client.tokenAccount.findUnique({ where: { userId } });
       return { created: true, balanceAfter: account?.balance ?? 0, entryId: entry.id };
     };
-    return tx ? run(tx) : this.prisma.$transaction(run);
+    return this.runGuarded(flow, userId, -amount, reason, idempotencyKey, tx);
   }
 
-  // ---- 内部:流水插入(幂等冲突识别)与重放 ----
+  // ---- 内部:幂等匹配与事务编排 ----
 
-  private async insertEntry(
-    tx: Tx,
+  /** 事务外预查:同参命中 → 重放结果;异参命中 → DUPLICATED_IDEMPOTENCY;未命中 → null */
+  private async matchReplay(
+    userId: string,
+    delta: number,
+    reason: LedgerReason,
+    idempotencyKey: string
+  ): Promise<LedgerMutationResult | null> {
+    const existing = await this.prisma.tokenLedgerEntry.findUnique({ where: { idempotencyKey } });
+    if (!existing) {
+      return null;
+    }
+    if (existing.delta !== delta || existing.reason !== reason) {
+      throw BizException.of(
+        AppErrorCode.DUPLICATED_IDEMPOTENCY,
+        '幂等键已被不同参数的请求使用(idempotency key 冲突)'
+      );
+    }
+    return this.replayResult(userId, existing);
+  }
+
+  /** 事务执行 + 并发冲突兜底(P2002 → 事务已回滚,事务外复核同参重放) */
+  private async runGuarded(
+    flow: (client: Tx) => Promise<LedgerMutationResult>,
     userId: string,
     delta: number,
     reason: LedgerReason,
     idempotencyKey: string,
-    refId?: string
-  ): Promise<{ entry: TokenLedgerEntry; created: boolean }> {
-    const accountId = await this.resolveAccountId(tx, userId);
+    tx?: Tx
+  ): Promise<LedgerMutationResult> {
+    if (tx) {
+      // 调用方事务:键应为新生成(如 gen-debit:新 taskId),冲突概率可忽略;P2002 直接上抛
+      return flow(tx);
+    }
     try {
-      const entry = await tx.tokenLedgerEntry.create({
-        data: { accountId, delta, reason, idempotencyKey, refId }
-      });
-      return { entry, created: true };
+      return await this.prisma.$transaction(flow);
     } catch (err) {
-      if ((err as { code?: string }).code !== 'P2002') {
-        throw err;
+      if ((err as { code?: string }).code === 'P2002') {
+        const replay = await this.matchReplay(userId, delta, reason, idempotencyKey);
+        if (replay) {
+          return replay;
+        }
       }
-
-      // 唯一键冲突 → 幂等重放:同参返回既有流水,异参视为 key 复用错误
-      const existing = await tx.tokenLedgerEntry.findUnique({ where: { idempotencyKey } });
-      if (!existing) {
-        throw err;
-      }
-      if (existing.delta !== delta || existing.reason !== reason) {
-        throw BizException.of(
-          AppErrorCode.DUPLICATED_IDEMPOTENCY,
-          '幂等键已被不同参数的请求使用(idempotency key 冲突)'
-        );
-      }
-      return { entry: existing, created: false };
+      throw err;
     }
   }
 
@@ -169,8 +188,8 @@ export class TokenService {
     return created.id;
   }
 
-  private async replayResult(tx: Tx, userId: string, entry: TokenLedgerEntry): Promise<LedgerMutationResult> {
-    const account = await tx.tokenAccount.findUnique({ where: { userId } });
+  private async replayResult(userId: string, entry: TokenLedgerEntry): Promise<LedgerMutationResult> {
+    const account = await this.prisma.tokenAccount.findUnique({ where: { userId } });
     return { created: false, balanceAfter: account?.balance ?? 0, entryId: entry.id };
   }
 }
