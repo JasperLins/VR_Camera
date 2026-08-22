@@ -52,6 +52,8 @@
 
 ## 4. 下一步开工清单
 
+> **闲时(自主)任务队列已建:[IDLE_TASKS.md](./IDLE_TASKS.md)** ——T0~T25 按序领取,含批次闸门/验收标准/不可自动清单;交互会话同样优先消化该队列。
+
 **优先级 1:B1 收尾(依赖 §3-A Docker 修复 + 一次人工 Play 走查)**
 - Docker 修复后:`pnpm db:up && pnpm migrate:dev && pnpm db:patch && pnpm dev` → curl 全链路实测(guest 登录→余额 80→/me);
 - L-2 业务表补全:好友授权/私密口令/举报工单/审核记录(B3 各包用);
