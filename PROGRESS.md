@@ -55,7 +55,7 @@
 **优先级 1:B1 收尾(依赖 §3-A Docker 修复 + 一次人工 Play 走查)**
 - Docker 修复后:`pnpm db:up && pnpm migrate:dev && pnpm db:patch && pnpm dev` → curl 全链路实测(guest 登录→余额 80→/me);
 - L-2 业务表补全:好友授权/私密口令/举报工单/审核记录(B3 各包用);
-- 人工:Unity 打开 client → 菜单「VRM→工程设置→创建 Main 场景」→ Play 走查 4 Tab 壳(client/README.md §5 有验收点)。
+- 人工:Unity 打开 client → 菜单「VR留念→工程设置→创建 Main 场景」→ Play 走查 4 Tab 壳(client/README.md §5 有验收点;菜单根名用中文,防 Unity 6 包名误判)。
 
 **优先级 2:B2 批次(PKG-10 地理查询 / 12 AR 相机层 / 14 生成网关 / 17 审核版权 / 18 积分打卡)**
 - PKG-10 可先做:geohash 聚合纯逻辑 + ST_DWithin 查询 + P95 压测脚本(依赖迁移落库);

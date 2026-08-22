@@ -104,7 +104,7 @@ Tests ──→ 全部
 | | `GpsCompassAnchorProvider.cs` | GPS+罗盘降级锚定骨架(传感器接线在 PKG-12/PR-1b 后) |
 | | `GeospatialAnchorProvider.cs` | Geospatial 锚定骨架(AR Foundation API 在 PKG-12/PR-1a 后接入) |
 | | `AnchorService.cs` | 双模式选择器:VPS 可用走 Geospatial,否则自动降级 GPS+罗盘(D-022) |
-| **Editor** | `ProjectSetupMenu.cs` | 菜单「VRM→工程设置→创建 Main 场景并加入构建」(一键出可跑场景) |
+| **Editor** | `ProjectSetupMenu.cs` | 菜单「VR留念→工程设置→创建 Main 场景并加入构建」(一键出可跑场景;根名用中文是刻意的——Unity 6 会把纯 ASCII 顶层菜单名当包名解析并丢弃) |
 | **Tests** | `ConvTests.cs` | CONV 单测:北京公开基准比对(1e-9)、杭/京回环(<1e-6)、境外直通、偏移量区间 |
 | | `ServiceRegistryTests.cs` | 服务注册表行为单测 |
 | | `ApiEnvelopeParseTests.cs` | 信封解析契约单测(与服务端 @vrm/shared 防漂移) |
@@ -125,7 +125,7 @@ Tests ──→ 全部
 
 **已完成(B1/PKG-09 部分)**:A-2 App 壳(AppShell+TabBar 四格+中央凸起相机,运行时自动装配)、A-3 登录对接(AuthSession 游客静默登录+令牌注入)、A-4 设备分级检测、A-6 贴纸组件库(Toast/加载态/空态/设计令牌)。
 
-**首次运行 Play 模式步骤**:Unity 编辑器 → 菜单 `VRM → 工程设置 → 创建 Main 场景并加入构建` → Play。应看到:暖白底地图页(空态卡)+ 底部四格 TabBar(地图高亮、中央渐变相机钮)+ 点击 Tab 切页 + 相机页深色全屏(无 TabBar)。
+**首次运行 Play 模式步骤**:Unity 编辑器 → 菜单 `VR留念 → 工程设置 → 创建 Main 场景并加入构建` → Play。应看到:暖白底地图页(空态卡)+ 底部四格 TabBar(地图高亮、中央渐变相机钮)+ 点击 Tab 切页 + 相机页深色全屏(无 TabBar)。
 
 **剩余(B1 后与 B2+)**:
 - 真实页面替换:B3(地图 PKG-11/生成流程 PKG-15/放置 PKG-16/打卡 PKG-19/管理 PKG-20/钱包 PKG-21)、B4(商店/足迹);

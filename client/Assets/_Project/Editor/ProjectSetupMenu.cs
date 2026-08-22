@@ -12,7 +12,9 @@ namespace VRM.EditorTools
         private const string SceneDir = "Assets/Scenes";
         private const string ScenePath = SceneDir + "/Main.unity";
 
-        [MenuItem("VRM/工程设置/创建 Main 场景并加入构建")]
+        // 菜单根名用中文「VR留念」:Unity 6 会把纯 ASCII 的顶层菜单名当包名解析,
+        // 「VRM」曾触发 "Package name 'VRM' is invalid" 导致菜单被丢弃
+        [MenuItem("VR留念/工程设置/创建 Main 场景并加入构建")]
         public static void CreateMainScene()
         {
             if (File.Exists(ScenePath))
