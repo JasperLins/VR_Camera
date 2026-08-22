@@ -8,7 +8,8 @@
 | 仓库 | `git@github.com:JasperLins/VR_Camera.git` |
 | 开发基准 | `work/docs/08-handoff/ai-dev-handoff.md`(27 任务包 / 6 批次 / 32 屏) |
 | 编码规范 | [CONVENTIONS.md](./CONVENTIONS.md)(**写代码前必读**) |
-| 进度台账 | `work/dev-log.md` |
+| 进度断点 | [PROGRESS.md](./PROGRESS.md)(**新会话续接入口**:做到哪/下一步/坑清单) |
+| 进度台账 | `work/dev-log.md`(批次 DoD/token 统计,监督者签字用) |
 | 排期 | Sprint-0 → B1~B5;P0 闭环 2026-12-15,全量提审 2027-01-05 |
 
 ---
@@ -113,4 +114,4 @@ pnpm dev                      # 3. 起 API(localhost:3000/health 与 /docs)
 | B4 | PKG-23~26 P1 增强 | ⬜ 未开始 | — |
 | B5 | PKG-27 + SIT/上架 | ⬜ 未开始 | M3=2027-01-05 |
 
-最新状态以 `work/dev-log.md` 为准。
+最新工作断点以 [PROGRESS.md](./PROGRESS.md) 为准;批次 DoD 统计见 `work/dev-log.md`。
