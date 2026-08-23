@@ -18,8 +18,21 @@ import {
   hashShareToken,
   PASSCODE_COOLDOWN_SECONDS,
   PASSCODE_MAX_ATTEMPTS,
+  recycleDeadline,
   validatePlacement
 } from './anchor.logic';
+
+/** 详情/列表行视图:软删除行附回收截止(30 天倒计时,UX S21) */
+export interface AnchorWithRecycle extends Anchor {
+  recycleDeadline: Date | null;
+}
+
+export interface AnchorListResult {
+  items: AnchorWithRecycle[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
 
 @Injectable()
 export class AnchorService {
@@ -71,8 +84,8 @@ export class AnchorService {
     });
   }
 
-  /** 详情:作者/授权名单/口令通过者可见(R-4:aiGenerated 下发) */
-  async getDetail(userId: string, anchorId: string): Promise<Anchor & { recycleDeadline: Date | null }> {
+  /** 详情:作者/授权名单/口令通过者可见(R-4:aiGenerated 下发);软删除行附回收截止 */
+  async getDetail(userId: string, anchorId: string): Promise<AnchorWithRecycle> {
     const anchor = await this.prisma.anchor.findUnique({ where: { id: anchorId } });
     if (!anchor) {
       throw BizException.of(AppErrorCode.ANCHOR_NOT_FOUND, '锚点不存在');
@@ -80,7 +93,7 @@ export class AnchorService {
     if (!(await this.canView(userId, anchor))) {
       throw BizException.of(AppErrorCode.PRIVATE_CONTENT_DENIED, '私密内容,需作者授权或口令');
     }
-    return anchor;
+    return withRecycleDeadline(anchor);
   }
 
   /** 私密可见性判定:作者/授权名单/口令会话三通道(口令会话存 Redis,24h) */
@@ -101,8 +114,8 @@ export class AnchorService {
     return pass === '1';
   }
 
-  /** 我的内容管理三态列表(可见/已隐藏/已删除;回收站带倒计时) */
-  async listMine(userId: string, status: AnchorStatus, page: number, pageSize: number) {
+  /** 我的内容管理三态列表(可见/已隐藏/已删除;回收站带 30 天倒计时) */
+  async listMine(userId: string, status: AnchorStatus, page: number, pageSize: number): Promise<AnchorListResult> {
     const [items, total] = await this.prisma.$transaction([
       this.prisma.anchor.findMany({
         where: { userId, status },
@@ -113,10 +126,7 @@ export class AnchorService {
       this.prisma.anchor.count({ where: { userId, status } })
     ]);
     return {
-      items: items.map((a) => ({
-        ...a,
-        recycleDeadline: a.status === AnchorStatus.DELETED && a.expiresAt === null ? null : null
-      })),
+      items: items.map(withRecycleDeadline),
       total,
       page,
       pageSize
@@ -253,4 +263,12 @@ export class AnchorService {
     }
     return this.prisma.anchor.update({ where: { id: anchorId }, data: { status: match.to } });
   }
+}
+
+/** 软删除行补回收截止字段(updatedAt 即删除时刻;其余状态 null) */
+function withRecycleDeadline(anchor: Anchor): AnchorWithRecycle {
+  return {
+    ...anchor,
+    recycleDeadline: anchor.status === AnchorStatus.DELETED ? recycleDeadline(anchor.updatedAt) : null
+  };
 }

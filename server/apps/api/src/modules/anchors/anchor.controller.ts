@@ -21,8 +21,9 @@ import { AnchorContentType, AnchorStatus, AnchorVisibility, User } from '@vrm/da
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Anchor } from '@vrm/database';
 import { EXPIRY_VALUES } from './anchor.logic';
-import { AnchorService } from './anchor.service';
+import { AnchorListResult, AnchorService, AnchorWithRecycle } from './anchor.service';
 
 class PlaceAnchorDto {
   @IsString()
@@ -97,7 +98,7 @@ export class AnchorController {
 
   @Post()
   @ApiOperation({ summary: '放置内容(WGS84+海拔落库即刻可见;私密仅授权可见;标题机审)' })
-  async place(@CurrentUser() user: User, @Body() dto: PlaceAnchorDto) {
+  async place(@CurrentUser() user: User, @Body() dto: PlaceAnchorDto): Promise<Anchor> {
     return this.anchors.place(user.id, {
       title: dto.title,
       contentType: dto.contentType,
@@ -113,31 +114,31 @@ export class AnchorController {
 
   @Get(':id')
   @ApiOperation({ summary: '内容详情(私密需授权/口令;含 aiGenerated 标识 R-4)' })
-  async detail(@CurrentUser() user: User, @Param('id') id: string) {
+  async detail(@CurrentUser() user: User, @Param('id') id: string): Promise<AnchorWithRecycle> {
     return this.anchors.getDetail(user.id, id);
   }
 
   @Get()
   @ApiOperation({ summary: '我的内容三态列表(VISIBLE/HIDDEN/DELETED,回收站含 30 天倒计时)' })
-  async mine(@CurrentUser() user: User, @Query() query: MyListQueryDto) {
+  async mine(@CurrentUser() user: User, @Query() query: MyListQueryDto): Promise<AnchorListResult> {
     return this.anchors.listMine(user.id, query.status, query.page, query.pageSize);
   }
 
   @Post(':id/hide')
   @ApiOperation({ summary: '隐藏(数据保留,取景框消失)' })
-  async hide(@CurrentUser() user: User, @Param('id') id: string) {
+  async hide(@CurrentUser() user: User, @Param('id') id: string): Promise<Anchor> {
     return this.anchors.hide(user.id, id);
   }
 
   @Post(':id/reopen')
   @ApiOperation({ summary: '重开(恢复原坐标原状态;回收期内恢复为 HIDDEN)' })
-  async reopen(@CurrentUser() user: User, @Param('id') id: string, @Body() dto: ReopenDto) {
+  async reopen(@CurrentUser() user: User, @Param('id') id: string, @Body() dto: ReopenDto): Promise<Anchor> {
     return this.anchors.reopen(user.id, id, dto.expiry as never);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '删除(软删,30 天回收期内可恢复)' })
-  async remove(@CurrentUser() user: User, @Param('id') id: string) {
+  async remove(@CurrentUser() user: User, @Param('id') id: string): Promise<Anchor> {
     return this.anchors.remove(user.id, id);
   }
 

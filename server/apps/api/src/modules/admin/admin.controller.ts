@@ -29,6 +29,22 @@ class AnchorListQueryDto extends PaginationDto {
   status?: AnchorStatus;
 }
 
+/** 内容管理列表行(select 子集;显式接口满足 declaration 检查,TS2742) */
+interface AdminAnchorRow {
+  id: string;
+  title: string;
+  userId: string;
+  contentType: 'MODEL' | 'IMAGE' | 'TEXT';
+  visibility: 'PUBLIC' | 'PRIVATE';
+  status: AnchorStatus;
+  aiGenerated: boolean;
+  latitude: import('@vrm/database').Prisma.Decimal;
+  longitude: import('@vrm/database').Prisma.Decimal;
+  createdAt: Date;
+  updatedAt: Date;
+  expiresAt: Date | null;
+}
+
 @ApiTags('admin')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, AdminGuard)
@@ -41,7 +57,9 @@ export class AdminController {
 
   @Get('anchors')
   @ApiOperation({ summary: '内容管理列表(全量锚点,按状态过滤)' })
-  async anchors(@Query() query: AnchorListQueryDto) {
+  async anchors(
+    @Query() query: AnchorListQueryDto
+  ): Promise<{ items: AdminAnchorRow[]; total: number; page: number; pageSize: number }> {
     const [items, total] = await this.prisma.$transaction([
       this.prisma.anchor.findMany({
         where: query.status ? { status: query.status } : undefined,

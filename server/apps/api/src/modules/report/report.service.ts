@@ -8,7 +8,7 @@ import { AppErrorCode } from '@vrm/shared';
 import { BizException } from '../../common/biz.exception';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { ContentSafetyService } from '../safety/content-safety.service';
-import { isSlaBreached, slaDeadlineFrom } from './report.logic';
+import { canReportTransition, isSlaBreached, ReportStatusValue, slaDeadlineFrom } from './report.logic';
 
 @Injectable()
 export class ReportService {
@@ -110,8 +110,9 @@ export class ReportService {
     if (!report) {
       throw BizException.of(AppErrorCode.NOT_FOUND, '举报工单不存在');
     }
-    const { canReportTransition } = await import('./report.logic');
-    if (!canReportTransition(report.status as never, to)) {
+    // Prisma 枚举与 report.logic 枚举字面值一一对应(schema 同步口径),显式双向断言满足 declaration 检查
+    const from = report.status as unknown as ReportStatusValue;
+    if (!canReportTransition(from, to as unknown as ReportStatusValue)) {
       throw BizException.of(AppErrorCode.ILLEGAL_TASK_TRANSITION, `举报工单非法流转: ${report.status} → ${to}`);
     }
     const terminal = to === ReportStatus.RESOLVED || to === ReportStatus.DISMISSED;

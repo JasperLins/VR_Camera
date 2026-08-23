@@ -56,5 +56,3 @@ export class ConsentsController {
     return { items: await this.agreements.myConsents(user.id) };
   }
 }
-
-export { AgreementsController };
